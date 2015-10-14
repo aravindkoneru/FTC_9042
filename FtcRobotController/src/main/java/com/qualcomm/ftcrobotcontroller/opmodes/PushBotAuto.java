@@ -5,9 +5,8 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 // PushBotAuto
 //
 /**
- * Provide a basic autonomous operational mode that uses the left and right
- * drive motors and associated encoders implemented using a state machine for
- * the Push Bot.
+ * Extends the PushBotTelemetry and PushBotHardware classes to provide a basic
+ * autonomous operational mode for the Push Bot.
  *
  * @author SSI Robotics
  * @version 2015-08-01-06-01
@@ -17,10 +16,23 @@ public class PushBotAuto extends PushBotTelemetry
 {
     //--------------------------------------------------------------------------
     //
+    // v_state
+    //
+    //--------
+    // This class member remembers which state is currently active.  When the
+    // start method is called, the state will be initialized (0).  When the loop
+    // starts, the state will change from initialize to state_1.  When state_1
+    // actions are complete, the state will change to state_2.  This implements
+    // a state machine for the loop method.
+    //--------
+    int v_state = 0;
+
+    //--------------------------------------------------------------------------
+    //
     // PushBotAuto
     //
     /**
-     * Construct the class.
+     * Constructs the class.
      *
      * The system calls this member when the class is instantiated.
      */
@@ -37,14 +49,14 @@ public class PushBotAuto extends PushBotTelemetry
         //
         // All via self-construction.
 
-    } // PushBotAuto
+    } // PushBotAuto::PushBotAuto
 
     //--------------------------------------------------------------------------
     //
     // start
     //
     /**
-     * Perform any actions that are necessary when the OpMode is enabled.
+     * Performs any actions that are necessary when the OpMode is enabled.
      *
      * The system calls this member once when the OpMode is enabled.
      */
@@ -61,7 +73,7 @@ public class PushBotAuto extends PushBotTelemetry
         //
         reset_drive_encoders ();
 
-    } // start
+    } // PushBotAuto::start
 
     //--------------------------------------------------------------------------
     //
@@ -69,11 +81,10 @@ public class PushBotAuto extends PushBotTelemetry
     //
     /**
      * Implement a state machine that controls the robot during auto-operation.
-     * The state machine uses a class member and encoder input to transition
-     * between states.
      *
      * The system calls this member repeatedly while the OpMode is running.
      */
+    static int[] l_times = new int [3];
     @Override public void loop ()
 
     {
@@ -84,17 +95,22 @@ public class PushBotAuto extends PushBotTelemetry
         switch (v_state)
         {
         //
-        // Synchronize the state machine and hardware.
+        // Synchronoize the state machine and hardware.
         //
         case 0:
             //
             // Reset the encoders to ensure they are at a known good value.
             //
+
             reset_drive_encoders ();
 
             //
             // Transition to the next state when this method is called again.
             //
+
+            l_times[0] = 0;
+            l_times[1] = 0;
+            l_times[2] = 0;
             v_state++;
 
             break;
@@ -147,6 +163,10 @@ public class PushBotAuto extends PushBotTelemetry
             {
                 v_state++;
             }
+            else
+            {
+                l_times[0]++;
+            }
             break;
         //
         // Turn left until the encoders exceed the specified values.
@@ -168,6 +188,10 @@ public class PushBotAuto extends PushBotTelemetry
             if (have_drive_encoders_reset ())
             {
                 v_state++;
+            }
+            else
+            {
+                l_times[1]++;
             }
             break;
         //
@@ -191,6 +215,10 @@ public class PushBotAuto extends PushBotTelemetry
             {
                 v_state++;
             }
+            else
+            {
+                l_times[2]++;
+            }
             break;
         //
         // Perform no action - stay in this case until the OpMode is stopped.
@@ -208,21 +236,11 @@ public class PushBotAuto extends PushBotTelemetry
         // Send telemetry data to the driver station.
         //
         update_telemetry (); // Update common telemetry
-        telemetry.addData ("18", "State: " + v_state);
+        telemetry.addData ("11", "State: " + v_state);
+        telemetry.addData ("12", "Times: " + l_times[0]);
+        telemetry.addData ("13", "Times: " + l_times[1]);
+        telemetry.addData ("14", "Times: " + l_times[2]);
 
-    } // loop
-
-    //--------------------------------------------------------------------------
-    //
-    // v_state
-    //
-    /**
-     * This class member remembers which state is currently active.  When the
-     * start method is called, the state will be initialized (0).  When the loop
-     * starts, the state will change from initialize to state_1.  When state_1
-     * actions are complete, the state will change to state_2.  This implements
-     * a state machine for the loop method.
-     */
-    private int v_state = 0;
+    } // PushBotAuto::loop
 
 } // PushBotAuto
