@@ -47,10 +47,10 @@ public class FtcOpModeRegister implements OpModeRegister {
       manager.register("ArmTester", armTester.class);
       manager.register("ArmTesterManual", armTesterManual.class);
       manager.register("ArmDist", armDist.class);
-      manager.register("ArmButtons", armButtonTester.class);
+      manager.register("Auto", Auto.class);
 
       //driving
-      manager.register("MainTeleOp", MainTewleOp.class);
+      manager.register("MainTeleOp", MainTeleOp.class);
 
   }
 }

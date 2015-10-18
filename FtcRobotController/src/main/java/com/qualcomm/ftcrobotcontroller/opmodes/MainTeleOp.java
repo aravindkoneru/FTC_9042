@@ -2,6 +2,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 
@@ -11,6 +12,7 @@ public class MainTeleOp extends OpMode {
             motorRight2;
     DcMotor motorLeft1,
             motorLeft2;
+    Servo Servo1;
 
     /**
      * Constructor
@@ -25,6 +27,7 @@ public class MainTeleOp extends OpMode {
 
         motorRight1 = hardwareMap.dcMotor.get("r1");
         motorRight2 = hardwareMap.dcMotor.get("r2");
+        Servo1 = hardwareMap.servo.get("s1");
 
         motorLeft1 = hardwareMap.dcMotor.get("l1");
         motorLeft2 = hardwareMap.dcMotor.get("l2");
@@ -42,6 +45,13 @@ public class MainTeleOp extends OpMode {
 
             setLeftPower(leftStick);
             setRightPower(rightStick);
+
+        if (gamepad1.right_bumper){
+            Servo1.setPosition(.15);
+            }
+        if (gamepad1.left_bumper){
+            Servo1.setPosition(.9);
+        }
 
     }
     public void setLeftPower(float power){
