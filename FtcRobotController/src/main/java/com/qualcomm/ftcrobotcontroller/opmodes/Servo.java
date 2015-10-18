@@ -19,8 +19,6 @@ public class Servo extends OpMode {
 
     public Servo() {
 
-
-
     }
 
     @Override
@@ -55,7 +53,6 @@ public class Servo extends OpMode {
                 motorA.setPower(0);
                 motorB.setPower(0);
                 h++;
-
 
             }
         }
