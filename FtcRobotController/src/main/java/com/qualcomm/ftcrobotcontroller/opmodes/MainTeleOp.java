@@ -46,12 +46,21 @@ public class MainTeleOp extends OpMode {
             setLeftPower(leftStick);
             setRightPower(rightStick);
 
-        if (gamepad1.right_bumper){
-            Servo1.setPosition(.15);
-            }
-        if (gamepad1.left_bumper){
-            Servo1.setPosition(.9);
+//        if (gamepad1.right_bumper){
+//            Servo1.setPosition(.15);
+//            }
+//        if (gamepad1.left_bumper){
+//            Servo1.setPosition(.9);
+//        }
+
+
+        if(gamepad1.right_bumper){
+            Servo1.setPosition(.4);
         }
+        if(gamepad1.left_bumper){
+            Servo1.setPosition(.6);
+        }
+        Servo1
 
     }
     public void setLeftPower(float power){
