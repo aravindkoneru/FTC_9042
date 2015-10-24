@@ -18,7 +18,6 @@ public class Auto extends OpMode {
     int[] left = new int[5];
     int[] right = new int[5];
     int h=1;
-    int i=1;
 
     /**
      * Constructor
@@ -35,13 +34,16 @@ public class Auto extends OpMode {
         motorRight2 = hardwareMap.dcMotor.get("r2");
         motorLeft1 = hardwareMap.dcMotor.get("l1");
         motorLeft2 = hardwareMap.dcMotor.get("l2");
-        left[1]=9000;
-        left[2]=7000;
-        left[3]=7800;
+        motorRight1.setDirection(DcMotor.Direction.REVERSE);
+        motorRight2.setDirection(DcMotor.Direction.REVERSE);
+
+        left[1]=4000;
+        left[2]=5600;
+        left[3]=10200;
         left[4]=0;
-        right[1]=9000;
-        right[2]=11000;
-        right[3]=11800;
+        right[1]=4000;
+        right[2]=2400;
+        right[3]=7000;
         right[4]=0;
 
 
@@ -49,29 +51,50 @@ public class Auto extends OpMode {
 
     @Override
     public void loop() {
-        int x = -motorLeft1.getCurrentPosition();
+        int j;
+        int k;
+        int w = motorLeft1.getCurrentPosition();
+        int x = motorLeft2.getCurrentPosition();
         int y = motorRight1.getCurrentPosition();
+        int z = motorRight2.getCurrentPosition();
+
+//        int LeftSidePosition=((x+w)/2);
+//        int RightSidePosition=((y+z)/2);
         // motor right encoder values are negative
-        int rightTarget = right[i];
+        int rightTarget = right[h];
         int leftTarget = left[h];
-        if (left[h]!=0 && (right[i]!=0 )) {
-            h = movement(left, h, leftTarget, x, motorLeft1, motorLeft2);
-            i = movement(right, i, rightTarget, y, motorRight1, motorRight2);
+        if (leftTarget!=0 || (rightTarget!=0 )) {
+            j=movement(left, h, leftTarget, x, motorLeft1, motorLeft2);
+            k= movement(right, h, rightTarget, y, motorRight1, motorRight2);
+            if (k>j){
+                h=k;
+            }
+            if (j>k){
+                h=j;
+            }
+            else{
+                h=j;
+            }
         }
-        else if (left[h]==0 || right[i]==0) {
+        else if (leftTarget==0 || rightTarget==0) {
             motorLeft1.setPower(0);
+            motorLeft2.setPower(0);
+            motorRight1.setPower(0);
+            motorRight2.setPower(0);
         }
 
-        telemetry.addData("Right Motor Position = ", y);
-        telemetry.addData("Left Motor Position = ", x);
+        telemetry.addData("Right Front Position = ", motorRight1.getCurrentPosition());
+        telemetry.addData("Right Back Position = ", motorRight2.getCurrentPosition());
+        telemetry.addData("Left Front Position = ", motorLeft1.getCurrentPosition());
+        telemetry.addData("Left Back Position = ", motorLeft2.getCurrentPosition());
 
 
     }
     public int movement(int[] list, int h, int targetPos, int currentPos, DcMotor motorA, DcMotor motorB) {
         if (list[(h - 1)] > targetPos) {
             if (currentPos > targetPos) {
-                motorA.setPower(-.5);
-                motorB.setPower(-.5);
+                motorA.setPower(-.4);
+                motorB.setPower(-.4);
             } else if (currentPos <= targetPos) {
                 motorA.setPower(0);
                 motorB.setPower(0);
@@ -80,14 +103,12 @@ public class Auto extends OpMode {
         }
         else if (list[(h - 1)] < targetPos) {
             if (currentPos < targetPos) {
-                motorA.setPower(.5);
-                motorB.setPower(.5);
+                motorA.setPower(.4);
+                motorB.setPower(.4);
             } else if (currentPos >= targetPos) {
                 motorA.setPower(0);
                 motorB.setPower(0);
                 h++;
-
-
             }
         }
         return h;
