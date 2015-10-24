@@ -72,7 +72,7 @@ public class OpHelper extends OpMode {
     {
         double pos = clipValues(position, ComponentType.SERVO);
         servo1.setPosition(pos);
-        
+
         return true;
     }
 
