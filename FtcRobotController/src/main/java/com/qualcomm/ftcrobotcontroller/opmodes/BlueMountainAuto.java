@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 
-public class Auto extends OpMode {
+public class BlueMountainAuto extends OpMode {
 
     DcMotor motorRight1;
     DcMotor motorRight2;
@@ -23,7 +23,7 @@ public class Auto extends OpMode {
      * Constructor
      */
 
-    public Auto() {
+    public BlueMountainAuto() {
 
     }
 
@@ -37,13 +37,13 @@ public class Auto extends OpMode {
         motorRight1.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
 
-        left[1]=4000;
-        left[2]=5600;
-        left[3]=10200;
+        left[1]=4000+2220;
+        left[2]=5600+2220;
+        left[3]=10200+2220;
         left[4]=0;
-        right[1]=4000;
-        right[2]=2400;
-        right[3]=7000;
+        right[1]=4000+2220;
+        right[2]=2400+2220;
+        right[3]=7000+2220;
         right[4]=0;
 
 

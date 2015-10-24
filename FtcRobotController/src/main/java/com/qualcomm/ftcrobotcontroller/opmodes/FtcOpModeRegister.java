@@ -46,8 +46,8 @@ public class FtcOpModeRegister implements OpModeRegister {
       //the arm
       manager.register("Encoder Reset", EncoderTester.class);
       manager.register("ArmTesterManual", armTesterManual.class);
-      manager.register("ArmDist", armDist.class);
-      manager.register("Auto", Auto.class);
+      manager.register("BlueMountain", BlueMountainAuto.class);
+      manager.register("Red Mountain", RedMountainAuto.class);
 
       //driving
       manager.register("MainTeleOp", MainTeleOp.class);
