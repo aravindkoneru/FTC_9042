@@ -30,8 +30,8 @@ public class MainTeleOp extends OpMode {
         motorLeft1 = hardwareMap.dcMotor.get("l1");
         motorLeft2 = hardwareMap.dcMotor.get("l2");
 
-        motorLeft1.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft2.setDirection(DcMotor.Direction.REVERSE);
+        motorRight1.setDirection(DcMotor.Direction.REVERSE);
+        motorRight2.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MainTeleOp extends OpMode {
             setLeftPower(leftStick);
             setRightPower(rightStick);
 
-        if (gamepad1.right_bumper){
+       if (gamepad1.right_bumper){
             servo1.setPosition(0.0);
             }
         if (gamepad1.left_bumper){
