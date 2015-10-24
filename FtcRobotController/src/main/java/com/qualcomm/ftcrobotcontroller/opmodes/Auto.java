@@ -34,7 +34,7 @@ public class Auto extends OpMode {
         motorLeft2 = hardwareMap.dcMotor.get("l2");
         motorRight1.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
-
+        //TODO Add those DOCUMENTATIONS & COMMENTS though!
         left[1]=4000;
         left[2]=5600;
         left[3]=10200;
@@ -47,6 +47,7 @@ public class Auto extends OpMode {
 
     @Override
     public void loop() {
+        // TODO Please don't use those magic variables. Name them with something relevant.
         int j;
         int k;
         int w = motorLeft1.getCurrentPosition();
@@ -54,9 +55,9 @@ public class Auto extends OpMode {
         int y = motorRight1.getCurrentPosition();
         int z = motorRight2.getCurrentPosition();
 
-// int LeftSidePosition=((x+w)/2);
-// int RightSidePosition=((y+z)/2);
-// motor right encoder values are negative
+        // int LeftSidePosition=((x+w)/2);
+        // int RightSidePosition=((y+z)/2);
+        // motor right encoder values are negative
         int rightTarget = right[h];
         int leftTarget = left[h];
         if (leftTarget!=0 || (rightTarget!=0 )) {
@@ -109,9 +110,6 @@ public class Auto extends OpMode {
         }
         return h;
     }
-
-
-
     @Override
     public void stop() {
 
