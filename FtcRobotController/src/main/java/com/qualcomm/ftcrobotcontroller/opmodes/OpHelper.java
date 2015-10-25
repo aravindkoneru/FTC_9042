@@ -13,19 +13,11 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class OpHelper extends OpMode {
     //Components:
-    private DcMotorController motorController1, motorController2;
     private DcMotor left1, left2, right1, right2;
-    private ServoController servoController1;
     private Servo servo1;
 
     private int leftTarget, rightTarget;
     //Constants
-    public final short
-            LEFT1CHANNEL = 1,
-            LEFT2CHANNEL = 2,
-            RIGHT1CHANNEL = 1,
-            RIGHT2CHANNEL = 2,
-            SERVO1CHANNEL = 1;
     public final double
             SERVO_MAX=1,
             SERVO_MIN=-1,
@@ -48,13 +40,10 @@ public class OpHelper extends OpMode {
             left2.setDirection(DcMotor.Direction.REVERSE);
 
 
-        motorController1 = hardwareMap.dcMotorController.get("mc1");        //Sets up everything using hardware map
-        motorController2 = hardwareMap.dcMotorController.get("mc2");
         left1 = hardwareMap.dcMotor.get("l1");
         left2 = hardwareMap.dcMotor.get("l2");
         right1 = hardwareMap.dcMotor.get("r1");
         right2 = hardwareMap.dcMotor.get("r2");
-        servoController1 = hardwareMap.servoController.get("sc1");
         servo1 = hardwareMap.servo.get("s1");
 
         resetEncoders();
@@ -108,10 +97,10 @@ public class OpHelper extends OpMode {
 
     public boolean resetEncoders()
     {
-        motorController1.setMotorChannelMode(LEFT1CHANNEL, DcMotorController.RunMode.RESET_ENCODERS);
-        motorController1.setMotorChannelMode(LEFT2CHANNEL, DcMotorController.RunMode.RESET_ENCODERS);
-        motorController2.setMotorChannelMode(RIGHT1CHANNEL, DcMotorController.RunMode.RESET_ENCODERS);
-        motorController2.setMotorChannelMode(RIGHT2CHANNEL, DcMotorController.RunMode.RESET_ENCODERS);
+        left1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        left2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        right1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        right2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         return true;
     }
 
@@ -123,10 +112,10 @@ public class OpHelper extends OpMode {
         right1.setTargetPosition(0);
         right2.setTargetPosition(0);
 
-        motorController1.setMotorChannelMode(LEFT1CHANNEL, DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorController1.setMotorChannelMode(LEFT2CHANNEL, DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorController2.setMotorChannelMode(RIGHT1CHANNEL, DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorController2.setMotorChannelMode(RIGHT2CHANNEL, DcMotorController.RunMode.RUN_USING_ENCODERS);
+        left1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        left2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        right1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        right2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         return true;
     }
 
