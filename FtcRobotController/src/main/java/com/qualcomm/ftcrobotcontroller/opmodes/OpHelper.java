@@ -140,7 +140,10 @@ public class OpHelper extends OpMode {
 
     public boolean checkRunStatus()         //TODO Implement the correct sign for the ticks
     {
-        if(Math.abs(left1.getCurrentPosition()-l1Target)<=TOLERANCE && Math.abs(left2.getCurrentPosition()-l2Target)<=TOLERANCE && Math.abs(right1.getCurrentPosition()-r1Target)<=TOLERANCE && Math.abs(right2.getCurrentPosition()-r2Target)<=TOLERANCE)
+        if(Math.abs(left1.getCurrentPosition()-l1Target)<=TOLERANCE &&
+                Math.abs(left2.getCurrentPosition()-l2Target)<=TOLERANCE &&
+                Math.abs(right1.getCurrentPosition()-r1Target)<=TOLERANCE &&
+                Math.abs(right2.getCurrentPosition()-r2Target)<=TOLERANCE)
             return true;
         return false;
     }
