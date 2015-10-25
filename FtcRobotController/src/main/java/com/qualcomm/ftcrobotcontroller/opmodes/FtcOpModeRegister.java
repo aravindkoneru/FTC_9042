@@ -54,7 +54,8 @@ public class FtcOpModeRegister implements OpModeRegister {
       manager.register("MainTeleOp", MainTeleOp.class);
 
       //OpMode helper classes
-      manager.register("Run10In", TestEncoders.class);
+      manager.register("Auton", TestEncoders.class);
+      manager.register("Sticks", DriveStickWithHelper.class);
       manager.register("System Check", SystemCheck.class);
 
   }

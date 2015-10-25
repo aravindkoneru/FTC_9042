@@ -10,7 +10,7 @@ public class MainTeleOp extends OpMode {
             motorRight2;
     DcMotor motorLeft1,
             motorLeft2;
-    Servo servo1;
+//    Servo servo1;
 
     /**
      * Constructor
@@ -25,13 +25,15 @@ public class MainTeleOp extends OpMode {
 
         motorRight1 = hardwareMap.dcMotor.get("r1");
         motorRight2 = hardwareMap.dcMotor.get("r2");
-        servo1 = hardwareMap.servo.get("s1");
+//        servo1 = hardwareMap.servo.get("s1");
 
         motorLeft1 = hardwareMap.dcMotor.get("l1");
         motorLeft2 = hardwareMap.dcMotor.get("l2");
 
         motorRight1.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
+        motorLeft1.setDirection(DcMotor.Direction.REVERSE);
+        motorLeft2.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -44,16 +46,16 @@ public class MainTeleOp extends OpMode {
             setLeftPower(leftStick);
             setRightPower(rightStick);
 
-       if (gamepad1.right_bumper){
-            servo1.setPosition(0.0);
-            }
-        if (gamepad1.left_bumper){
-            servo1.setPosition(1.0);
-        }
-        else if(gamepad1.a)
-        {
-            servo1.setPosition(135.0/255);
-        }
+//       if (gamepad1.right_bumper){
+//            servo1.setPosition(0.0);
+//            }
+//        if (gamepad1.left_bumper){
+//            servo1.setPosition(1.0);
+//        }
+//        else if(gamepad1.a)
+//        {
+//            servo1.setPosition(135.0/255);
+//        }
 
     }
     public void setLeftPower(float power){

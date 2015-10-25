@@ -13,6 +13,7 @@ public class OpHelper extends OpMode {
     //Components:
     private DcMotor left1, left2, right1, right2;
     private Servo servo1;
+    public double lx1 = 0, ly1 = 0, rx1 = 0, ry1 = 0, lx2, ly2, rx2, ry2;
 
     private int leftTarget, rightTarget;
 //    Constants
@@ -55,7 +56,7 @@ public class OpHelper extends OpMode {
         double rightPower = clipValues(right, ComponentType.MOTOR);
 
         left1.setPower(leftPower);
-        left2.setPower(rightPower);
+        left2.setPower(leftPower);
 
         right1.setPower(rightPower);
         right2.setPower(rightPower);
@@ -98,11 +99,18 @@ public class OpHelper extends OpMode {
         right2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
+    public void setToWOEncoderMode()
+    {
+        left1.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        left2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        right1.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        right2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    }
     public boolean setTargetValue(double distance_in_inches) {              //Sets values for driving straight, and indicates completion
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget=leftTarget;
         setTargetValueMotor(leftTarget, rightTarget);
-        setPower(.4,.4);
+        setPower(.4, .4);
         if(checkRunStatus())
         {
             setPower(0,0);
@@ -143,6 +151,26 @@ public class OpHelper extends OpMode {
         telemetry.addData("Right1", right1.getCurrentPosition());
         telemetry.addData("Right2", right2.getCurrentPosition());
         telemetry.addData("RightTarget", rightTarget);
+    }
+
+    public void updateController()
+    {
+        //lx1=gamepad1.left_stick_x;
+        //lx2=gamepad2.left_stick_x;
+        ly1=gamepad1.left_stick_y;
+        //ly2=gamepad2.left_stick_y;
+
+        //rx1=gamepad1.right_stick_x;
+        //rx2=gamepad2.right_stick_x;
+        ry1=gamepad1.right_stick_y;
+        //ry2=gamepad2.right_stick_y;
+    }
+
+    public void driveUsingSticks()
+    {
+        setToWOEncoderMode();
+        updateController();
+        setPower(-ly1, -ry1);
     }
 
     @Override

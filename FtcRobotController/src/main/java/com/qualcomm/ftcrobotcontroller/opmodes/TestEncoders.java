@@ -30,7 +30,7 @@ public class TestEncoders extends OpHelper{
             }
             case FIRST_STATE:
             {
-                if(setTargetValue(20))
+                if(setTargetValue(10))
                 {
                     rs = RunState.SECOND_STATE;
                     resetEncoders();
@@ -39,7 +39,7 @@ public class TestEncoders extends OpHelper{
             }
             case SECOND_STATE:
             {
-                if(setTargetValue(10))
+                if(setTargetValue(5))
                 {
                     rs = RunState.THIRD_STATE;
                     resetEncoders();
