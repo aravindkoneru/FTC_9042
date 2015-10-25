@@ -3,9 +3,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -17,8 +15,8 @@ public class OpHelper extends OpMode {
     private Servo servo1;
 
     private int leftTarget, rightTarget;
-    //Constants
-    public final double
+//    Constants
+        public final double
             SERVO_MAX=1,
             SERVO_MIN=-1,
             SERVO_NEUTRAL = 9.0/17,      //Stops the continuous servo
@@ -27,18 +25,14 @@ public class OpHelper extends OpMode {
 
     public final double                     //Constants for running using encoders
             CIRCUMFERENCE_INCHES = 4*Math.PI,
-            TICKS_PER_ROTATION = 1200/1.05,
+            TICKS_PER_ROTATION = 1200/1.03,
             TICKS_PER_INCH = TICKS_PER_ROTATION/CIRCUMFERENCE_INCHES,
-            TOLERANCE = 100;
-    //
-    public OpHelper(){}
-    @Override
-    public void init() {
-        if(left1.getDirection() == DcMotor.Direction.FORWARD)
-            left1.setDirection(DcMotor.Direction.REVERSE);
-        if(left2.getDirection() == DcMotor.Direction.FORWARD)
-            left2.setDirection(DcMotor.Direction.REVERSE);
+            TOLERANCE = 10;
 
+    public OpHelper(){
+
+    }
+    public void init() {
 
         left1 = hardwareMap.dcMotor.get("l1");
         left2 = hardwareMap.dcMotor.get("l2");
@@ -46,19 +40,22 @@ public class OpHelper extends OpMode {
         right2 = hardwareMap.dcMotor.get("r2");
         servo1 = hardwareMap.servo.get("s1");
 
+
+        if(left1.getDirection() == DcMotor.Direction.FORWARD)
+            left1.setDirection(DcMotor.Direction.REVERSE);
+        if(left2.getDirection() == DcMotor.Direction.FORWARD)
+            left2.setDirection(DcMotor.Direction.REVERSE);
+
         resetEncoders();
-        setToEncoderMode();
     }
 
-    @Override
     public void loop(){
     }
 
-    @Override
     public void stop(){
     }
 
-    public boolean setPower(double left, double right)      //Sets power, and checks values
+    public void setPower(double left, double right)      //Sets power, and checks values
     {
         double leftPower = clipValues(left, ComponentType.MOTOR);
         double rightPower = clipValues(right, ComponentType.MOTOR);
@@ -68,16 +65,12 @@ public class OpHelper extends OpMode {
 
         right1.setPower(rightPower);
         right2.setPower(rightPower);
-
-        return true;
     }
 
-    public boolean setServo(double position)
+    public void setServo(double position)
     {
         double pos = clipValues(position, ComponentType.SERVO);
         servo1.setPosition(pos);
-
-        return true;
     }
 
     enum ComponentType{         //helps with clipValues
@@ -90,40 +83,34 @@ public class OpHelper extends OpMode {
     {
         if (type == ComponentType.MOTOR)
             return Range.clip(initialValue, MOTOR_MIN, MOTOR_MAX);
-        else if (type == ComponentType.SERVO)
+        if (type == ComponentType.SERVO)
             return Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
-        return -2;
+        return 0;
     }
 
-    public boolean resetEncoders()
+    public void resetEncoders()
     {
         left1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         left2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         right1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         right2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        return true;
     }
 
-    public boolean setToEncoderMode()
+    public void setToEncoderMode()
     {
-        resetEncoders();
-        left1.setTargetPosition(0);
-        left2.setTargetPosition(0);
-        right1.setTargetPosition(0);
-        right2.setTargetPosition(0);
-
-        left1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        left2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        right1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        right2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        return true;
+        left1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        left2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        right1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        right2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    public boolean setTargetValue(double distance_in_inches) {              //Sets values for driving straight
+    public void setTargetValue(double distance_in_inches) {              //Sets values for driving straight
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget=leftTarget;
         setTargetValueMotor(leftTarget, rightTarget);
-        return true;
+        setPower(.4,.4);
+        if(checkRunStatus())
+            setPower(0,0);
     }
 
     public boolean checkRunStatus()         //TODO Implement the correct sign for the ticks
