@@ -25,7 +25,7 @@ public class OpHelper extends OpMode {
 
     public final double                     //Constants for running using encoders
             CIRCUMFERENCE_INCHES = 4*Math.PI,
-            TICKS_PER_ROTATION = 1200/1.03,
+            TICKS_PER_ROTATION = 1200/1.06,                 //TODO CARARARARARABRATE!
             TICKS_PER_INCH = TICKS_PER_ROTATION/CIRCUMFERENCE_INCHES,
             TOLERANCE = 10;
 
@@ -47,12 +47,6 @@ public class OpHelper extends OpMode {
             left2.setDirection(DcMotor.Direction.REVERSE);
 
         resetEncoders();
-    }
-
-    public void loop(){
-    }
-
-    public void stop(){
     }
 
     public void setPower(double left, double right)      //Sets power, and checks values
@@ -113,7 +107,12 @@ public class OpHelper extends OpMode {
             setPower(0,0);
     }
 
-    public boolean checkRunStatus()         //TODO Implement the correct sign for the ticks
+    //TODO: Run tests to determine the relationship between degrees turned and ticks
+    public boolean setTargetValueTurn(double degrees){
+        return false;
+    }
+
+    public boolean checkRunStatus()
     {
         if(Math.abs(left1.getCurrentPosition()-leftTarget)<=TOLERANCE &&
                 Math.abs(left2.getCurrentPosition()-leftTarget)<=TOLERANCE &&
@@ -127,6 +126,7 @@ public class OpHelper extends OpMode {
     {
         left1.setTargetPosition(left);
         left2.setTargetPosition(left);
+
         right1.setTargetPosition(right);
         right2.setTargetPosition(right);
     }
@@ -139,5 +139,13 @@ public class OpHelper extends OpMode {
         telemetry.addData("Right1", right1.getCurrentPosition());
         telemetry.addData("Right2", right2.getCurrentPosition());
         telemetry.addData("RightTarget", rightTarget);
+    }
+
+    @Override
+    public void loop(){
+    }
+
+    @Override
+    public void stop(){
     }
 }

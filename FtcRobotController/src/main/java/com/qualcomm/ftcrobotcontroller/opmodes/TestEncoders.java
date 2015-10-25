@@ -12,6 +12,6 @@ public class TestEncoders extends OpHelper{
     public void loop() {
         telemetry();
         setToEncoderMode();
-        setTargetValue(-20);
+        setTargetValue(20);
     }
 }

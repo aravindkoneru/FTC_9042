@@ -55,6 +55,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
       //OpMode helper classes
       manager.register("Run10In", TestEncoders.class);
+      manager.register("System Check", SystemCheck.class);
 
   }
 }
