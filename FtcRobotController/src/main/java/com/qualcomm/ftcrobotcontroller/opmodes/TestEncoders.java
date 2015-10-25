@@ -5,26 +5,16 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 public class TestEncoders extends OpHelper{
 
-    private boolean isRunning = false;
-
     public TestEncoders()
     {}
 
     @Override
     public void loop() {
-        telemetry();
-        if(!isRunning)      //Initial set target and power
-        {
-            setTargetValue(10);
-            setPower(0.4, 0.4);
-            isRunning=true;
-        }
-
+        //telemetry();
+        setTargetValue(10);
         if(checkRunStatus())
-        {
-            setTargetValue(0);
-            resetEncoders();
             setPower(0,0);
-        }
+        else
+            setPower(0.4,0.4);
     }
 }

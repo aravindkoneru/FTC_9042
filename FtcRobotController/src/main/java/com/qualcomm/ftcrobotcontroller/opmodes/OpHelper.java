@@ -18,7 +18,7 @@ public class OpHelper extends OpMode {
     private ServoController servoController1;
     private Servo servo1;
 
-    private int l1Target, l2Target, r1Target, r2Target;
+    private int leftTarget, rightTarget;
     //Constants
     public final short
             LEFT1CHANNEL = 1,
@@ -131,38 +131,37 @@ public class OpHelper extends OpMode {
     }
 
     public boolean setTargetValue(double distance_in_inches) {              //Sets values for driving straight
-        l1Target = (int)(distance_in_inches*TICKS_PER_INCH);
-        setTargetValueMotor(l1Target, l1Target, l1Target, l1Target);
+        leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
+        rightTarget=leftTarget;
+        setTargetValueMotor(leftTarget, rightTarget);
         return true;
     }
 
     public boolean checkRunStatus()         //TODO Implement the correct sign for the ticks
     {
-        if(Math.abs(left1.getCurrentPosition()-l1Target)<=TOLERANCE &&
-                Math.abs(left2.getCurrentPosition()-l2Target)<=TOLERANCE &&
-                Math.abs(right1.getCurrentPosition()-r1Target)<=TOLERANCE &&
-                Math.abs(right2.getCurrentPosition()-r2Target)<=TOLERANCE)
+        if(Math.abs(left1.getCurrentPosition()-leftTarget)<=TOLERANCE &&
+                Math.abs(left2.getCurrentPosition()-leftTarget)<=TOLERANCE &&
+                Math.abs(right1.getCurrentPosition()-rightTarget)<=TOLERANCE &&
+                Math.abs(right2.getCurrentPosition()-rightTarget)<=TOLERANCE)
             return true;
         return false;
     }
 
-    private void setTargetValueMotor(int l1, int l2, int r1, int r2)        //Individual target position setting, do not use manually.
+    private void setTargetValueMotor(int left, int right)        //Individual target position setting, do not use manually.
     {
-        left1.setTargetPosition(l1);
-        left2.setTargetPosition(l2);
-        right1.setTargetPosition(r1);
-        right2.setTargetPosition(r2);
+        left1.setTargetPosition(left);
+        left2.setTargetPosition(left);
+        right1.setTargetPosition(right);
+        right2.setTargetPosition(right);
     }
 
 
     public void telemetry(){
         telemetry.addData("Left1", left1.getCurrentPosition());
-        telemetry.addData("Left1Target:", l1Target);
         telemetry.addData("Left2", left2.getCurrentPosition());
-        telemetry.addData("Left2Target", l2Target);
+        telemetry.addData("LeftTarget", leftTarget);
         telemetry.addData("Right1", right1.getCurrentPosition());
-        telemetry.addData("Right1Target", r1Target);
         telemetry.addData("Right2", right2.getCurrentPosition());
-        telemetry.addData("Right2Target", r2Target);
+        telemetry.addData("RightTarget", rightTarget);
     }
 }
