@@ -42,6 +42,12 @@ public class OpHelper extends OpMode {
     public OpHelper(){}
     @Override
     public void init() {
+        if(left1.getDirection() == DcMotor.Direction.FORWARD)
+            left1.setDirection(DcMotor.Direction.REVERSE);
+        if(left2.getDirection() == DcMotor.Direction.FORWARD)
+            left2.setDirection(DcMotor.Direction.REVERSE);
+
+
         motorController1 = hardwareMap.dcMotorController.get("mc1");        //Sets up everything using hardware map
         motorController2 = hardwareMap.dcMotorController.get("mc2");
         left1 = hardwareMap.dcMotor.get("l1");
@@ -50,10 +56,15 @@ public class OpHelper extends OpMode {
         right2 = hardwareMap.dcMotor.get("r2");
         servoController1 = hardwareMap.servoController.get("sc1");
         servo1 = hardwareMap.servo.get("s1");
+
+        resetEncoders();
+        setToEncoderMode();
     }
 
     @Override
     public void loop(){
+
+
     }
 
     @Override
@@ -123,7 +134,7 @@ public class OpHelper extends OpMode {
 
     public boolean setTargetValue(double distance_in_inches) {              //Sets values for driving straight
         l1Target = (int)(distance_in_inches*TICKS_PER_INCH);
-        setTargetValueMotor(l1Target,l1Target,l1Target,l1Target);
+        setTargetValueMotor(l1Target, l1Target, l1Target, l1Target);
         return true;
     }
 
@@ -140,5 +151,17 @@ public class OpHelper extends OpMode {
         left2.setTargetPosition(l2);
         right1.setTargetPosition(r1);
         right2.setTargetPosition(r2);
+    }
+
+
+    public void telemetry(){
+        telemetry.addData("Left1", left1.getCurrentPosition());
+        telemetry.addData("Left1Target:", l1Target);
+        telemetry.addData("Left2", left2.getCurrentPosition());
+        telemetry.addData("Left2Target", l2Target);
+        telemetry.addData("Right1", right1.getCurrentPosition());
+        telemetry.addData("Right1Target", r1Target);
+        telemetry.addData("Right2", right2.getCurrentPosition());
+        telemetry.addData("Right2Target", r2Target);
     }
 }
