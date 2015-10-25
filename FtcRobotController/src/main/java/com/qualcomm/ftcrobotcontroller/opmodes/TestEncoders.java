@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.opmodes
+package com.qualcomm.ftcrobotcontroller.opmodes;
 
 /**
  * Created by Tim on 10/25/2015.
@@ -21,5 +21,10 @@ public class TestEncoders extends OpHelper{
         }
 
         if(checkRunStatus())
+        {
+            setTargetValue(0);
+            resetEncoders();
+            setPower(0,0);
+        }
     }
 }

@@ -49,7 +49,7 @@ public class FtcOpModeRegister implements OpModeRegister {
       manager.register("ArmDist", armDist.class);
       manager.register("BlueMountain", BlueMountainAuto.class);
       manager.register("Red Mountain", RedMountainAuto.class);
-
+      manager.register("Run10In", TestEncoders.class);
       //driving
       manager.register("MainTeleOp", MainTeleOp.class);
 
