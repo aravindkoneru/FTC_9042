@@ -98,13 +98,17 @@ public class OpHelper extends OpMode {
         right2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    public void setTargetValue(double distance_in_inches) {              //Sets values for driving straight
+    public boolean setTargetValue(double distance_in_inches) {              //Sets values for driving straight, and indicates completion
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget=leftTarget;
         setTargetValueMotor(leftTarget, rightTarget);
         setPower(.4,.4);
         if(checkRunStatus())
+        {
             setPower(0,0);
+            return true;
+        }
+        return false;
     }
 
     //TODO: Run tests to determine the relationship between degrees turned and ticks
