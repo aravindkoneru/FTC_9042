@@ -50,13 +50,32 @@ public class OpHelper extends OpMode {
         setToEncoderMode();
     }
 
-    @Override
-    public void loop(){
+    public boolean resetEncoders()
+    {
+        left1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        left2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        right1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        right2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        return true;
     }
 
-    @Override
-    public void stop(){
+    public boolean setToEncoderMode()
+    {
+        //resetEncoders(); //TODO Check if this line is redundant - Aravind
+        left1.setTargetPosition(0);
+        left2.setTargetPosition(0);
+
+        right1.setTargetPosition(0);
+        right2.setTargetPosition(0);
+
+        left1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        left2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
+        right1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        right2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        return true;
     }
+
 
     public boolean setPower(double left, double right)      //Sets power, and checks values
     {
@@ -71,6 +90,24 @@ public class OpHelper extends OpMode {
 
         return true;
     }
+
+    //TODO: Check use case for my idea for setServo
+    //rb ===> 1
+    //lb ===> -1
+    //a =====> 0
+
+//    public boolean setServo(double position)
+//    {
+//        if(position == -1){
+//            servo1.setPosition(SERVO_MIN);
+//        } else if(position == 0){
+//            servo1.setPosition(SERVO_NEUTRAL);
+//        } else if(position == 1){
+//            servo1.setPosition(SERVO_MAX);
+//        }
+//
+//        return true;
+//    }
 
     public boolean setServo(double position)
     {
@@ -95,35 +132,19 @@ public class OpHelper extends OpMode {
         return -2;
     }
 
-    public boolean resetEncoders()
-    {
-        left1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        left2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        right1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        right2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        return true;
-    }
 
-    public boolean setToEncoderMode()
-    {
-        resetEncoders();
-        left1.setTargetPosition(0);
-        left2.setTargetPosition(0);
-        right1.setTargetPosition(0);
-        right2.setTargetPosition(0);
 
-        left1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        left2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        right1.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        right2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        return true;
-    }
 
     public boolean setTargetValue(double distance_in_inches) {              //Sets values for driving straight
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget=leftTarget;
         setTargetValueMotor(leftTarget, rightTarget);
         return true;
+    }
+
+    //TODO: Run tests to determine the relationship between degrees turned and ticks
+    public boolean setTargetValueTurn(double degrees){
+        return false;
     }
 
     public boolean checkRunStatus()         //TODO Implement the correct sign for the ticks
@@ -140,6 +161,7 @@ public class OpHelper extends OpMode {
     {
         left1.setTargetPosition(left);
         left2.setTargetPosition(left);
+
         right1.setTargetPosition(right);
         right2.setTargetPosition(right);
     }
@@ -152,5 +174,13 @@ public class OpHelper extends OpMode {
         telemetry.addData("Right1", right1.getCurrentPosition());
         telemetry.addData("Right2", right2.getCurrentPosition());
         telemetry.addData("RightTarget", rightTarget);
+    }
+
+    @Override
+    public void loop(){
+    }
+
+    @Override
+    public void stop(){
     }
 }

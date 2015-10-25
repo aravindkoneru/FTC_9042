@@ -10,8 +10,8 @@ public class TestEncoders extends OpHelper{
 
     @Override
     public void loop() {
-        //telemetry();
         setTargetValue(10);
+        telemetry();
         if(checkRunStatus())
             setPower(0,0);
         else
