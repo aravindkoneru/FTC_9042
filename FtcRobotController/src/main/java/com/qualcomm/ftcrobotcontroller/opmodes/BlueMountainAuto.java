@@ -58,8 +58,8 @@ public class BlueMountainAuto extends OpMode {
         int y = motorRight1.getCurrentPosition();
         int z = motorRight2.getCurrentPosition();
 
-//        int LeftSidePosition=((x+w)/2);
-//        int RightSidePosition=((y+z)/2);
+        //int LeftSidePosition=((x+w)/2);
+        //int RightSidePosition=((y+z)/2);
         // motor right encoder values are negative
         int rightTarget = right[h];
         int leftTarget = left[h];
