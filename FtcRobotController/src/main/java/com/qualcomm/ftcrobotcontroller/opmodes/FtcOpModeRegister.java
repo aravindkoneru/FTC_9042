@@ -51,10 +51,10 @@ public class FtcOpModeRegister implements OpModeRegister {
       manager.register("Red Mountain", RedMountainAuto.class);
 
       //driving
+      manager.register("Encoder tester", TestEncoders.class);
       manager.register("MainTeleOp", MainTeleOp.class);
 
       //OpMode helper classes
-      manager.register("Auton", TestEncoders.class);
 //      manager.register("Sticks", DriveStickWithHelper.class);
 //      manager.register("System Check", SystemCheck.class);
 
