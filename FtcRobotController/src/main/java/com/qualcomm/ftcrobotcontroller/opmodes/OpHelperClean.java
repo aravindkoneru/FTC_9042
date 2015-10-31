@@ -182,8 +182,6 @@ public class OpHelperClean extends OpMode {
     }
 
 
-
-
     public void loop(){
 
     }
