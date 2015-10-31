@@ -55,8 +55,8 @@ public class FtcOpModeRegister implements OpModeRegister {
 
       //OpMode helper classes
       manager.register("Auton", TestEncoders.class);
-      manager.register("Sticks", DriveStickWithHelper.class);
-      manager.register("System Check", SystemCheck.class);
+//      manager.register("Sticks", DriveStickWithHelper.class);
+//      manager.register("System Check", SystemCheck.class);
 
   }
 }
