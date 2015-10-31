@@ -44,6 +44,7 @@ public class TestEncoders extends OpHelperClean{
 //                setTargetValueMotor(5,5);
 //
 //                if(hasReached())
+
 //                {
 //                    rs = RunState.THIRD_STATE;
 //                    resetEncoders();

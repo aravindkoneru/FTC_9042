@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-//TODO Talk to Tim about structure/organization
-
 /**
  * Created by aravindkoneru on 10/28/15.
  */
@@ -205,6 +203,7 @@ public class OpHelperClean extends OpMode {
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
     }
+
 
     public void loop(){
 
