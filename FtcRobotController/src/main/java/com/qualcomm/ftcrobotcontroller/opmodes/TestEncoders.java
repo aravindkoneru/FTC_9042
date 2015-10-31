@@ -3,7 +3,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by Tim on 10/25/2015.
  */
-public class TestEncoders extends OpHelper{
+public class TestEncoders extends OpHelperClean{
 
     enum RunState{
         RESET_STATE,
@@ -19,7 +19,7 @@ public class TestEncoders extends OpHelper{
 
     @Override
     public void loop() {
-        telemetry();
+        basicTel();
         setToEncoderMode();
         switch(rs) {
             case RESET_STATE:
@@ -30,22 +30,26 @@ public class TestEncoders extends OpHelper{
             }
             case FIRST_STATE:
             {
-                if(setTargetValue(10))
+                setTargetValueMotor(10,10);
+
+                if(hasReached())
                 {
                     rs = RunState.SECOND_STATE;
                     resetEncoders();
                 }
                 break;
             }
-            case SECOND_STATE:
-            {
-                if(setTargetValue(5))
-                {
-                    rs = RunState.THIRD_STATE;
-                    resetEncoders();
-                }
-                break;
-            }
+//            case SECOND_STATE:
+//            {
+//                setTargetValueMotor(5,5);
+//
+//                if(hasReached())
+//                {
+//                    rs = RunState.THIRD_STATE;
+//                    resetEncoders();
+//                }
+//                break;
+//            }
         }
     }
 }

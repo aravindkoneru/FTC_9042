@@ -86,21 +86,24 @@ public class OpHelperClean extends OpMode {
         }
     }
 
-    public boolean resetEncoders(){
+    public void resetEncoders(){
         frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        return (frontLeft.getCurrentPosition() == 0 &&
-                backLeft.getCurrentPosition() == 0 &&
-                frontRight.getCurrentPosition() == 0 &&
-                backRight.getCurrentPosition() == 0);
+//        return (frontLeft.getCurrentPosition() == 0 &&
+//                backLeft.getCurrentPosition() == 0 &&
+//                frontRight.getCurrentPosition() == 0 &&
+//                backRight.getCurrentPosition() == 0);
     }
 
     //TODO: Implement cheesy drive or special drive code?
     public void setPower(double leftPower, double rightPower){//only accepts clipped values
+        clipValues(leftPower, ComponentType.MOTOR);
+        clipValues(rightPower, ComponentType.MOTOR);
+
         frontLeft.setPower(leftPower);
         backLeft.setPower(leftPower);
 
@@ -132,7 +135,7 @@ public class OpHelperClean extends OpMode {
 
         setPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
-        if(checkRunStatus())
+        if(hasReached())
         {
             setPower(0,0);
             return true;//done traveling
@@ -148,7 +151,7 @@ public class OpHelperClean extends OpMode {
         backRight.setTargetPosition(rightTarget);
     }
 
-    public boolean checkRunStatus()
+    public boolean hasReached()
     {
         return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
                 Math.abs(backLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
@@ -171,6 +174,21 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("RightTargetTarg: ", rightTarget);
     }
 
+    enum ComponentType{         //helps with clipValues
+        NONE,
+        MOTOR,
+        SERVO
+    }
+
+    public void clipValues(double initialValue, ComponentType type)
+    {
+        if (type == ComponentType.MOTOR)
+            Range.clip(initialValue, MOTOR_MIN, MOTOR_MAX);
+        if (type == ComponentType.SERVO)
+            Range.clip(initialValue, SERVO_MIN, SERVO_MAX);
+        //return 0;
+    }
+
 
     public boolean setServo(double pos){//only accepts a clipped value
         zipLiner.setPosition(pos);
@@ -187,9 +205,6 @@ public class OpHelperClean extends OpMode {
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
     }
-
-
-
 
     public void loop(){
 
