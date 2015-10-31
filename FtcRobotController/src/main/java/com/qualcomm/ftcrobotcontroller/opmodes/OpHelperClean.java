@@ -177,6 +177,19 @@ public class OpHelperClean extends OpMode {
         return true;
     }
 
+    public void manualDrive(){
+        double rightPower = gamepad1.right_stick_y;
+        double leftPower = gamepad1.left_stick_y;
+
+        frontLeft.setPower(leftPower);
+        backLeft.setPower(leftPower);
+
+        frontRight.setPower(rightPower);
+        backRight.setPower(rightPower);
+    }
+
+
+
 
     public void loop(){
 
