@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-//TODO Talk to Tim about structure/organization
-
 /**
  * Created by aravindkoneru on 10/28/15.
  */
@@ -86,17 +84,12 @@ public class OpHelperClean extends OpMode {
         }
     }
 
-    public boolean resetEncoders(){
+    public void resetEncoders(){
         frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-
-        return (frontLeft.getCurrentPosition() == 0 &&
-                backLeft.getCurrentPosition() == 0 &&
-                frontRight.getCurrentPosition() == 0 &&
-                backRight.getCurrentPosition() == 0);
     }
 
     //TODO: Implement cheesy drive or special drive code?
