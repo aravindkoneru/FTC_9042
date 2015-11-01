@@ -5,20 +5,25 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 public class TestEncoders extends OpHelperClean{
 
+
     enum RunState{
         RESET_STATE,
         FIRST_STATE,
+        FIRST_RESET,
         SECOND_STATE,
         THIRD_STATE,
-        FOURTH_STATE
+        FOURTH_STATE,
+        LAST_STATE
     }
 
     private RunState rs = RunState.RESET_STATE;
-    public TestEncoders()
-    {}
+    public TestEncoders() {}
+
 
     @Override
     public void loop() {
+
+
         basicTel();
         setToEncoderMode();
         switch(rs) {
@@ -30,27 +35,35 @@ public class TestEncoders extends OpHelperClean{
             }
             case FIRST_STATE:
             {
-                setTargetValueMotor(10,10);
 
-                if(hasReached())
+                if(runStraight(10) )//&& debug)
                 {
-                    rs = RunState.SECOND_STATE;
-                    resetEncoders();
+                    rs = RunState.FIRST_RESET;
                 }
                 break;
             }
-//            case SECOND_STATE:
-//            {
-//                setTargetValueMotor(5,5);
-//
-//                if(hasReached())
+            case FIRST_RESET: {
 
+                if(resetEncoders()){
+                    rs = RunState.SECOND_STATE;
+                }
+                break;
+            }
+            case SECOND_STATE:
+            {
+//                if(runStraight(12))// && debug)
 //                {
-//                    rs = RunState.THIRD_STATE;
-//                    resetEncoders();
+                //    resetEncoders();
+                rs = RunState.LAST_STATE;
 //                }
-//                break;
-//            }
+                break;
+            }
+
+            case LAST_STATE:
+            {
+            }
+
+
         }
     }
 }
