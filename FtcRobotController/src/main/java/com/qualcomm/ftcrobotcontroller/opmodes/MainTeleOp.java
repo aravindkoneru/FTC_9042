@@ -13,40 +13,45 @@ public class MainTeleOp extends OpHelperClean {
 
     @Override
     public void loop() {
+        basicTel();
 
         manualDrive();//move robot using joysticks
 
         //Handle zipliner positions
         if(gamepad2.x){
-            setServo(1);
+            setZipLinePosition(1);
         }
 
         if(gamepad2.b){
-            setServo(-1);
+            setZipLinePosition(-1);
         }
 
         if(gamepad2.a){
-            setServo(0);
+            setZipLinePosition(0);
         }
+
+
 
         //TODO: Check if this will work
         //handle arm pivot
         if(gamepad2.left_bumper){
             setArmPivot(-.4);
-        }
-
-        if(gamepad2.right_bumper){
+        }else if(gamepad2.right_bumper){
             setArmPivot(.4);
+        } else{
+            setArmPivot(0);
         }
 
         //TODO: Tape measure code
-
-
+        if(gamepad2.right_trigger > 0) {
+            moveTapeMeasure(.2);
+        } else if(gamepad2.left_trigger > 0){
+            moveTapeMeasure(-.2);
+        } else{
+            moveTapeMeasure(0);
+        }
 
     }
-
-
-
 
     @Override
     public void stop() {

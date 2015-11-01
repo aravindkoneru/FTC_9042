@@ -33,7 +33,7 @@ public class OpHelperClean extends OpMode {
 
     //SERVO CONSTANTS
     private final double SERVO_MAX=1,
-            SERVO_MIN=-1,
+            SERVO_MIN=0,
             SERVO_NEUTRAL = 9.0/17;      //Stops the continuous servo
 
     //MOTOR RANGES
@@ -52,20 +52,32 @@ public class OpHelperClean extends OpMode {
     }
 
     public void init(){
+        //left drive
         frontLeft = hardwareMap.dcMotor.get("l1");
         backLeft = hardwareMap.dcMotor.get("l2");
 
+        //right drive
         frontRight = hardwareMap.dcMotor.get("r1");
         backRight = hardwareMap.dcMotor.get("r2");
 
+        //pivot motor
         armPivot = hardwareMap.dcMotor.get("arm");
+
+        //tape measure arms
+        armMotor1 = hardwareMap.dcMotor.get("tm1");
+        armMotor2 = hardwareMap.dcMotor.get("tm2");
+
+        zipLiner = hardwareMap.servo.get("zip");
+
         setDirection(); //ensures the proper motor directions
+
 
         resetEncoders(); //ensures that the encoders have reset
     }
 
     //sets the proper direction for the motors
     public void setDirection(){
+        //config drive motors
         if(frontLeft.getDirection() == DcMotor.Direction.REVERSE){
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
         }
@@ -81,7 +93,15 @@ public class OpHelperClean extends OpMode {
             backRight.setDirection(DcMotor.Direction.REVERSE);
         }
 
+
         //TODO configure arm motor direction
+
+        //TODO config arm pivot direction
+    }
+
+    public void moveTapeMeasure(double power){
+        armMotor2.setPower(power);
+        armMotor1.setPower(power);
     }
 
     public boolean resetEncoders() {
@@ -102,7 +122,7 @@ public class OpHelperClean extends OpMode {
     }
 
     //TODO: Implement cheesy drive or special drive code?
-    public void setPower(double leftPower, double rightPower){//only accepts clipped values
+    public void setMotorPower(double leftPower, double rightPower){//only accepts clipped values
         clipValues(leftPower, ComponentType.MOTOR);
         clipValues(rightPower, ComponentType.MOTOR);
 
@@ -137,11 +157,11 @@ public class OpHelperClean extends OpMode {
         rightTarget = leftTarget;
         setTargetValueMotor();
 
-        setPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
         if(hasReached())
         {
-            setPower(0,0);
+            setMotorPower(0,0);
             return true;//done traveling
         }
         return false;
@@ -178,6 +198,10 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("RightTarget: ", rightTarget);
 
         telemetry.addData("RESET ENCODERS", flag);
+
+        telemetry.addData("neutral", gamepad2.a);
+        telemetry.addData("right", gamepad2.b);
+        telemetry.addData("left", gamepad2.x);
     }
 
     enum ComponentType{         //helps with clipValues
@@ -196,14 +220,15 @@ public class OpHelperClean extends OpMode {
     }
 
 
-    public boolean setServo(double pos){//slider values
+    public boolean setZipLinePosition(double pos){//slider values
         if(pos == 1){
-            zipLiner.setPosition(Servo.MAX_POSITION);
+            zipLiner.setPosition(SERVO_MAX);
         } else if(pos == -1){
-            zipLiner.setPosition(Servo.MIN_POSITION);
+            zipLiner.setPosition(SERVO_MIN);
         } else if(pos == 0){
             zipLiner.setPosition(SERVO_NEUTRAL);
         }
+
         return true;
     }
 
@@ -213,14 +238,12 @@ public class OpHelperClean extends OpMode {
     }
 
     public void manualDrive(){
+        setToWOEncoderMode();
+
         double rightPower = gamepad1.right_stick_y;
         double leftPower = gamepad1.left_stick_y;
 
-        frontLeft.setPower(leftPower);
-        backLeft.setPower(leftPower);
-
-        frontRight.setPower(rightPower);
-        backRight.setPower(rightPower);
+        setMotorPower(rightPower, leftPower);
     }
 
     public void loop(){
