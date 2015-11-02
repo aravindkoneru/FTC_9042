@@ -234,7 +234,8 @@ public class OpHelperClean extends OpMode {
 
     //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power){
-        armPivot.setPower(clipValues(power, ComponentType.MOTOR));
+        armPivot.setPower(power);
+        //armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
 
     public void manualDrive(){
@@ -244,6 +245,15 @@ public class OpHelperClean extends OpMode {
         double leftPower = gamepad1.left_stick_y;
 
         setMotorPower(rightPower, leftPower);
+    }
+
+    public void turtleDrive(){
+        setToWOEncoderMode();
+
+        double rightPower = gamepad1.right_stick_y;
+        double leftPower = gamepad1.left_stick_y;
+
+        setMotorPower(rightPower*.7, leftPower*.7);
     }
 
     public void loop(){
