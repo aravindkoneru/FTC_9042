@@ -11,41 +11,39 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class OpHelperClean extends OpMode {
 
-
-    int flag = 0;
-
+    //driving motors
     DcMotor frontLeft,
             backLeft;
 
     DcMotor frontRight,
             backRight;
 
-    //currently placeholders, was told they would be needed
+    //arm motors
     DcMotor armMotor1,
             armMotor2,
             armPivot;
 
+    //zipline servo
     Servo zipLiner;
 
-
+    //encoder targets
     private int rightTarget,
             leftTarget;
 
     //SERVO CONSTANTS
     private final double SERVO_MAX=1,
-            SERVO_MIN=0,
-            SERVO_NEUTRAL = 9.0/17;      //Stops the continuous servo
+                         SERVO_MIN=0,
+                         SERVO_NEUTRAL = 9.0/17;//Stops the continuous servo
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
-            MOTOR_MIN=-1;
+                         MOTOR_MIN=-1;
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
             TICKS_PER_ROTATION = 1200/1.05,
             TICKS_PER_INCH = TICKS_PER_ROTATION/CIRCUMFERENCE_INCHES,
             TOLERANCE = 10;
-
 
     public OpHelperClean(){
 
@@ -67,6 +65,7 @@ public class OpHelperClean extends OpMode {
         armMotor1 = hardwareMap.dcMotor.get("tm1");
         armMotor2 = hardwareMap.dcMotor.get("tm2");
 
+        //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
 
         setDirection(); //ensures the proper motor directions
@@ -99,20 +98,19 @@ public class OpHelperClean extends OpMode {
         //TODO config arm pivot direction
     }
 
+    //moves tape measure based on direct
     public void moveTapeMeasure(double power){
         armMotor2.setPower(power);
         armMotor1.setPower(power);
     }
 
+    //reset all the drive encoders and return true if all encoders read 0
     public boolean resetEncoders() {
         frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-
-        flag = 1;
-
 
         return (frontLeft.getCurrentPosition() == 0 &&
                 backLeft.getCurrentPosition() == 0 &&
@@ -121,8 +119,8 @@ public class OpHelperClean extends OpMode {
 
     }
 
-    //TODO: Implement cheesy drive or special drive code?
-    public void setMotorPower(double leftPower, double rightPower){//only accepts clipped values
+    //driving power
+    public void setMotorPower(double leftPower, double rightPower){
         clipValues(leftPower, ComponentType.MOTOR);
         clipValues(rightPower, ComponentType.MOTOR);
 
@@ -133,8 +131,8 @@ public class OpHelperClean extends OpMode {
         backRight.setPower(rightPower);
     }
 
+    //sets all drive motors to encoder mode
     public void setToEncoderMode(){
-        flag=0;
 
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -143,6 +141,7 @@ public class OpHelperClean extends OpMode {
         backRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
+    //sets all drive motors to run without encoders
     public void setToWOEncoderMode()
     {
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
@@ -152,6 +151,7 @@ public class OpHelperClean extends OpMode {
         backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
+    //makes the robot move straight using the encoders
     public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget = leftTarget;
@@ -167,6 +167,7 @@ public class OpHelperClean extends OpMode {
         return false;
     }
 
+    //sets the target position for the drive encoders
     public void setTargetValueMotor(){
         frontLeft.setTargetPosition(leftTarget);
         backLeft.setTargetPosition(leftTarget);
@@ -175,6 +176,7 @@ public class OpHelperClean extends OpMode {
         backRight.setTargetPosition(rightTarget);
     }
 
+    //returns true if all the motors have reached the desired postiion
     public boolean hasReached()
     {
         return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
@@ -188,21 +190,19 @@ public class OpHelperClean extends OpMode {
         return false;
     }
 
+    //basic debugging and feedback
     public void basicTel(){
+        //left drive
         telemetry.addData("frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("LeftTarget: ", leftTarget);
 
+        //right drive
         telemetry.addData("frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("backRightPos: ", backRight.getCurrentPosition());
         telemetry.addData("RightTarget: ", rightTarget);
-
-        telemetry.addData("RESET ENCODERS", flag);
-
-        telemetry.addData("neutral", gamepad2.a);
-        telemetry.addData("right", gamepad2.b);
-        telemetry.addData("left", gamepad2.x);
     }
+
 
     enum ComponentType{         //helps with clipValues
         NONE,
@@ -210,6 +210,7 @@ public class OpHelperClean extends OpMode {
         SERVO
     }
 
+    //makes sure values are within the range for various components
     public double clipValues(double initialValue, ComponentType type) {
         double finalval=0;
         if (type == ComponentType.MOTOR)
@@ -219,7 +220,7 @@ public class OpHelperClean extends OpMode {
         return finalval;
     }
 
-
+    //sets the postiion of the zipline
     public boolean setZipLinePosition(double pos){//slider values
         if(pos == 1){
             zipLiner.setPosition(SERVO_MAX);
@@ -232,28 +233,31 @@ public class OpHelperClean extends OpMode {
         return true;
     }
 
+    //moves the arm at a constant speed
     //TODO: Calibrate this motor for the arm
     public void setArmPivot(double power){
         armPivot.setPower(power);
-        //armPivot.setPower(clipValues(power, ComponentType.MOTOR));
     }
 
-    public void manualDrive(){
+
+    //normal driving mode
+    //boolean is true when turtle drive should be enabled
+    public void manualDrive(boolean turtleDrive){
         setToWOEncoderMode();
 
         double rightPower = gamepad1.right_stick_y;
         double leftPower = gamepad1.left_stick_y;
 
-        setMotorPower(rightPower, leftPower);
+        if(turtleDrive){
+            setMotorPower(rightPower*.5, leftPower*.5);
+        } else{
+            setMotorPower(rightPower, leftPower);
+        }
     }
 
-    public void turtleDrive(){
-        setToWOEncoderMode();
+    //TODO: Make a function to move drive at same speed as the tape measure (Eric's suggestion)
+    public void upMountain(){
 
-        double rightPower = gamepad1.right_stick_y;
-        double leftPower = gamepad1.left_stick_y;
-
-        setMotorPower(rightPower*.7, leftPower*.7);
     }
 
     public void loop(){
@@ -261,6 +265,10 @@ public class OpHelperClean extends OpMode {
     }
 
     public void stop(){
+
+        setMotorPower(0,0);//brake the movement of drive
+        moveTapeMeasure(0);//brake the tape measure
+        setArmPivot(0);//brake the arm pivot
 
     }
 
