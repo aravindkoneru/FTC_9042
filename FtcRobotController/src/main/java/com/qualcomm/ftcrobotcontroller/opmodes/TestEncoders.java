@@ -55,8 +55,22 @@ public class TestEncoders extends OpHelperClean{
             }
             case SECOND_STATE:
             {
+                if (runTurnLeft(5)){
+                    rs = RunState.SECOND_RESET;
+                }
+                break;
+            }
+            case SECOND_RESET:
+            {
+                if(resetEncoders()){//make sure that the encoder have reset
+                    rs = RunState.THIRD_STATE;
+                }
+                break;
+            }
+            case THIRD_STATE:
+            {
                 if (runStraight(5)){
-                    rs = RunState.LAST_STATE;
+                    rs=RunState.LAST_STATE;
                 }
                 break;
             }

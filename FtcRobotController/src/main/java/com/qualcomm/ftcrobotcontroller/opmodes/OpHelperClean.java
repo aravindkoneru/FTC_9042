@@ -70,7 +70,6 @@ public class OpHelperClean extends OpMode {
 
         setDirection(); //ensures the proper motor directions
 
-
         resetEncoders(); //ensures that the encoders have reset
     }
 
@@ -130,6 +129,18 @@ public class OpHelperClean extends OpMode {
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
     }
+    public void setMotorPowerLeft(double leftPower){
+        clipValues(leftPower, ComponentType.MOTOR);
+
+        frontLeft.setPower(leftPower);
+        backLeft.setPower(leftPower);
+    }
+    public void setMotorPowerRight(double rightPower){
+        clipValues(rightPower, ComponentType.MOTOR);
+
+        frontRight.setPower(rightPower);
+        backRight.setPower(rightPower);
+    }
 
     //sets all drive motors to encoder mode
     public void setToEncoderMode(){
@@ -166,6 +177,46 @@ public class OpHelperClean extends OpMode {
         }
         return false;
     }
+    public boolean runTurnRight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
+        leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
+        rightTarget = -leftTarget;
+        setTargetValueMotor();
+
+        setMotorPower(.4, -.4);//TODO: Stalling factor that Libby brought up; check for adequate power
+
+        if(hasReachedRight())
+        {
+            setMotorPowerRight(0);
+        }
+        if(hasReachedLeft())
+        {
+            setMotorPowerLeft(0);
+        }
+        if(hasReachedLeft() && (hasReachedRight())){
+            return true;
+        }
+        return false;
+    }
+    public boolean runTurnLeft(double distance_in_inches) {//Sets values for driving straight, and indicates completion
+        leftTarget = -(int)(distance_in_inches*TICKS_PER_INCH);
+        rightTarget = -leftTarget;
+        setTargetValueMotor();
+
+        setMotorPower(-.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+
+        if(hasReachedRight())
+        {
+            setMotorPowerRight(0);
+        }
+        if(hasReachedLeft())
+        {
+            setMotorPowerLeft(0);
+        }
+        if(hasReachedLeft() && (hasReachedRight())){
+            return true;
+        }
+        return false;
+    }
 
     //sets the target position for the drive encoders
     public void setTargetValueMotor(){
@@ -184,7 +235,16 @@ public class OpHelperClean extends OpMode {
                 Math.abs(frontRight.getCurrentPosition()-rightTarget)<=TOLERANCE &&
                 Math.abs(backRight.getCurrentPosition()-rightTarget)<=TOLERANCE);
     }
-
+    public boolean hasReachedLeft()
+    {
+        return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
+                Math.abs(backLeft.getCurrentPosition()-leftTarget)<=TOLERANCE);
+    }
+    public boolean hasReachedRight()
+    {
+        return (Math.abs(frontRight.getCurrentPosition()-rightTarget)<=TOLERANCE &&
+                Math.abs(backRight.getCurrentPosition()-rightTarget)<=TOLERANCE);
+    }
     //TODO: Run tests to determine the relationship between degrees turned and ticks
     public boolean setTargetValueTurn(double degrees){
         return false;
