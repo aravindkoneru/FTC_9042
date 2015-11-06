@@ -34,32 +34,34 @@ public class TestEncoders extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                resetEncoders();
-                rs=RunState.FIRST_STATE;
+                while(resetEncoders()==false)
+                    telemetry.addData("in the reset loop", 10);
+                    rs=RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
 
-                if(runStraight(10) ){
-                    rs = RunState.FIRST_RESET;
-                }
-                break;
-            }
-            case FIRST_RESET: {
-
-                if(resetEncoders()){                //make sure that the encoder have reset
-                    rs = RunState.SECOND_STATE;
-                }
-                break;
-            }
-            case SECOND_STATE:
-            {
-                if (runStraight(5)){
+                if(runStraight(-10) ){
                     rs = RunState.LAST_STATE;
                 }
                 break;
             }
+//            case FIRST_RESET: {
+//
+//                if(resetEncoders()){//make sure that the encoder have reset
+//
+//                    rs = RunState.SECOND_STATE;
+//                }
+//                break;
+//            }
+//            case SECOND_STATE:
+//            {
+//                if (setTargetValueTurn(90)){
+//                    rs = RunState.LAST_STATE;
+//                }
+//                break;
+//            }
 
             case LAST_STATE:
             {
