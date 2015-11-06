@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-public class OpHelperClean extends OpMode {
+public class OpHelperClean extends OpMode{
 
     //driving motors
     DcMotor frontLeft,
@@ -142,8 +142,7 @@ public class OpHelperClean extends OpMode {
     }
 
     //sets all drive motors to run without encoders
-    public void setToWOEncoderMode()
-    {
+    public void setToWOEncoderMode() {
         frontLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
 
@@ -177,8 +176,7 @@ public class OpHelperClean extends OpMode {
     }
 
     //returns true if all the motors have reached the desired postiion
-    public boolean hasReached()
-    {
+    public boolean hasReached(){
         return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
                 Math.abs(backLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
                 Math.abs(frontRight.getCurrentPosition()-rightTarget)<=TOLERANCE &&
@@ -239,7 +237,6 @@ public class OpHelperClean extends OpMode {
         armPivot.setPower(power);
     }
 
-
     //normal driving mode
     //boolean is true when turtle drive should be enabled
     public void manualDrive(boolean turtleDrive){
@@ -271,5 +268,4 @@ public class OpHelperClean extends OpMode {
         setArmPivot(0);//brake the arm pivot
 
     }
-
 }

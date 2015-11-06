@@ -18,7 +18,6 @@ public class TestEncoders extends OpHelperClean{
         LAST_STATE
     }
 
-
     private RunState rs = RunState.RESET_STATE;
 
     public TestEncoders() {}
