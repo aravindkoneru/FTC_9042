@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-public class OpHelperClean extends OpMode {
+public class OpHelperClean extends OpMode{
 
     //driving motors
     DcMotor frontLeft,
@@ -183,12 +183,11 @@ public class OpHelperClean extends OpMode {
     }
 
     //returns true if all the motors have reached the desired postiion
-    public boolean hasReached()
-    {
-        return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
-                Math.abs(backLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
-                Math.abs(frontRight.getCurrentPosition()-rightTarget)<=TOLERANCE &&
-                Math.abs(backRight.getCurrentPosition()-rightTarget)<=TOLERANCE);
+    public boolean hasReached() {
+        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
+                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
+                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE &&
+                Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
 
     //TODO: Run tests to determine the relationship between degrees turned and ticks
@@ -252,7 +251,6 @@ public class OpHelperClean extends OpMode {
         armPivot.setPower(power);
     }
 
-
     //normal driving mode
     //boolean is true when turtle drive should be enabled
     public void manualDrive(boolean turtleDrive){
@@ -284,5 +282,4 @@ public class OpHelperClean extends OpMode {
         setArmPivot(0);//brake the arm pivot
         setZipLinePosition(0);
     }
-
 }
