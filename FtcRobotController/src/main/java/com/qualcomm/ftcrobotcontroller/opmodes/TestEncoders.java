@@ -47,7 +47,7 @@ public class TestEncoders extends OpHelperClean{
             }
             case FIRST_RESET: {
 
-                if(resetEncoders()){//make sure that the encoder have reset
+                if(resetEncoders()){                //make sure that the encoder have reset
                     rs = RunState.SECOND_STATE;
                 }
                 break;
