@@ -48,7 +48,7 @@ public class MidknightAutonRed extends OpHelperClean{
             {
 
                 if(runStraight(-22, false) ){
-                    rs = RunState.LAST_STATE;
+                    rs = RunState.FIRST_RESET;
                 }
                 break;
             }
@@ -78,7 +78,7 @@ public class MidknightAutonRed extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if(runStraight(45,false))
+                if(runStraight(60,false))
                 {
                     rs = RunState.THIRD_RESET;
                 }
@@ -93,7 +93,7 @@ public class MidknightAutonRed extends OpHelperClean{
             }
             case FOURTH_STATE:
             {
-                if(setTargetValueTurn(-90)){
+                if(setTargetValueTurn(-100)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;

@@ -78,7 +78,7 @@ public class MidknightAutonBlue extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if(runStraight(-60,false))
+                if(runStraight(-65,false))
                     {
                         rs = RunState.THIRD_RESET;
                     }
@@ -93,7 +93,7 @@ public class MidknightAutonBlue extends OpHelperClean{
             }
             case FOURTH_STATE:
             {
-                if(setTargetValueTurn(90)){
+                if(setTargetValueTurn(130)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -101,7 +101,7 @@ public class MidknightAutonBlue extends OpHelperClean{
             case FOURTH_RESET:
             {
                 if(resetEncoders()){
-                    rs = RunState.FIFTH_STATE;
+                    rs = RunState.SIXTH_STATE;
                 }
                 break;
             }
