@@ -20,6 +20,15 @@ public class MainTeleOp extends OpHelperClean {
             manualDrive(false);
         }
 
+        if(gamepad1.y){
+            setMotorPower(1,1);
+        }
+
+        if(gamepad1.a){
+            setMotorPower(-1,-1);
+        }
+
+
         //Handle zipliner positions
         if(gamepad2.right_bumper){
             setZipLinePosition(1);
