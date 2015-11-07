@@ -41,7 +41,7 @@ public class TestEncoders extends OpHelperClean{
             case FIRST_STATE:
             {
 
-                if(runStraight(-10) ){
+                if(runStraight(-10,false) ){
                     rs = RunState.LAST_STATE;
                 }
                 break;

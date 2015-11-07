@@ -47,8 +47,8 @@ public class MidknightAutonBlue extends OpHelperClean{
             case FIRST_STATE:
             {
 
-                if(runStraight(-22, false) ){
-                    rs = RunState.LAST_STATE;
+                if(runStraight(-16, false) ){
+                    rs = RunState.FIRST_RESET;
                 }
                 break;
             }
@@ -63,7 +63,7 @@ public class MidknightAutonBlue extends OpHelperClean{
             }
             case SECOND_STATE:
             {
-                if (setTargetValueTurn(43))
+                if (setTargetValueTurn(70))
                 {
                     rs = RunState.SECOND_RESET;
                 }
@@ -78,7 +78,7 @@ public class MidknightAutonBlue extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if(runStraight(45,false))
+                if(runStraight(-60,false))
                     {
                         rs = RunState.THIRD_RESET;
                     }
@@ -120,7 +120,7 @@ public class MidknightAutonBlue extends OpHelperClean{
             }
             case SIXTH_STATE:
             {
-                if(runStraight(70,true))
+                if(runStraight(-70,true))
                 {
                     rs = RunState.LAST_STATE;
                 }

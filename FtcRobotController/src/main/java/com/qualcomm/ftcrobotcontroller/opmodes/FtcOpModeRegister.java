@@ -47,6 +47,7 @@ public class FtcOpModeRegister implements OpModeRegister {
       //driving
       manager.register("TestEncoders", TestEncoders.class);
       manager.register("MainTeleOp", MainTeleOp.class);
+      manager.register("MidknightAutonBlue", MidknightAutonBlue.class);
 
   }
 }
