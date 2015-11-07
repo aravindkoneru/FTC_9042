@@ -158,7 +158,7 @@ public class OpHelperClean extends OpMode{
     }
 
     //makes the robot move straight using the encoders
-    public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
+    /*Public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget = leftTarget;
         setTargetValueMotor();
@@ -171,7 +171,26 @@ public class OpHelperClean extends OpMode{
             return true;//done traveling
         }
         return false;
+    }*/
+    public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
+        leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
+        rightTarget = leftTarget;
+        setTargetValueMotor();
+
+        if(speed){
+            setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
+        } else{
+            setMotorPower(.4,.4);
+        }
+
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;//done traveling
+        }
+        return false;
     }
+
 
     //sets the target position for the drive encoders
     public void setTargetValueMotor(){
@@ -191,7 +210,7 @@ public class OpHelperClean extends OpMode{
     }
 
     //TODO: Run tests to determine the relationship between degrees turned and ticks
-    public boolean setTargetValueTurn(double degrees){
+   /* public boolean setTargetValueTurn(double degrees){
         double constantOfTurn = 1.0;          //TODO: Get rid of this shady way of calibration and do some math... But for now it will suffice
         double distance = constantOfTurn * degrees/360 * WHEELBASEWIDTH *Math.PI * TICKS_PER_INCH;
 
@@ -201,7 +220,7 @@ public class OpHelperClean extends OpMode{
         if(hasReached())
             return true;
         return false;
-    }
+    }*/
 
     //basic debugging and feedback
     public void basicTel(){
@@ -264,6 +283,21 @@ public class OpHelperClean extends OpMode{
         } else{
             setMotorPower(rightPower, leftPower);
         }
+    }
+    private final double ROBOT_WIDTH = 14.5;
+    public boolean setTargetValueTurn(double degrees) {
+
+        int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
+        leftTarget = encoderTarget;
+        rightTarget = -encoderTarget;
+        setTargetValueMotor();
+        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;//done traveling
+        }
+        return false;
     }
 
     //TODO: Make a function to move drive at same speed as the tape measure (Eric's suggestion)
