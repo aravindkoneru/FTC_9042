@@ -3,7 +3,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by Tim on 10/25/2015.
  */
-public class TestEncoders extends OpHelperClean{
+//STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
+
+public class BlueSideBlue extends OpHelperClean{
 
 
     //establish run states for auton
@@ -27,7 +29,7 @@ public class TestEncoders extends OpHelperClean{
 
     private RunState rs = RunState.RESET_STATE;
 
-    public TestEncoders() {}
+    public BlueSideBlue() {}
 
 
     @Override
@@ -41,7 +43,7 @@ public class TestEncoders extends OpHelperClean{
             case RESET_STATE:
             {
                 resetEncoders();
-                rs=RunState.FIRST_STATE;
+                rs= RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
@@ -75,47 +77,49 @@ public class TestEncoders extends OpHelperClean{
             case THIRD_STATE:
             {
                 if (runStraight(41, false)){
-                    rs=RunState.FOURTH_STATE;
+                    rs= RunState.FOURTH_STATE;
                 }
                 break;
             }
             case THIRD_RESET:
             {
                 if (resetEncoders()){
-                rs=RunState.FOURTH_STATE;
-            }
+                    rs= RunState.FOURTH_STATE;
+                }
                 break;
             }
             case FOURTH_STATE: {
+                setZipLinePosition(-1);
                 if (setTargetValueTurn(90)){
-                    rs=RunState.FOURTH_RESET;
+                    rs= RunState.FOURTH_RESET;
                 }
                 break;
             }
             case FOURTH_RESET:
             {
+                setZipLinePosition(0);
                 if (resetEncoders()){
-                    rs=RunState.FIFTH_STATE;
+                    rs= RunState.FIFTH_STATE;
                 }
                 break;
             }
             case FIFTH_STATE:
             {
                 if (runStraight(20, false)){
-                    rs=RunState.FIFTH_RESET;
+                    rs= RunState.FIFTH_RESET;
                 }
             }
-        case FIFTH_RESET:
-        {
-            if (resetEncoders()){
-                rs=RunState.FIFTH_STATE;
+            case FIFTH_RESET:
+            {
+                if (resetEncoders()){
+                    rs= RunState.FIFTH_STATE;
+                }
+                break;
             }
-            break;
-        }
             case SIXTH_STATE:
             {
                 if (runStraight(70, true)){
-                    rs=RunState.FIFTH_RESET;
+                    rs= RunState.LAST_STATE;
                 }
             }
             case LAST_STATE:

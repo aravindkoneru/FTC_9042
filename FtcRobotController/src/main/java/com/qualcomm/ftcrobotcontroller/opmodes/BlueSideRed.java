@@ -3,7 +3,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by Tim on 10/25/2015.
  */
-public class TestEncoders extends OpHelperClean{
+//STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
+
+public class BlueSideRed extends OpHelperClean{
 
 
     //establish run states for auton
@@ -27,7 +29,7 @@ public class TestEncoders extends OpHelperClean{
 
     private RunState rs = RunState.RESET_STATE;
 
-    public TestEncoders() {}
+    public BlueSideRed() {}
 
 
     @Override
@@ -82,8 +84,8 @@ public class TestEncoders extends OpHelperClean{
             case THIRD_RESET:
             {
                 if (resetEncoders()){
-                rs=RunState.FOURTH_STATE;
-            }
+                    rs=RunState.FOURTH_STATE;
+                }
                 break;
             }
             case FOURTH_STATE: {
@@ -105,17 +107,17 @@ public class TestEncoders extends OpHelperClean{
                     rs=RunState.FIFTH_RESET;
                 }
             }
-        case FIFTH_RESET:
-        {
-            if (resetEncoders()){
-                rs=RunState.FIFTH_STATE;
+            case FIFTH_RESET:
+            {
+                if (resetEncoders()){
+                    rs=RunState.FIFTH_STATE;
+                }
+                break;
             }
-            break;
-        }
             case SIXTH_STATE:
             {
                 if (runStraight(70, true)){
-                    rs=RunState.FIFTH_RESET;
+                    rs=RunState.LAST_STATE;
                 }
             }
             case LAST_STATE:

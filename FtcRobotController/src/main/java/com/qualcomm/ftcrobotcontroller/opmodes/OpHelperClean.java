@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-public class OpHelperClean extends OpMode {
+public class OpHelperClean extends OpMode{
 
     //driving motors
     DcMotor frontLeft,
@@ -32,18 +32,21 @@ public class OpHelperClean extends OpMode {
 
     //SERVO CONSTANTS
     private final double SERVO_MAX=1,
-                         SERVO_MIN=0,
-                         SERVO_NEUTRAL = 9.0/17;//Stops the continuous servo
+            SERVO_MIN=0,
+            SERVO_NEUTRAL = 9.0/17;//Stops the continuous servo
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
-                         MOTOR_MIN=-1;
+            MOTOR_MIN=-1;
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
             TICKS_PER_ROTATION = 1200/1.05,
             TICKS_PER_INCH = TICKS_PER_ROTATION/CIRCUMFERENCE_INCHES,
-            TOLERANCE = 10;
+            TOLERANCE = 40;
+
+    //WHEELBASE CONSTANTS
+    private final double WHEELBASEWIDTH = 15;
 
     public OpHelperClean(){
 
@@ -70,6 +73,7 @@ public class OpHelperClean extends OpMode {
 
         setDirection(); //ensures the proper motor directions
 
+
         resetEncoders(); //ensures that the encoders have reset
     }
 
@@ -91,6 +95,9 @@ public class OpHelperClean extends OpMode {
             backRight.setDirection(DcMotor.Direction.REVERSE);
         }
 
+        if(armMotor1.getDirection() == DcMotor.Direction.FORWARD){
+            armMotor1.setDirection(DcMotor.Direction.REVERSE);
+        }
 
         //TODO configure arm motor direction
 
@@ -129,18 +136,6 @@ public class OpHelperClean extends OpMode {
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
     }
-    public void setMotorPowerLeft(double leftPower){
-        clipValues(leftPower, ComponentType.MOTOR);
-
-        frontLeft.setPower(leftPower);
-        backLeft.setPower(leftPower);
-    }
-    public void setMotorPowerRight(double rightPower){
-        clipValues(rightPower, ComponentType.MOTOR);
-
-        frontRight.setPower(rightPower);
-        backRight.setPower(rightPower);
-    }
 
     //sets all drive motors to encoder mode
     public void setToEncoderMode(){
@@ -163,60 +158,37 @@ public class OpHelperClean extends OpMode {
     }
 
     //makes the robot move straight using the encoders
-    public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
+    /*Public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
         leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
         rightTarget = leftTarget;
         setTargetValueMotor();
-
         setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
-
         if(hasReached())
         {
             setMotorPower(0,0);
             return true;//done traveling
         }
         return false;
-    }
-    public boolean runTurnRight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
-        leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
-        rightTarget = -leftTarget;
+    }*/
+    public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
+        leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
+        rightTarget = leftTarget;
         setTargetValueMotor();
 
-        setMotorPower(.4, -.4);//TODO: Stalling factor that Libby brought up; check for adequate power
+        if(speed){
+            setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
+        } else{
+            setMotorPower(.4,.4);
+        }
 
-        if(hasReachedRight())
-        {
-            setMotorPowerRight(0);
-        }
-        if(hasReachedLeft())
-        {
-            setMotorPowerLeft(0);
-        }
-        if(hasReachedLeft() && (hasReachedRight())){
-            return true;
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;//done traveling
         }
         return false;
     }
-    public boolean runTurnLeft(double distance_in_inches) {//Sets values for driving straight, and indicates completion
-        leftTarget = -(int)(distance_in_inches*TICKS_PER_INCH);
-        rightTarget = -leftTarget;
-        setTargetValueMotor();
 
-        setMotorPower(-.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
-
-        if(hasReachedRight())
-        {
-            setMotorPowerRight(0);
-        }
-        if(hasReachedLeft())
-        {
-            setMotorPowerLeft(0);
-        }
-        if(hasReachedLeft() && (hasReachedRight())){
-            return true;
-        }
-        return false;
-    }
 
     //sets the target position for the drive encoders
     public void setTargetValueMotor(){
@@ -228,27 +200,24 @@ public class OpHelperClean extends OpMode {
     }
 
     //returns true if all the motors have reached the desired postiion
-    public boolean hasReached()
-    {
-        return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
-                Math.abs(backLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
-                Math.abs(frontRight.getCurrentPosition()-rightTarget)<=TOLERANCE &&
-                Math.abs(backRight.getCurrentPosition()-rightTarget)<=TOLERANCE);
+    public boolean hasReached() {
+        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
+                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
+                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE &&
+                Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
-    public boolean hasReachedLeft()
-    {
-        return (Math.abs(frontLeft.getCurrentPosition()-leftTarget)<=TOLERANCE &&
-                Math.abs(backLeft.getCurrentPosition()-leftTarget)<=TOLERANCE);
-    }
-    public boolean hasReachedRight()
-    {
-        return (Math.abs(frontRight.getCurrentPosition()-rightTarget)<=TOLERANCE &&
-                Math.abs(backRight.getCurrentPosition()-rightTarget)<=TOLERANCE);
-    }
+
     //TODO: Run tests to determine the relationship between degrees turned and ticks
-    public boolean setTargetValueTurn(double degrees){
+   /* public boolean setTargetValueTurn(double degrees){
+        double constantOfTurn = 1.0;          //TODO: Get rid of this shady way of calibration and do some math... But for now it will suffice
+        double distance = constantOfTurn * degrees/360 * WHEELBASEWIDTH *Math.PI * TICKS_PER_INCH;
+        leftTarget= (int) -distance;
+        rightTarget= (int) distance;
+        setTargetValueMotor();
+        if(hasReached())
+            return true;
         return false;
-    }
+    }*/
 
     //basic debugging and feedback
     public void basicTel(){
@@ -256,7 +225,6 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("LeftTarget: ", leftTarget);
-
         //right drive
         telemetry.addData("frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("backRightPos: ", backRight.getCurrentPosition());
@@ -299,7 +267,6 @@ public class OpHelperClean extends OpMode {
         armPivot.setPower(power);
     }
 
-
     //normal driving mode
     //boolean is true when turtle drive should be enabled
     public void manualDrive(boolean turtleDrive){
@@ -313,6 +280,21 @@ public class OpHelperClean extends OpMode {
         } else{
             setMotorPower(rightPower, leftPower);
         }
+    }
+    private final double ROBOT_WIDTH = 14.5;
+    public boolean setTargetValueTurn(double degrees) {
+
+        int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
+        leftTarget = encoderTarget;
+        rightTarget = -encoderTarget;
+        setTargetValueMotor();
+        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;//done traveling
+        }
+        return false;
     }
 
     //TODO: Make a function to move drive at same speed as the tape measure (Eric's suggestion)
@@ -329,7 +311,6 @@ public class OpHelperClean extends OpMode {
         setMotorPower(0,0);//brake the movement of drive
         moveTapeMeasure(0);//brake the tape measure
         setArmPivot(0);//brake the arm pivot
-
+        setZipLinePosition(0);
     }
-
 }
