@@ -32,12 +32,12 @@ public class OpHelperClean extends OpMode{
 
     //SERVO CONSTANTS
     private final double SERVO_MAX=1,
-                         SERVO_MIN=0,
-                         SERVO_NEUTRAL = 9.0/17;//Stops the continuous servo
+            SERVO_MIN=0,
+            SERVO_NEUTRAL = 9.0/17;//Stops the continuous servo
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
-                         MOTOR_MIN=-1;
+            MOTOR_MIN=-1;
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
@@ -157,21 +157,6 @@ public class OpHelperClean extends OpMode{
         backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-    //makes the robot move straight using the encoders
-    /*Public boolean runStraight(double distance_in_inches) {//Sets values for driving straight, and indicates completion
-        leftTarget = (int)(distance_in_inches*TICKS_PER_INCH);
-        rightTarget = leftTarget;
-        setTargetValueMotor();
-
-        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
-
-        if(hasReached())
-        {
-            setMotorPower(0,0);
-            return true;//done traveling
-        }
-        return false;
-    }*/
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget = leftTarget;
@@ -209,18 +194,6 @@ public class OpHelperClean extends OpMode{
                 Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
     }
 
-    //TODO: Run tests to determine the relationship between degrees turned and ticks
-   /* public boolean setTargetValueTurn(double degrees){
-        double constantOfTurn = 1.0;          //TODO: Get rid of this shady way of calibration and do some math... But for now it will suffice
-        double distance = constantOfTurn * degrees/360 * WHEELBASEWIDTH *Math.PI * TICKS_PER_INCH;
-
-        leftTarget= (int) -distance;
-        rightTarget= (int) distance;
-        setTargetValueMotor();
-        if(hasReached())
-            return true;
-        return false;
-    }*/
 
     //basic debugging and feedback
     public void basicTel(){
