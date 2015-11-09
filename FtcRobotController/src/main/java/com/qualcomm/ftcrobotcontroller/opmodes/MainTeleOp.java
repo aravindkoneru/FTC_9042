@@ -16,6 +16,7 @@ public class MainTeleOp extends OpHelperClean {
         basicTel();
 
 
+
         //move robot using joysticks
         if(gamepad1.right_bumper && gamepad1.left_bumper){
             manualDrive(true);
@@ -40,9 +41,9 @@ public class MainTeleOp extends OpHelperClean {
 
         //handle arm pivot
         if(gamepad2.left_bumper){
-            setArmPivot(-.2);
+            setArmPivot(-.1);
         }else if(gamepad2.right_bumper){
-            setArmPivot(.2);
+            setArmPivot(.1);
         } else{
             setArmPivot(0);
         }
@@ -50,12 +51,13 @@ public class MainTeleOp extends OpHelperClean {
 
         //handle tape measure movement
         if(gamepad2.left_trigger > 0) {
-            moveTapeMeasure(.2);
+            moveTapeMeasure(1);
         } else if(gamepad2.right_trigger > 0){
-            moveTapeMeasure(-.2);
+            moveTapeMeasure(-1);
         } else{
             moveTapeMeasure(0);
         }
+
 
     }
 

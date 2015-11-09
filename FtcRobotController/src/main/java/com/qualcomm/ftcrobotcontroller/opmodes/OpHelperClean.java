@@ -100,16 +100,8 @@ public class OpHelperClean extends OpMode{
         }
 
         //TODO configure arm motor direction
-
         //TODO config arm pivot direction
     }
-
-    //moves tape measure based on direct
-    public void moveTapeMeasure(double power){
-        armMotor2.setPower(power);
-        armMotor1.setPower(power);
-    }
-
     //reset all the drive encoders and return true if all encoders read 0
     public boolean resetEncoders() {
         frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -117,11 +109,16 @@ public class OpHelperClean extends OpMode{
 
         frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        armMotor1.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        armMotor2.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+
 
         return (frontLeft.getCurrentPosition() == 0 &&
                 backLeft.getCurrentPosition() == 0 &&
                 frontRight.getCurrentPosition() == 0 &&
-                backRight.getCurrentPosition() == 0);
+                backRight.getCurrentPosition() == 0 &&
+                armMotor1.getCurrentPosition() == 0 &&
+                armMotor2.getCurrentPosition() ==0);
 
     }
 
@@ -145,6 +142,11 @@ public class OpHelperClean extends OpMode{
 
         frontRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
+        armMotor1.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        armMotor2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
+
     }
 
     //sets all drive motors to run without encoders
@@ -155,6 +157,10 @@ public class OpHelperClean extends OpMode{
 
         frontRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+
+        armMotor1.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        armMotor2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+
     }
 
     //makes the robot move straight using the encoders
@@ -170,6 +176,18 @@ public class OpHelperClean extends OpMode{
         }
         return false;
     }*/
+    public void moveTapeMeasure(double power){
+        double difference=findRatio();
+        armMotor2.setPower(power*.5*difference);
+        armMotor1.setPower(power*.5);
+    }
+    public double findRatio(){
+        double difference=1;
+        if (Math.abs(armMotor1.getCurrentPosition()-armMotor2.getCurrentPosition())>=TOLERANCE) {
+            difference = armMotor1.getCurrentPosition() / armMotor2.getCurrentPosition();
+        }
+        return difference;
+    }
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
         rightTarget = leftTarget;
@@ -276,7 +294,7 @@ public class OpHelperClean extends OpMode{
         double leftPower = gamepad1.left_stick_y;
 
         if(turtleDrive){
-            setMotorPower(rightPower*.5, leftPower*.5);
+            setMotorPower(rightPower*.333, leftPower*.333);
         } else{
             setMotorPower(rightPower, leftPower);
         }
@@ -311,6 +329,6 @@ public class OpHelperClean extends OpMode{
         setMotorPower(0,0);//brake the movement of drive
         moveTapeMeasure(0);//brake the tape measure
         setArmPivot(0);//brake the arm pivot
-        setZipLinePosition(0);
+        setZipLinePosition(0);//brake the rack and pinion
     }
 }
