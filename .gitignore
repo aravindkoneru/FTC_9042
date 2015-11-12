@@ -5,6 +5,9 @@
 # Java class files
 *.class
 
+# vim classes
+*.swp
+
 # generated files
 bin/
 gen/
