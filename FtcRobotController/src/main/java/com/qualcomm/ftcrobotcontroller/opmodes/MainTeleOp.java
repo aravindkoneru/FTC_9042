@@ -49,9 +49,9 @@ public class MainTeleOp extends OpHelperClean {
 
         //handle tape measure movement
         if(gamepad2.y) {
-            moveTapeMeasure(.2);
+            moveTapeMeasure(1);
         } else if(gamepad2.a){
-            moveTapeMeasure(-.2);
+            moveTapeMeasure(-1);
         } else{
             moveTapeMeasure(0);
         }

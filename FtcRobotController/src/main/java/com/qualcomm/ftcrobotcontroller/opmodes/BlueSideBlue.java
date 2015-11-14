@@ -35,21 +35,22 @@ public class BlueSideBlue extends OpHelperClean{
     @Override
     public void loop() {
 
-
         basicTel();
+        telemetry.addData("state: ", rs);
         setToEncoderMode();
 
         switch(rs) {
             case RESET_STATE:
             {
-                resetEncoders();
-                rs= RunState.FIRST_STATE;
+                if (resetEncoders()){
+                    rs= RunState.FIRST_STATE;
+                }
                 break;
             }
             case FIRST_STATE:
             {
 
-                if(runStraight(12, false) ){
+                if(runStraight(-75, false) ){
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -62,7 +63,7 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(45)){
+                if (setTargetValueTurn(50,0)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -76,8 +77,8 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if (runStraight(41, false)){
-                    rs= RunState.FOURTH_STATE;
+                if (setTargetValueTurn(0,-50)){
+                    rs= RunState.THIRD_RESET;
                 }
                 break;
             }
@@ -89,8 +90,8 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case FOURTH_STATE: {
-                setZipLinePosition(-1);
-                if (setTargetValueTurn(90)){
+                setZipLinePosition(1);
+                if (runStraight(-20, false)){
                     rs= RunState.FOURTH_RESET;
                 }
                 break;
@@ -104,19 +105,6 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case FIFTH_STATE:
-            {
-                if (runStraight(20, false)){
-                    rs= RunState.FIFTH_RESET;
-                }
-            }
-            case FIFTH_RESET:
-            {
-                if (resetEncoders()){
-                    rs= RunState.FIFTH_STATE;
-                }
-                break;
-            }
-            case SIXTH_STATE:
             {
                 if (runStraight(70, true)){
                     rs= RunState.LAST_STATE;

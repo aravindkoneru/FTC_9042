@@ -59,7 +59,7 @@ public class TestEncoders extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(45)){
+                if (setTargetValueTurn(-10,0)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -86,7 +86,7 @@ public class TestEncoders extends OpHelperClean{
                 break;
             }
             case FOURTH_STATE: {
-                if (setTargetValueTurn(90)){
+                if (setTargetValueTurn(10,0)){
                     rs=RunState.FOURTH_RESET;
                 }
                 break;
