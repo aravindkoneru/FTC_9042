@@ -24,7 +24,9 @@ public class OpHelperClean extends OpMode{
             armPivot;
 
     //zipline servo
-    Servo zipLiner;
+    Servo zipLiner,
+          plow1,
+          plow2;
 
     //encoder targets
     private int rightTarget,
@@ -33,11 +35,14 @@ public class OpHelperClean extends OpMode{
     //SERVO CONSTANTS
     private final double SERVO_MAX=.6,
             SERVO_MIN=.2,
-            SERVO_NEUTRAL = 9.0/17;//Stops the continuous servo
+            SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
+            PLOW_UP = .8,
+            PLOW_DOWN = .4;
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
             MOTOR_MIN=-1;
+
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
@@ -301,6 +306,16 @@ public class OpHelperClean extends OpMode{
             return true;
         }
         return false;
+    }
+    public void setPlowPosition(boolean up){
+        if (up){
+            plow1.setPosition(PLOW_UP);
+            plow2.setPosition(PLOW_UP);
+        }
+        if (!up){
+            plow1.setPosition(PLOW_DOWN);
+            plow2.setPosition(PLOW_DOWN);
+        }
     }
 
     //TODO: Make a function to move drive at same speed as the tape measure (Eric's suggestion)
