@@ -8,6 +8,8 @@ public class MainTeleOp extends OpHelperClean {
 
     }
 
+    private int position = 0;
+
     @Override
     public void loop() {
         //enable basic feedback
@@ -47,14 +49,20 @@ public class MainTeleOp extends OpHelperClean {
             setArmPivot(0);
         }
 
-        //handle tape measure movement
-        if(gamepad2.y) {
-            moveTapeMeasure(.2);
-        } else if(gamepad2.a){
-            moveTapeMeasure(-.2);
-        } else{
-            moveTapeMeasure(0);
+        if(gamepad2.y){
+            setT
         }
+
+//        //handle tape measure movement
+//        if(gamepad2.y) {
+//            runTapeMeasure(position + 10);
+//            position += 10;
+//        } else if(gamepad2.a){
+//            runTapeMeasure(position - 10);
+//            position -= 10;
+//       } else{
+//            runTapeMeasure(position);
+//        }
 
     }
 

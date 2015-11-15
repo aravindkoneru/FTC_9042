@@ -23,8 +23,9 @@ public class OpHelperClean extends OpMode{
             armMotor2,
             armPivot;
 
-    //zipline servo
-    Servo zipLiner;
+    //servos
+    Servo zipLiner,
+            plow;
 
     //encoder targets
     private int rightTarget,
@@ -69,13 +70,18 @@ public class OpHelperClean extends OpMode{
         armMotor2 = hardwareMap.dcMotor.get("tm2");
 
         //zipline servo
-        zipLiner = hardwareMap.servo.get("zip");
+        zipLiner = hardwareMap.servo.get("zipR");
+
+        //plow = hardwareMap.servo.get("plow");
 
         setDirection(); //ensures the proper motor directions
 
+        resetTape(); //resets the tape measures
 
         resetEncoders(); //ensures that the encoders have reset
     }
+
+
 
     //sets the proper direction for the motors
     public void setDirection(){
@@ -112,11 +118,11 @@ public class OpHelperClean extends OpMode{
 
     //reset all the drive encoders and return true if all encoders read 0
     public boolean resetEncoders() {
-        frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        backLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        backRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        frontRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        backRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         return (frontLeft.getCurrentPosition() == 0 &&
                 backLeft.getCurrentPosition() == 0 &&
@@ -140,21 +146,23 @@ public class OpHelperClean extends OpMode{
     //sets all drive motors to encoder mode
     public void setToEncoderMode(){
 
-        frontLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
-        frontRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
+
     }
 
     //sets all drive motors to run without encoders
     public void setToWOEncoderMode()
     {
-        frontLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
 
-        frontRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public boolean runStraight(double distance_in_inches, boolean speed) {//Sets values for driving straight, and indicates completion
@@ -167,7 +175,6 @@ public class OpHelperClean extends OpMode{
         } else{
             setMotorPower(.4,.4);
         }
-
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -198,13 +205,16 @@ public class OpHelperClean extends OpMode{
     //basic debugging and feedback
     public void basicTel(){
         //left drive
-        telemetry.addData("frontLeftPos: ", frontLeft.getCurrentPosition());
-        telemetry.addData("backLeftPos: ", backLeft.getCurrentPosition());
-        telemetry.addData("LeftTarget: ", leftTarget);
+        telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
+        telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
+        telemetry.addData("03 LeftTarget: ", leftTarget);
         //right drive
-        telemetry.addData("frontRightPos: ", frontRight.getCurrentPosition());
-        telemetry.addData("backRightPos: ", backRight.getCurrentPosition());
-        telemetry.addData("RightTarget: ", rightTarget);
+        telemetry.addData("04 frontRightPos: ", frontRight.getCurrentPosition());
+        telemetry.addData("05 backRightPos: ", backRight.getCurrentPosition());
+        telemetry.addData("06 RightTarget: ", rightTarget);
+
+        telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
+        telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
     }
 
 
@@ -280,6 +290,44 @@ public class OpHelperClean extends OpMode{
 
     public void loop(){
 
+    }
+
+    public boolean armHasReacher(int ticks){
+        if      (armMotor2.getCurrentPosition() == ticks
+                && armMotor1.getCurrentPosition() == ticks){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    public void runTapeMeasure(int ticks){
+        setTape();
+
+        armMotor1.setTargetPosition(ticks);
+        armMotor2.setTargetPosition(ticks);
+
+        armMotor1.setPower(.2);
+        armMotor2.setPower(.2);
+
+        if(armHasReacher(ticks)){
+            armMotor1.setPower(0);
+            armMotor2.setPower(0);
+        }
+
+    }
+
+    public boolean resetTape(){
+        armMotor1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        armMotor2.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+        return (armMotor1.getCurrentPosition() == 0 &&
+                armMotor2.getCurrentPosition() == 0);
+    }
+
+    public void setTape(){
+        armMotor1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
     public void stop(){
