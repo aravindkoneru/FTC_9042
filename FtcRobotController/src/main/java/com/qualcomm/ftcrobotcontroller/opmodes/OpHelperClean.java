@@ -23,22 +23,25 @@ public class OpHelperClean extends OpMode{
             armMotor2,
             armPivot;
 
-    //servos
-    Servo zipLiner,
-            plow;
+    //zipline servo
+    Servo zipLiner;
+    Servo plow1;
 
     //encoder targets
     private int rightTarget,
             leftTarget;
 
     //SERVO CONSTANTS
-    private final double SERVO_MAX=1,
-            SERVO_MIN=0,
-            SERVO_NEUTRAL = 9.0/17;//Stops the continuous servo
+    private final double SERVO_MAX=.6,
+            SERVO_MIN=.2,
+            SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
+            PLOW_UP = 0,
+            PLOW_DOWN = 1;
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
             MOTOR_MIN=-1;
+
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
@@ -70,14 +73,10 @@ public class OpHelperClean extends OpMode{
         armMotor2 = hardwareMap.dcMotor.get("tm2");
 
         //zipline servo
-        zipLiner = hardwareMap.servo.get("zipR");
-
-        //plow = hardwareMap.servo.get("plow");
+        zipLiner = hardwareMap.servo.get("zip");
+        plow1 = hardwareMap.servo.get("plow");
 
         setDirection(); //ensures the proper motor directions
-
-        resetTape(); //resets the tape measures
-
         resetEncoders(); //ensures that the encoders have reset
     }
 
@@ -89,6 +88,7 @@ public class OpHelperClean extends OpMode{
         if(frontLeft.getDirection() == DcMotor.Direction.REVERSE){
             frontLeft.setDirection(DcMotor.Direction.FORWARD);
         }
+
         if(backLeft.getDirection() == DcMotor.Direction.REVERSE){
             backLeft.setDirection(DcMotor.Direction.FORWARD);
         }
@@ -112,11 +112,20 @@ public class OpHelperClean extends OpMode{
 
     //moves tape measure based on direct
     public void moveTapeMeasure(double power){
-        armMotor2.setPower(power);
         armMotor1.setPower(power);
+        armMotor2.setPower(power);
     }
 
     //reset all the drive encoders and return true if all encoders read 0
+    public boolean resetTapeEncoders() {
+        armMotor1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        armMotor2.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+        return (armMotor1.getCurrentPosition() == 0 &&
+                armMotor2.getCurrentPosition() == 0);
+    }
+
+
     public boolean resetEncoders() {
         frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -124,10 +133,10 @@ public class OpHelperClean extends OpMode{
         frontRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         backRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        return (frontLeft.getCurrentPosition() == 0 &&
-                backLeft.getCurrentPosition() == 0 &&
-                frontRight.getCurrentPosition() == 0 &&
-                backRight.getCurrentPosition() == 0);
+        return ((frontLeft.getCurrentPosition() == 0) &&
+                (backLeft.getCurrentPosition() == 0) &&
+                (frontRight.getCurrentPosition() == 0) &&
+                (backRight.getCurrentPosition() == 0));
 
     }
 
@@ -145,14 +154,14 @@ public class OpHelperClean extends OpMode{
 
     //sets all drive motors to encoder mode
     public void setToEncoderMode(){
+    //    armMotor1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+    //    armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
-
     }
 
     //sets all drive motors to run without encoders
@@ -171,8 +180,9 @@ public class OpHelperClean extends OpMode{
         setTargetValueMotor();
 
         if(speed){
-            setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
-        } else{
+            setMotorPower(1, 1);//TODO: Stalling factor that Libby brought up; check for adequate power
+        }
+        else{
             setMotorPower(.4,.4);
         }
 
@@ -209,6 +219,7 @@ public class OpHelperClean extends OpMode{
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("03 LeftTarget: ", leftTarget);
         //right drive
+
         telemetry.addData("04 frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("05 backRightPos: ", backRight.getCurrentPosition());
         telemetry.addData("06 RightTarget: ", rightTarget);
@@ -268,19 +279,47 @@ public class OpHelperClean extends OpMode{
         }
     }
     private final double ROBOT_WIDTH = 14.5;
-    public boolean setTargetValueTurn(double degrees) {
+//    public boolean setTargetValueTurn(double right, double left) {
+//
+//        int leftEncoderTarget = (int) (left * TICKS_PER_INCH);
+//        int rightEncoderTarget = (int) (right * TICKS_PER_INCH);
+//        leftTarget = leftEncoderTarget;
+//        rightTarget = rightEncoderTarget;
+//        setTargetValueMotor();
+//        if (right==0){
+//            setMotorPower(.6, .1);//TODO: Stalling factor that Libby brought up; check for adequate power
+//        }
+//        if (left==0){
+//            setMotorPower(.1, .6);//TODO: Stalling factor that Libby brought up; check for adequate power
+//        }
+//
+//        if (hasReached()) {
+//            setMotorPower(0, 0);
+//            return true;
+//        }
+//        return false;
+//    }
+public boolean setTargetValueTurn(double degrees) {
 
-        int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
-        leftTarget = encoderTarget;
-        rightTarget = -encoderTarget;
-        setTargetValueMotor();
-        setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+    int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
+    leftTarget = encoderTarget;
+    rightTarget = -encoderTarget;
+    setTargetValueMotor();
+    setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;//done traveling
+    if (hasReached()) {
+        setMotorPower(0, 0);
+        return true;//done traveling
+    }
+    return false;
+}
+    public void setPlowPosition(boolean up){
+        if (up){
+            plow1.setPosition(PLOW_UP);
         }
-        return false;
+        else{
+            plow1.setPosition(PLOW_DOWN);
+        }
     }
 
     //TODO: Make a function to move drive at same speed as the tape measure (Eric's suggestion)

@@ -5,7 +5,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 //STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-public class BlueSideRed extends OpHelperClean{
+public class BlueMountainRed extends OpHelperClean{
 
 
     //establish run states for auton
@@ -29,7 +29,7 @@ public class BlueSideRed extends OpHelperClean{
 
     private RunState rs = RunState.RESET_STATE;
 
-    public BlueSideRed() {}
+    public BlueMountainRed() {}
 
 
     @Override
@@ -42,6 +42,8 @@ public class BlueSideRed extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
+                setZipLinePosition(0);
+                setPlowPosition(false);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
                 break;
@@ -49,7 +51,7 @@ public class BlueSideRed extends OpHelperClean{
             case FIRST_STATE:
             {
 
-                if(runStraight(12, false) ){
+                if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -62,7 +64,7 @@ public class BlueSideRed extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(45)){
+                if (setTargetValueTurn(68)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -76,8 +78,8 @@ public class BlueSideRed extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if (runStraight(41, false)){
-                    rs=RunState.FOURTH_STATE;
+                if (runStraight(-47, false)){
+                    rs=RunState.THIRD_RESET;
                 }
                 break;
             }
@@ -89,7 +91,7 @@ public class BlueSideRed extends OpHelperClean{
                 break;
             }
             case FOURTH_STATE: {
-                if (setTargetValueTurn(90)){
+                if (setTargetValueTurn(139)){
                     rs=RunState.FOURTH_RESET;
                 }
                 break;
@@ -103,22 +105,25 @@ public class BlueSideRed extends OpHelperClean{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(20, false)){
+                if (runStraight(-20, false)){
                     rs=RunState.FIFTH_RESET;
                 }
+                break;
             }
             case FIFTH_RESET:
             {
+                setPlowPosition(true);
                 if (resetEncoders()){
-                    rs=RunState.FIFTH_STATE;
+                    rs=RunState.SIXTH_STATE;
                 }
                 break;
             }
             case SIXTH_STATE:
             {
-                if (runStraight(70, true)){
+                if (runStraight(-70, true)){
                     rs=RunState.LAST_STATE;
                 }
+                break;
             }
             case LAST_STATE:
             {

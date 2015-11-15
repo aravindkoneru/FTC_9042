@@ -15,27 +15,35 @@ public class MainTeleOp extends OpHelperClean {
         //enable basic feedback
         basicTel();
 
+
         //move robot using joysticks
-        if(gamepad1.right_bumper && gamepad1.left_bumper){
+        if(gamepad1.right_bumper){
             manualDrive(true);
-        } else{
+        }
+        else{
             manualDrive(false);
         }
 
         if(gamepad1.y){
             setMotorPower(1,1);
         }
-
-        if(gamepad1.a){
+        else if(gamepad1.a){
             setMotorPower(-1,-1);
+        }
+
+        if (gamepad1.b){
+            setPlowPosition(true);
+        }
+        else if (gamepad1.x){
+            setPlowPosition(false);
         }
 
 
         //Handle zipliner positions
         if(gamepad2.right_bumper){
-            setZipLinePosition(1);
-        } else if(gamepad2.left_bumper){
             setZipLinePosition(-1);
+        } else if(gamepad2.left_bumper){
+            setZipLinePosition(1);
         } else{
             setZipLinePosition(0);
         }
@@ -43,14 +51,22 @@ public class MainTeleOp extends OpHelperClean {
         //handle arm pivot
         if(gamepad2.dpad_down){
             setArmPivot(-.2);
-        }else if(gamepad2.dpad_up){
-            setArmPivot(.2);
-        } else{
-            setArmPivot(0);
         }
+        else if(gamepad2.dpad_up) {
+            setArmPivot(.2);
+        }
+        else setArmPivot(0);
 
-        if(gamepad2.y){
-            setT
+
+            //handle tape measure movement
+        if (gamepad2.y) {
+            moveTapeMeasure(-.2);
+        } else if (gamepad2.a) {
+            moveTapeMeasure(.2);
+        } else if(gamepad2.x){
+            moveTapeMeasure(.8);
+        }else{
+            moveTapeMeasure(0);
         }
 
 //        //handle tape measure movement
@@ -65,6 +81,7 @@ public class MainTeleOp extends OpHelperClean {
 //        }
 
     }
+
 
     @Override
     public void stop() {

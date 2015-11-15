@@ -1,11 +1,11 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.hardware.DcMotorController;
-
 /**
  * Created by Tim on 10/25/2015.
  */
-public class MidknightAutonBlue extends OpHelperClean{
+
+//STARTING POSITION = Middle on crack of 3 Mats from side non mountain corner
+public class BlueMountainRedSharp extends OpHelperClean{
 
 
     //establish run states for auton
@@ -22,12 +22,14 @@ public class MidknightAutonBlue extends OpHelperClean{
         FIFTH_STATE,
         FIFTH_RESET,
         SIXTH_STATE,
+        SIXTH_RESET,
         LAST_STATE
     }
 
+
     private RunState rs = RunState.RESET_STATE;
 
-    public MidknightAutonBlue() {}
+    public BlueMountainRedSharp() {}
 
 
     @Override
@@ -40,93 +42,86 @@ public class MidknightAutonBlue extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-
-                rs=RunState.FIRST_STATE;
+                resetEncoders();
+                rs= RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
 
-                if(runStraight(-16, false) ){
+                if(runStraight(-36, false) ){
                     rs = RunState.FIRST_RESET;
                 }
                 break;
             }
-            case FIRST_RESET:
-            {
-                if(resetEncoders())
-                {
+            case FIRST_RESET: {
+
+                if(resetEncoders()){//make sure that the encoder have reset
                     rs = RunState.SECOND_STATE;
                 }
                 break;
-
             }
-            case SECOND_STATE:
-            {
-                if (setTargetValueTurn(70))
-                {
+            case SECOND_STATE: {
+                if (setTargetValueTurn(135)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
             }
             case SECOND_RESET:
             {
-                if(resetEncoders()){
+                if(resetEncoders()){//make sure that the encoder have reset
                     rs = RunState.THIRD_STATE;
                 }
                 break;
             }
             case THIRD_STATE:
             {
-                if(runStraight(-65,false))
-                    {
-                        rs = RunState.THIRD_RESET;
-                    }
+                if (runStraight(-20, false)){
+                    rs= RunState.THIRD_RESET;
+                }
                 break;
             }
             case THIRD_RESET:
             {
-                if(resetEncoders()){
-                    rs = RunState.FOURTH_STATE;
+                if (resetEncoders()){
+                    rs= RunState.FOURTH_STATE;
                 }
                 break;
             }
-            case FOURTH_STATE:
-            {
-                if(setTargetValueTurn(130)){
-                    rs = RunState.FOURTH_RESET;
+            case FOURTH_STATE: {
+                if (runStraight(-70, true)){
+                    rs= RunState.FOURTH_RESET;
                 }
                 break;
             }
             case FOURTH_RESET:
             {
-                if(resetEncoders()){
-                    rs = RunState.SIXTH_STATE;
+                if (resetEncoders()){
+                    rs= RunState.LAST_STATE;
                 }
                 break;
             }
             case FIFTH_STATE:
             {
-                if (setZipLinePosition(-1))
-                {
-                    rs = RunState.FIFTH_RESET;
+                if (runStraight(-20, false)){
+                    rs= RunState.FIFTH_RESET;
                 }
+                break;
             }
             case FIFTH_RESET:
             {
                 if (resetEncoders()){
-                    rs = RunState.SIXTH_STATE;
+                    rs= RunState.SIXTH_STATE;
                 }
+                break;
             }
             case SIXTH_STATE:
             {
-                if(runStraight(-70,true))
-                {
-                    rs = RunState.LAST_STATE;
+                if (runStraight(70, true)){
+                    rs= RunState.LAST_STATE;
                 }
+                break;
             }
-
-
             case LAST_STATE:
             {
                 stop();
