@@ -15,32 +15,33 @@ public class MainTeleOp extends OpHelperClean {
 
 
         //move robot using joysticks
-        if(gamepad1.right_bumper && gamepad1.left_bumper){
+        if(gamepad1.right_bumper){
             manualDrive(true);
-        } else{
+        }
+        else{
             manualDrive(false);
         }
 
         if(gamepad1.y){
             setMotorPower(1,1);
         }
-
-        if(gamepad1.a){
+        else if(gamepad1.a){
             setMotorPower(-1,-1);
         }
-        if (gamepad1.dpad_up){
+
+        if (gamepad1.b){
             setPlowPosition(true);
         }
-        if (gamepad1.dpad_down){
+        else if (gamepad1.x){
             setPlowPosition(false);
         }
 
 
         //Handle zipliner positions
         if(gamepad2.right_bumper){
-            setZipLinePosition(1);
-        } else if(gamepad2.left_bumper){
             setZipLinePosition(-1);
+        } else if(gamepad2.left_bumper){
+            setZipLinePosition(1);
         } else{
             setZipLinePosition(0);
         }
@@ -52,28 +53,20 @@ public class MainTeleOp extends OpHelperClean {
         else if(gamepad2.dpad_up) {
             setArmPivot(.2);
         }
+        else setArmPivot(0);
 
-        if (gamepad2.left_bumper) {
-            setArmPivot(-.1);
-        } else if (gamepad2.right_bumper) {
-            setArmPivot(.1);
-        } else {
-            setArmPivot(0);
-        }
 
             //handle tape measure movement
         if (gamepad2.y) {
-            moveTapeMeasure(1);
+            moveTapeMeasure(-.2);
         } else if (gamepad2.a) {
-
-            if (gamepad2.left_trigger > 0) {
-                moveTapeMeasure(1);
-            } else if (gamepad2.right_trigger > 0) {
-                moveTapeMeasure(-1);
-            } else {
-                moveTapeMeasure(0);
-            }
+            moveTapeMeasure(.2);
+        } else if(gamepad2.x){
+            moveTapeMeasure(.8);
+        }else{
+            moveTapeMeasure(0);
         }
+
     }
 
 

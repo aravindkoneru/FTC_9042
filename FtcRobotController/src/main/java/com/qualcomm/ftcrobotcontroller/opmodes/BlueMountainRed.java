@@ -3,7 +3,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by Tim on 10/25/2015.
  */
-public class TestEncoders extends OpHelperClean{
+//STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
+
+public class BlueMountainRed extends OpHelperClean{
 
 
     //establish run states for auton
@@ -24,9 +26,10 @@ public class TestEncoders extends OpHelperClean{
         LAST_STATE
     }
 
+
     private RunState rs = RunState.RESET_STATE;
 
-    public TestEncoders() {}
+    public BlueMountainRed() {}
 
 
     @Override
@@ -39,14 +42,16 @@ public class TestEncoders extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                while(resetEncoders()==false)
-                    telemetry.addData("in the reset loop", 10);
-                    rs=RunState.FIRST_STATE;
+                setZipLinePosition(0);
+                setPlowPosition(false);
+                resetEncoders();
+                rs=RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
-                if(runStraight(12, false) ){
+
+                if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -59,7 +64,7 @@ public class TestEncoders extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(-10)){
+                if (setTargetValueTurn(68)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -73,20 +78,20 @@ public class TestEncoders extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if (runStraight(41, false)){
-                    rs=RunState.FOURTH_STATE;
+                if (runStraight(-47, false)){
+                    rs=RunState.THIRD_RESET;
                 }
                 break;
             }
             case THIRD_RESET:
             {
                 if (resetEncoders()){
-                rs=RunState.FOURTH_STATE;
-            }
+                    rs=RunState.FOURTH_STATE;
+                }
                 break;
             }
             case FOURTH_STATE: {
-                if (setTargetValueTurn(10)){
+                if (setTargetValueTurn(139)){
                     rs=RunState.FOURTH_RESET;
                 }
                 break;
@@ -100,22 +105,25 @@ public class TestEncoders extends OpHelperClean{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(20, false)){
+                if (runStraight(-20, false)){
                     rs=RunState.FIFTH_RESET;
                 }
+                break;
             }
-        case FIFTH_RESET:
-        {
-            if (resetEncoders()){
-                rs=RunState.FIFTH_STATE;
+            case FIFTH_RESET:
+            {
+                setPlowPosition(true);
+                if (resetEncoders()){
+                    rs=RunState.SIXTH_STATE;
+                }
+                break;
             }
-            break;
-        }
             case SIXTH_STATE:
             {
-                if (runStraight(70, true)){
-                    rs=RunState.FIFTH_RESET;
+                if (runStraight(-70, true)){
+                    rs=RunState.LAST_STATE;
                 }
+                break;
             }
             case LAST_STATE:
             {

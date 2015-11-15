@@ -24,9 +24,8 @@ public class OpHelperClean extends OpMode{
             armPivot;
 
     //zipline servo
-    Servo zipLiner,
-          plow1,
-          plow2;
+    Servo zipLiner;
+    Servo plow1;
 
     //encoder targets
     private int rightTarget,
@@ -36,8 +35,8 @@ public class OpHelperClean extends OpMode{
     private final double SERVO_MAX=.6,
             SERVO_MIN=.2,
             SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
-            PLOW_UP = .8,
-            PLOW_DOWN = .4;
+            PLOW_UP = 0,
+            PLOW_DOWN = 1;
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
@@ -75,6 +74,7 @@ public class OpHelperClean extends OpMode{
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
+        plow1 = hardwareMap.servo.get("plow");
 
         setDirection(); //ensures the proper motor directions
         resetTapeEncoders();
@@ -111,14 +111,8 @@ public class OpHelperClean extends OpMode{
 
     //moves tape measure based on direct
     public void moveTapeMeasure(double power){
-        double difference=1;
-        if (Math.abs(armMotor1.getCurrentPosition() - armMotor2.getCurrentPosition())>=50){
-            difference=armMotor1.getCurrentPosition()/armMotor2.getCurrentPosition();
-        }
-        double leftPower=power*.3;
-        double rightPower=power*.3*difference;
-        armMotor2.setPower(rightPower);
-        armMotor1.setPower(leftPower);
+        armMotor1.setPower(power);
+        armMotor2.setPower(power);
     }
 
     //reset all the drive encoders and return true if all encoders read 0
@@ -188,7 +182,7 @@ public class OpHelperClean extends OpMode{
         setTargetValueMotor();
 
         if(speed){
-            setMotorPower(.8, .8);//TODO: Stalling factor that Libby brought up; check for adequate power
+            setMotorPower(1, 1);//TODO: Stalling factor that Libby brought up; check for adequate power
         }
         else{
             setMotorPower(.4,.4);
@@ -287,34 +281,46 @@ public class OpHelperClean extends OpMode{
         }
     }
     private final double ROBOT_WIDTH = 14.5;
-    public boolean setTargetValueTurn(double right, double left) {
+//    public boolean setTargetValueTurn(double right, double left) {
+//
+//        int leftEncoderTarget = (int) (left * TICKS_PER_INCH);
+//        int rightEncoderTarget = (int) (right * TICKS_PER_INCH);
+//        leftTarget = leftEncoderTarget;
+//        rightTarget = rightEncoderTarget;
+//        setTargetValueMotor();
+//        if (right==0){
+//            setMotorPower(.6, .1);//TODO: Stalling factor that Libby brought up; check for adequate power
+//        }
+//        if (left==0){
+//            setMotorPower(.1, .6);//TODO: Stalling factor that Libby brought up; check for adequate power
+//        }
+//
+//        if (hasReached()) {
+//            setMotorPower(0, 0);
+//            return true;
+//        }
+//        return false;
+//    }
+public boolean setTargetValueTurn(double degrees) {
 
-        int leftEncoderTarget = (int) (left * TICKS_PER_INCH);
-        int rightEncoderTarget = (int) (right * TICKS_PER_INCH);
-        leftTarget = leftEncoderTarget;
-        rightTarget = rightEncoderTarget;
-        setTargetValueMotor();
-        if (right==0){
-            setMotorPower(.6, .1);//TODO: Stalling factor that Libby brought up; check for adequate power
-        }
-        if (left==0){
-            setMotorPower(.1, .6);//TODO: Stalling factor that Libby brought up; check for adequate power
-        }
+    int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
+    leftTarget = encoderTarget;
+    rightTarget = -encoderTarget;
+    setTargetValueMotor();
+    setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
 
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;
-        }
-        return false;
+    if (hasReached()) {
+        setMotorPower(0, 0);
+        return true;//done traveling
     }
+    return false;
+}
     public void setPlowPosition(boolean up){
         if (up){
             plow1.setPosition(PLOW_UP);
-            plow2.setPosition(PLOW_UP);
         }
-        if (!up){
+        else{
             plow1.setPosition(PLOW_DOWN);
-            plow2.setPosition(PLOW_DOWN);
         }
     }
 
