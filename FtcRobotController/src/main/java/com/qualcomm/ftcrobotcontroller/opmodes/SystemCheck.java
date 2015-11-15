@@ -16,7 +16,7 @@ public class SystemCheck extends OpHelperClean{
         PIVOT_DOWN,
         TAPES_OUT,
         TAPES_IN,
-        LAST;
+        LAST
     }
 
     double timer = 0;
