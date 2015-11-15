@@ -36,6 +36,7 @@ public class BlueSideBlue extends OpHelperClean{
     public void loop() {
 
 
+
         basicTel();
         setToEncoderMode();
 
