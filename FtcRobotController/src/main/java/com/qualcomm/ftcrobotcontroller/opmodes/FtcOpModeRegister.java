@@ -24,9 +24,8 @@ public class FtcOpModeRegister implements OpModeRegister {
 
       //Autonomous
       manager.register("BlueSideBlue", BlueSideBlue.class);
-      manager.register("BlueSideRed", BlueMountainRed.class);
+      manager.register("RedSideBlue", RedSideBlue.class);
       manager.register("Floor Goal", FloorZone.class);
-      manager.register("Dropping CLimbers", DropClimbers.class);
 
   }
 }

@@ -15,6 +15,7 @@ public class FloorZone extends OpHelperClean{
 
         LAST_STATE
     }
+    int timer=0;
 
 
     private RunState rs = RunState.RESET_STATE;
@@ -32,6 +33,7 @@ public class FloorZone extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
+                setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;
                 }
@@ -39,8 +41,8 @@ public class FloorZone extends OpHelperClean{
             }
             case FIRST_STATE:
             {
-
-                if(runStraight(-168, false) ){
+                shakePlow();
+                if(runStraight(-110, false) ){
                     rs = RunState.LAST_STATE;
                 }
                 break;
