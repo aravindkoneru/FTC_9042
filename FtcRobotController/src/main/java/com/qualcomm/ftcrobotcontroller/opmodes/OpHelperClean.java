@@ -52,6 +52,11 @@ public class OpHelperClean extends OpMode{
     //WHEELBASE CONSTANTS
     private final double WHEELBASEWIDTH = 15;
 
+    final boolean up=true,
+                    down=false;
+    int timer=0;
+
+
     public OpHelperClean(){
 
     }
@@ -180,7 +185,7 @@ public class OpHelperClean extends OpMode{
         setTargetValueMotor();
 
         if(speed){
-            setMotorPower(1, 1);//TODO: Stalling factor that Libby brought up; check for adequate power
+            setMotorPower(.9, .9);//TODO: Stalling factor that Libby brought up; check for adequate power
         }
         else{
             setMotorPower(.4,.4);
@@ -367,6 +372,18 @@ public boolean setTargetValueTurn(double degrees) {
     public void setTape(){
         armMotor1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+    }
+
+    public void shakePlow(){
+        timer++;
+        if (timer%15==0){
+            if (timer%30==0){
+                plow1.setPosition(.8);
+            }
+            else {
+                setPlowPosition(down);
+            }
+        }
     }
 
     public void stop(){

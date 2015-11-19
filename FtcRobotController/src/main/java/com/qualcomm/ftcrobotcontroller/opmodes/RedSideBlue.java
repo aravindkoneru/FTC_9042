@@ -120,11 +120,11 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 /**
- * Created by Tim on 10/25/2015.
+ * Created by Naman on 11/15/2015.
  */
 //STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-public class DropClimbers extends OpHelperClean{
+public class RedSideBlue extends OpHelperClean{
 
 
     //establish run states for auton
@@ -145,15 +145,15 @@ public class DropClimbers extends OpHelperClean{
         LAST_STATE
     }
 
-    double timer=0;
 
     private RunState rs = RunState.RESET_STATE;
 
-    public DropClimbers() {}
+    public RedSideBlue() {}
 
 
     @Override
     public void loop() {
+
 
 
         basicTel();
@@ -162,14 +162,17 @@ public class DropClimbers extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
+                setZipLinePosition(0);
+                setPlowPosition(false);
                 resetEncoders();
                 rs= RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
-
-                if(runStraight(112, false) ){
+                shakePlow();
+                setZipLinePosition(0);
+                if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -182,22 +185,24 @@ public class DropClimbers extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(45)){
+                setPlowPosition(down);
+                if (setTargetValueTurn(-60)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
             }
             case SECOND_RESET:
             {
-                if(resetEncoders()){//make sure that the encoder have reset
+                if(resetEncoders()){//make surehat the encoder have reset
                     rs = RunState.THIRD_STATE;
                 }
                 break;
             }
             case THIRD_STATE:
             {
-                if (runStraight(17, false)){
-                    rs= RunState.FOURTH_STATE;
+                shakePlow();
+                if (runStraight(-67, false)){
+                    rs= RunState.THIRD_RESET;
                 }
                 break;
             }
@@ -209,16 +214,16 @@ public class DropClimbers extends OpHelperClean{
                 break;
             }
             case FOURTH_STATE: {
-                moveTapeMeasure(.1);
-                if (timer<100){
-                    timer=-1;
-                    rs=RunState.FOURTH_RESET;
+                setZipLinePosition(1);
+                setPlowPosition(down);
+                if (setTargetValueTurn(-120)){
+                    rs= RunState.FOURTH_RESET;
                 }
-                timer++;
                 break;
             }
-            case FOURTH_RESET: {
-                moveTapeMeasure(0);
+            case FOURTH_RESET:
+            {
+                setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIFTH_STATE;
                 }
@@ -226,29 +231,25 @@ public class DropClimbers extends OpHelperClean{
             }
             case FIFTH_STATE:
             {
-                setArmPivot(-.1);
-                if (timer<100){
-                    timer=-1;
-                    rs=RunState.FIFTH_RESET;
+                shakePlow();
+                if (runStraight(-20, false)){
+                    rs= RunState.FIFTH_RESET;
                 }
-                timer++;
+                break;
             }
             case FIFTH_RESET:
             {
-                setArmPivot(0);
+                setPlowPosition(up);
                 if (resetEncoders()){
-                    rs= RunState.FIFTH_STATE;
+                    rs= RunState.SIXTH_STATE;
                 }
                 break;
             }
             case SIXTH_STATE:
             {
-                moveTapeMeasure(-.1);
-                if (timer<100){
-                    timer=-1;
-                    rs=RunState.LAST_STATE;
+                if (runStraight(-70, true)){
+                    rs= RunState.LAST_STATE;
                 }
-                timer++;
                 break;
             }
             case LAST_STATE:

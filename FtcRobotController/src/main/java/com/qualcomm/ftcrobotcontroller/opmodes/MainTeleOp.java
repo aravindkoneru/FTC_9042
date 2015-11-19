@@ -31,10 +31,10 @@ public class MainTeleOp extends OpHelperClean {
             setMotorPower(-1,-1);
         }
 
-        if (gamepad1.b){
+        if (gamepad1.dpad_up){
             setPlowPosition(true);
         }
-        else if (gamepad1.x){
+        else if (gamepad1.dpad_down){
             setPlowPosition(false);
         }
 

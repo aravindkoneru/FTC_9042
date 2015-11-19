@@ -170,6 +170,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FIRST_STATE:
             {
+                shakePlow();
                 setZipLinePosition(0);
                 if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
@@ -184,6 +185,7 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
+                setPlowPosition(down);
                 if (setTargetValueTurn(68)){
                     rs = RunState.SECOND_RESET;
                 }
@@ -198,6 +200,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case THIRD_STATE:
             {
+                shakePlow();
                 if (runStraight(-67, false)){
                     rs= RunState.THIRD_RESET;
                 }
@@ -212,6 +215,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FOURTH_STATE: {
                 setZipLinePosition(1);
+                setPlowPosition(down);
                 if (setTargetValueTurn(139)){
                     rs= RunState.FOURTH_RESET;
                 }
@@ -227,6 +231,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FIFTH_STATE:
             {
+                shakePlow();
                 if (runStraight(-20, false)){
                     rs= RunState.FIFTH_RESET;
                 }
@@ -234,7 +239,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
-                setPlowPosition(true);
+                setPlowPosition(up);
                 if (resetEncoders()){
                     rs= RunState.SIXTH_STATE;
                 }
