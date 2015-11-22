@@ -31,7 +31,6 @@ public class MainTeleOp extends OpHelperClean {
             setMotorPower(-1,-1);
         }
 
-        //plow positions
         if (gamepad1.dpad_up){
             setPlowPosition(true);
         }
