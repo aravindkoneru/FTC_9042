@@ -5,7 +5,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 //STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-public class BlueMountainRed extends OpHelperClean{
+public class BlueSideRed extends OpHelperClean{
 
 
     //establish run states for auton
@@ -29,7 +29,7 @@ public class BlueMountainRed extends OpHelperClean{
 
     private RunState rs = RunState.RESET_STATE;
 
-    public BlueMountainRed() {}
+    public BlueSideRed() {}
 
 
     @Override
@@ -43,7 +43,7 @@ public class BlueMountainRed extends OpHelperClean{
             case RESET_STATE:
             {
                 setZipLinePosition(0);
-                setPlowPosition(false);
+                setPlowPosition(down);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
                 break;
@@ -91,7 +91,7 @@ public class BlueMountainRed extends OpHelperClean{
                 break;
             }
             case FOURTH_STATE: {
-                if (setTargetValueTurn(139)){
+                if (setTargetValueTurn(120)){
                     rs=RunState.FOURTH_RESET;
                 }
                 break;
@@ -112,7 +112,7 @@ public class BlueMountainRed extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
-                setPlowPosition(true);
+                setPlowPosition(up);
                 if (resetEncoders()){
                     rs=RunState.SIXTH_STATE;
                 }

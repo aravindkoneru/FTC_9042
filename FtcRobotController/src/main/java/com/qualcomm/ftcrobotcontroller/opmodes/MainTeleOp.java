@@ -24,10 +24,10 @@ public class MainTeleOp extends OpHelperClean {
             manualDrive(false);
         }
 
-        if(gamepad1.y){
+        if(gamepad1.a){
             setMotorPower(1,1);
         }
-        else if(gamepad1.a){
+        else if(gamepad1.y){
             setMotorPower(-1,-1);
         }
 
@@ -36,6 +36,9 @@ public class MainTeleOp extends OpHelperClean {
         }
         else if (gamepad1.dpad_down){
             setPlowPosition(false);
+        }
+        else if (gamepad1.x){
+            plowFlicker();
         }
 
 

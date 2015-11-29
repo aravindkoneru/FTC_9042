@@ -36,7 +36,7 @@ public class OpHelperClean extends OpMode{
             SERVO_MIN=.2,
             SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
             PLOW_UP = 0,
-            PLOW_DOWN = 1;
+            PLOW_DOWN = .95;
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
@@ -374,17 +374,18 @@ public boolean setTargetValueTurn(double degrees) {
         armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    public void shakePlow(){
+    public void plowFlicker(){
         timer++;
-        if (timer%15==0){
-            if (timer%30==0){
-                plow1.setPosition(.8);
+        if (timer%25==0){
+            if (timer%50==0){
+                plow1.setPosition(.65);
             }
             else {
                 setPlowPosition(down);
             }
         }
     }
+
 
     public void stop(){
 
