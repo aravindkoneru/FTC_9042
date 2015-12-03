@@ -43,8 +43,7 @@ public class FloorZone extends OpHelperClean{
             }
             case FIRST_STATE:
             {
-//                plowFlicker();
-                if (runStraight(-87, true)){
+                if (runStraight(-95, true)){
                     rs=RunState.LAST_STATE;
                 }
 

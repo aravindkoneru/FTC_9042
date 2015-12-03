@@ -170,7 +170,6 @@ public class RedSideBlue extends OpHelperClean{
             }
             case FIRST_STATE:
             {
-                plowFlicker();
                 setZipLinePosition(0);
                 if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
@@ -200,7 +199,6 @@ public class RedSideBlue extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                plowFlicker();
                 if (runStraight(-67, false)){
                     rs= RunState.THIRD_RESET;
                 }
@@ -231,7 +229,6 @@ public class RedSideBlue extends OpHelperClean{
             }
             case FIFTH_STATE:
             {
-                plowFlicker();
                 if (runStraight(-20, false)){
                     rs= RunState.FIFTH_RESET;
                 }

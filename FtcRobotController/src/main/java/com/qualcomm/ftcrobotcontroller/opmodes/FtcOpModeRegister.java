@@ -11,14 +11,6 @@ public class FtcOpModeRegister implements OpModeRegister {
 
   public void register(OpModeManager manager) {
 
-      manager.register("NullOp", NullOp.class);
-
-      //test full functionality of robot
-      manager.register("SystemCheck", SystemCheck.class);
-
-      //driving
-      manager.register("TestEncoders", TestEncoders.class);
-
       //Tele-Op
       manager.register("MainTeleOp", MainTeleOp.class);
 
@@ -26,6 +18,7 @@ public class FtcOpModeRegister implements OpModeRegister {
       manager.register("Blue Alliance Blue Mountain", BlueSideBlue.class);
       manager.register("Blue Alliance Red Mountain", BlueSideRed.class);
       manager.register("Red Alliance Red Mountain", RedSideBlue.class);
+      manager.register("Blue Floor Zone and then Mountain", BlueFloorZoneBlue.class);
       manager.register("Floor Goal", FloorZone.class);
 
   }

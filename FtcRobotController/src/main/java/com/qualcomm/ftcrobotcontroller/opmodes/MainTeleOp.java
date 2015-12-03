@@ -32,22 +32,20 @@ public class MainTeleOp extends OpHelperClean {
         }
 
         if (gamepad1.dpad_up){
-            setPlowPosition(true);
+            setPlowPosition(up);
         }
         else if (gamepad1.dpad_down){
-            setPlowPosition(false);
-        }
-        else if (gamepad1.x){
-            plowFlicker();
+            setPlowPosition(down);
         }
 
 
         //Handle zipliner positions
         if(gamepad2.right_bumper){
-            setZipLinePosition(-1);
-        } else if(gamepad2.left_bumper){
             setZipLinePosition(1);
-        } else{
+        } else if(gamepad2.left_bumper){
+            setZipLinePosition(-1);
+        }
+        else{
             setZipLinePosition(0);
         }
 
@@ -63,25 +61,15 @@ public class MainTeleOp extends OpHelperClean {
 
             //handle tape measure movement
         if (gamepad2.y) {
-            moveTapeMeasure(-.2);
-        } else if (gamepad2.a) {
             moveTapeMeasure(.2);
+        } else if (gamepad2.a) {
+            moveTapeMeasure(-.2);
         } else if(gamepad2.x){
-            moveTapeMeasure(.8);
-        }else{
+            moveTapeMeasure(-.8);
+        }
+        else{
             moveTapeMeasure(0);
         }
-
-//        //handle tape measure movement
-//        if(gamepad2.y) {
-//            runTapeMeasure(position + 10);
-//            position += 10;
-//        } else if(gamepad2.a){
-//            runTapeMeasure(position - 10);
-//            position -= 10;
-//       } else{
-//            runTapeMeasure(position);
-//        }
 
     }
 

@@ -36,7 +36,7 @@ public class OpHelperClean extends OpMode{
             SERVO_MIN=.2,
             SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
             PLOW_UP = 0,
-            PLOW_DOWN = .95;
+            PLOW_DOWN = .55;
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
@@ -310,7 +310,7 @@ public boolean setTargetValueTurn(double degrees) {
     leftTarget = encoderTarget;
     rightTarget = -encoderTarget;
     setTargetValueMotor();
-    setMotorPower(.4, .4);//TODO: Stalling factor that Libby brought up; check for adequate power
+    setMotorPower(.4, .4);
 
     if (hasReached()) {
         setMotorPower(0, 0);
@@ -372,18 +372,6 @@ public boolean setTargetValueTurn(double degrees) {
     public void setTape(){
         armMotor1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-    }
-
-    public void plowFlicker(){
-        timer++;
-        if (timer%25==0){
-            if (timer%50==0){
-                plow1.setPosition(.65);
-            }
-            else {
-                setPlowPosition(down);
-            }
-        }
     }
 
 

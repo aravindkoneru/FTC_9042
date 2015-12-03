@@ -76,10 +76,9 @@ public class BlueSideRed extends OpHelperClean{
                 }
                 break;
             }
-            case THIRD_STATE:
-            {
-                if (runStraight(-47, false)){
-                    rs=RunState.THIRD_RESET;
+            case THIRD_STATE: {
+                if (runStraight(-44, true)) {
+                    rs = RunState.THIRD_RESET;
                 }
                 break;
             }
@@ -98,6 +97,7 @@ public class BlueSideRed extends OpHelperClean{
             }
             case FOURTH_RESET:
             {
+                setPlowPosition(up);
                 if (resetEncoders()){
                     rs=RunState.FIFTH_STATE;
                 }
@@ -112,7 +112,6 @@ public class BlueSideRed extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
-                setPlowPosition(up);
                 if (resetEncoders()){
                     rs=RunState.SIXTH_STATE;
                 }
