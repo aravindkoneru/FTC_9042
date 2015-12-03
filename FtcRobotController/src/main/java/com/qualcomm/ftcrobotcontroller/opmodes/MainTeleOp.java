@@ -54,30 +54,21 @@ public class MainTeleOp extends OpHelperClean {
         else if(gamepad2.dpad_up) {
             setArmPivot(.2);
         }
-        else setArmPivot(0);
-
+        else {
+            setArmPivot(0);
+        }
 
             //handle tape measure movement
         if (gamepad2.y) {
-            moveTapeMeasure(-.2);
-        } else if (gamepad2.a) {
             moveTapeMeasure(.2);
+        } else if (gamepad2.a) {
+            moveTapeMeasure(-.2);
         } else if(gamepad2.x){
-            moveTapeMeasure(.8);
+            moveTapeMeasure(-.8);
         }else{
             moveTapeMeasure(0);
         }
 
-//        //handle tape measure movement
-//        if(gamepad2.y) {
-//            runTapeMeasure(position + 10);
-//            position += 10;
-//        } else if(gamepad2.a){
-//            runTapeMeasure(position - 10);
-//            position -= 10;
-//       } else{
-//            runTapeMeasure(position);
-//        }
 
     }
 
