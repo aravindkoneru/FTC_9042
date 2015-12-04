@@ -3,9 +3,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by Tim on 10/25/2015.
  */
+//STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-//STARTING POSITION = Middle on crack of 3 Mats from side non mountain corner
-public class BlueMountainRedSharp extends OpHelperClean{
+public class BlueSideRed extends OpHelperClean{
 
 
     //establish run states for auton
@@ -29,7 +29,7 @@ public class BlueMountainRedSharp extends OpHelperClean{
 
     private RunState rs = RunState.RESET_STATE;
 
-    public BlueMountainRedSharp() {}
+    public BlueSideRed() {}
 
 
     @Override
@@ -42,14 +42,16 @@ public class BlueMountainRedSharp extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
+                setZipLinePosition(0);
+                setPlowPosition(down);
                 resetEncoders();
-                rs= RunState.FIRST_STATE;
+                rs=RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
 
-                if(runStraight(-36, false) ){
+                if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
                 }
                 break;
@@ -62,7 +64,7 @@ public class BlueMountainRedSharp extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(135)){
+                if (setTargetValueTurn(68)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -74,51 +76,51 @@ public class BlueMountainRedSharp extends OpHelperClean{
                 }
                 break;
             }
-            case THIRD_STATE:
-            {
-                if (runStraight(-20, false)){
-                    rs= RunState.THIRD_RESET;
+            case THIRD_STATE: {
+                if (runStraight(-44, true)) {
+                    rs = RunState.THIRD_RESET;
                 }
                 break;
             }
             case THIRD_RESET:
             {
                 if (resetEncoders()){
-                    rs= RunState.FOURTH_STATE;
+                    rs=RunState.FOURTH_STATE;
                 }
                 break;
             }
             case FOURTH_STATE: {
-                if (runStraight(-70, true)){
-                    rs= RunState.FOURTH_RESET;
+                if (setTargetValueTurn(120)){
+                    rs=RunState.FOURTH_RESET;
                 }
                 break;
             }
             case FOURTH_RESET:
             {
+                setPlowPosition(up);
                 if (resetEncoders()){
-                    rs= RunState.LAST_STATE;
+                    rs=RunState.FIFTH_STATE;
                 }
                 break;
             }
             case FIFTH_STATE:
             {
                 if (runStraight(-20, false)){
-                    rs= RunState.FIFTH_RESET;
+                    rs=RunState.FIFTH_RESET;
                 }
                 break;
             }
             case FIFTH_RESET:
             {
                 if (resetEncoders()){
-                    rs= RunState.SIXTH_STATE;
+                    rs=RunState.SIXTH_STATE;
                 }
                 break;
             }
             case SIXTH_STATE:
             {
-                if (runStraight(70, true)){
-                    rs= RunState.LAST_STATE;
+                if (runStraight(-70, true)){
+                    rs=RunState.LAST_STATE;
                 }
                 break;
             }

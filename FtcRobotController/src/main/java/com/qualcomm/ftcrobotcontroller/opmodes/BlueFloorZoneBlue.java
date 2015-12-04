@@ -1,3 +1,4 @@
+
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 /**
@@ -5,7 +6,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 //STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-public class BlueMountainRed extends OpHelperClean{
+public class BlueFloorZoneBlue extends OpHelperClean{
 
 
     //establish run states for auton
@@ -17,6 +18,8 @@ public class BlueMountainRed extends OpHelperClean{
         SECOND_RESET,
         THIRD_STATE,
         THIRD_RESET,
+        THIRD_STATE_PART_TWO,
+        THIRD_STATE_PART_TWO_RESET,
         FOURTH_STATE,
         FOURTH_RESET,
         FIFTH_STATE,
@@ -29,11 +32,12 @@ public class BlueMountainRed extends OpHelperClean{
 
     private RunState rs = RunState.RESET_STATE;
 
-    public BlueMountainRed() {}
+    public BlueFloorZoneBlue() {}
 
 
     @Override
     public void loop() {
+
 
 
         basicTel();
@@ -43,14 +47,14 @@ public class BlueMountainRed extends OpHelperClean{
             case RESET_STATE:
             {
                 setZipLinePosition(0);
-                setPlowPosition(false);
+                setPlowPosition(down);
                 resetEncoders();
-                rs=RunState.FIRST_STATE;
+                rs= RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
-
+                setZipLinePosition(0);
                 if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
                 }
@@ -64,7 +68,8 @@ public class BlueMountainRed extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(68)){
+                setPlowPosition(down);
+                if (setTargetValueTurn(75)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -78,50 +83,67 @@ public class BlueMountainRed extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if (runStraight(-47, false)){
-                    rs=RunState.THIRD_RESET;
+                if (runStraight(-90, true)){
+                    rs= RunState.THIRD_RESET;
                 }
                 break;
             }
             case THIRD_RESET:
             {
                 if (resetEncoders()){
-                    rs=RunState.FOURTH_STATE;
+                    rs= RunState.THIRD_STATE_PART_TWO;
                 }
                 break;
             }
+            case THIRD_STATE_PART_TWO:
+            {
+                if (runStraight(13, false)){
+                    rs= RunState.THIRD_STATE_PART_TWO_RESET;
+                }
+                break;
+            }
+            case THIRD_STATE_PART_TWO_RESET:
+            {
+                if (resetEncoders()){
+                    rs= RunState.FOURTH_STATE;
+                }
+                break;
+            }
+
             case FOURTH_STATE: {
-                if (setTargetValueTurn(139)){
-                    rs=RunState.FOURTH_RESET;
+                setZipLinePosition(-1);
+                if (setTargetValueTurn(75)){
+                    rs= RunState.FOURTH_RESET;
                 }
                 break;
             }
             case FOURTH_RESET:
             {
+                setZipLinePosition(0);
+                setPlowPosition(up);
                 if (resetEncoders()){
-                    rs=RunState.FIFTH_STATE;
+                    rs= RunState.FIFTH_STATE;
                 }
                 break;
             }
             case FIFTH_STATE:
             {
-                if (runStraight(-20, false)){
-                    rs=RunState.FIFTH_RESET;
+                if (runStraight(-40, false)){
+                    rs= RunState.FIFTH_RESET;
                 }
                 break;
             }
             case FIFTH_RESET:
             {
-                setPlowPosition(true);
                 if (resetEncoders()){
-                    rs=RunState.SIXTH_STATE;
+                    rs= RunState.SIXTH_STATE;
                 }
                 break;
             }
             case SIXTH_STATE:
             {
                 if (runStraight(-70, true)){
-                    rs=RunState.LAST_STATE;
+                    rs= RunState.LAST_STATE;
                 }
                 break;
             }

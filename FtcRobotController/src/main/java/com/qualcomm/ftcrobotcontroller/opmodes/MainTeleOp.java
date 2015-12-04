@@ -24,26 +24,27 @@ public class MainTeleOp extends OpHelperClean {
             manualDrive(false);
         }
 
-        if(gamepad1.y){
+        if(gamepad1.a){
             setMotorPower(1,1);
         }
-        else if(gamepad1.a){
+        else if(gamepad1.y){
             setMotorPower(-1,-1);
         }
 
         if (gamepad1.dpad_up){
-            setPlowPosition(true);
+            setPlowPosition(up);
         }
         else if (gamepad1.dpad_down){
-            setPlowPosition(false);
+            setPlowPosition(down);
         }
 
         //Handle zipliner positions
         if(gamepad2.right_bumper){
-            setZipLinePosition(-1);
-        } else if(gamepad2.left_bumper){
             setZipLinePosition(1);
-        } else{
+        } else if(gamepad2.left_bumper){
+            setZipLinePosition(-1);
+        }
+        else{
             setZipLinePosition(0);
         }
 
@@ -68,8 +69,6 @@ public class MainTeleOp extends OpHelperClean {
         }else{
             moveTapeMeasure(0);
         }
-
-
     }
 
 
