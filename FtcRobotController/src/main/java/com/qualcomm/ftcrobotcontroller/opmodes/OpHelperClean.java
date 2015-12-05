@@ -36,7 +36,7 @@ public class OpHelperClean extends OpMode{
             SERVO_MIN=.2,
             SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
             PLOW_UP = 0,
-            PLOW_DOWN = .55;
+            PLOW_DOWN = .5;
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
@@ -80,6 +80,8 @@ public class OpHelperClean extends OpMode{
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
         plow1 = hardwareMap.servo.get("plow");
+
+        setPlowPosition(false);
 
         setDirection(); //ensures the proper motor directions
         resetEncoders(); //ensures that the encoders have reset
