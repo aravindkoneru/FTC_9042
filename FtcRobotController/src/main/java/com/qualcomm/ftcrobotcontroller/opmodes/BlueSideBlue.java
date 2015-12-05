@@ -34,9 +34,7 @@ public class BlueSideBlue extends OpHelperClean{
 
     @Override
     public void loop() {
-
-
-
+//        setZipLinePosition(0);
         basicTel();
         setToEncoderMode();
 
@@ -44,13 +42,14 @@ public class BlueSideBlue extends OpHelperClean{
             case RESET_STATE:
             {
                 setZipLinePosition(0);
-                setPlowPosition(down);
+                setPlowPosition(true);
                 resetEncoders();
-                rs= RunState.FIRST_STATE;
+                rs=RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
+                plowFlicker();
                 setZipLinePosition(0);
                 if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
@@ -65,8 +64,9 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
+                plowFlicker();
                 setPlowPosition(down);
-                if (setTargetValueTurn(68)){
+                if (setTargetValueTurn(60)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -80,7 +80,8 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                if (runStraight(-68, true)){
+                plowFlicker();
+                if (runStraight(-67, false)){
                     rs= RunState.THIRD_RESET;
                 }
                 break;
@@ -93,8 +94,9 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case FOURTH_STATE: {
+                plowFlicker();
                 setZipLinePosition(-1);
-                if (setTargetValueTurn(120)){
+                if (setTargetValueTurn(155)){
                     rs= RunState.FOURTH_RESET;
                 }
                 break;
@@ -102,7 +104,7 @@ public class BlueSideBlue extends OpHelperClean{
             case FOURTH_RESET:
             {
                 setZipLinePosition(0);
-                setPlowPosition(up);
+                setPlowPosition(true);
                 if (resetEncoders()){
                     rs= RunState.FIFTH_STATE;
                 }

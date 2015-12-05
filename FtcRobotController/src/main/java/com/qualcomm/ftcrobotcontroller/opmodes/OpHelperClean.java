@@ -36,7 +36,7 @@ public class OpHelperClean extends OpMode{
             SERVO_MIN=.2,
             SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
             PLOW_UP = 0,
-            PLOW_DOWN = .55;
+            PLOW_DOWN = .5;
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
@@ -188,7 +188,7 @@ public class OpHelperClean extends OpMode{
             setMotorPower(.9, .9);//TODO: Stalling factor that Libby brought up; check for adequate power
         }
         else{
-            setMotorPower(.4,.4);
+            setMotorPower(.3,.3);
         }
 
         if (hasReached()) {
@@ -219,6 +219,8 @@ public class OpHelperClean extends OpMode{
 
     //basic debugging and feedback
     public void basicTel(){
+        telemetry.addData("SERVO Position: ", plow1.getPosition());
+
         //left drive
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
@@ -284,26 +286,7 @@ public class OpHelperClean extends OpMode{
         }
     }
     private final double ROBOT_WIDTH = 14.5;
-//    public boolean setTargetValueTurn(double right, double left) {
-//
-//        int leftEncoderTarget = (int) (left * TICKS_PER_INCH);
-//        int rightEncoderTarget = (int) (right * TICKS_PER_INCH);
-//        leftTarget = leftEncoderTarget;
-//        rightTarget = rightEncoderTarget;
-//        setTargetValueMotor();
-//        if (right==0){
-//            setMotorPower(.6, .1);//TODO: Stalling factor that Libby brought up; check for adequate power
-//        }
-//        if (left==0){
-//            setMotorPower(.1, .6);//TODO: Stalling factor that Libby brought up; check for adequate power
-//        }
-//
-//        if (hasReached()) {
-//            setMotorPower(0, 0);
-//            return true;
-//        }
-//        return false;
-//    }
+
 public boolean setTargetValueTurn(double degrees) {
 
     int encoderTarget = (int) (degrees/360*Math.PI*ROBOT_WIDTH*TICKS_PER_INCH);     //theta/360*PI*D
@@ -372,6 +355,19 @@ public boolean setTargetValueTurn(double degrees) {
     public void setTape(){
         armMotor1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+    }
+
+    public void plowFlicker(){
+        timer++;
+        timer=timer*20;
+            if (timer%200==0){
+                    if (timer%1000==0){
+                        plow1.setPosition(.1);
+                    }
+                    else{
+                        setPlowPosition(down);
+                    }
+                }
     }
 
 
