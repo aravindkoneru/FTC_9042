@@ -41,15 +41,14 @@ public class BlueSideBlue extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
+                alternatePropellor();
                 setZipLinePosition(0);
-                setPlowPosition(true);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
                 break;
             }
             case FIRST_STATE:
             {
-                plowFlicker();
                 setZipLinePosition(0);
                 if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
@@ -64,8 +63,6 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                plowFlicker();
-                setPlowPosition(down);
                 if (setTargetValueTurn(60)){
                     rs = RunState.SECOND_RESET;
                 }
@@ -80,7 +77,6 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case THIRD_STATE:
             {
-                plowFlicker();
                 if (runStraight(-67, false)){
                     rs= RunState.THIRD_RESET;
                 }
@@ -94,7 +90,6 @@ public class BlueSideBlue extends OpHelperClean{
                 break;
             }
             case FOURTH_STATE: {
-                plowFlicker();
                 setZipLinePosition(-1);
                 if (setTargetValueTurn(155)){
                     rs= RunState.FOURTH_RESET;
@@ -104,7 +99,6 @@ public class BlueSideBlue extends OpHelperClean{
             case FOURTH_RESET:
             {
                 setZipLinePosition(0);
-                setPlowPosition(true);
                 if (resetEncoders()){
                     rs= RunState.FIFTH_STATE;
                 }
@@ -119,6 +113,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
+                spinPropeller(0);
                 if (resetEncoders()){
                     rs= RunState.SIXTH_STATE;
                 }

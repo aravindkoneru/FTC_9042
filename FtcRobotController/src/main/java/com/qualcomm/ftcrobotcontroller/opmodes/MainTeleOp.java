@@ -31,11 +31,17 @@ public class MainTeleOp extends OpHelperClean {
             setMotorPower(-1,-1);
         }
 
-        if (gamepad1.dpad_up){
-            setPlowPosition(up);
+        if (gamepad1.left_trigger>0){
+            spinPropeller(1);
         }
-        else if (gamepad1.dpad_down){
-            setPlowPosition(down);
+        else if (gamepad1.right_trigger>0){
+            spinPropeller(-1);
+        }
+        else if (gamepad1.b) {
+            alternatePropellor();
+        }
+        else{
+            spinPropeller(0);
         }
 
 
@@ -56,7 +62,11 @@ public class MainTeleOp extends OpHelperClean {
         else if(gamepad2.dpad_up) {
             setArmPivot(.2);
         }
+        else if(gamepad2.b){
+            setArmPivot(-.05);
+        }
         else setArmPivot(0);
+
 
 
             //handle tape measure movement

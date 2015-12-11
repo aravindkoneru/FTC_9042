@@ -21,11 +21,11 @@ public class OpHelperClean extends OpMode{
     //arm motors
     DcMotor armMotor1,
             armMotor2,
-            armPivot;
+            armPivot,
+            propellor;
 
     //zipline servo
     Servo zipLiner;
-    Servo plow1;
 
     //encoder targets
     private int rightTarget,
@@ -61,6 +61,7 @@ public class OpHelperClean extends OpMode{
 
     }
 
+
     public void init(){
         //left drive
         frontLeft = hardwareMap.dcMotor.get("l1");
@@ -76,10 +77,10 @@ public class OpHelperClean extends OpMode{
         //tape measure arms
         armMotor1 = hardwareMap.dcMotor.get("tm1");
         armMotor2 = hardwareMap.dcMotor.get("tm2");
+        propellor = hardwareMap.dcMotor.get("prop");
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
-        plow1 = hardwareMap.servo.get("plow");
 
         setDirection(); //ensures the proper motor directions
         resetEncoders(); //ensures that the encoders have reset
@@ -114,7 +115,29 @@ public class OpHelperClean extends OpMode{
 
         //TODO config arm pivot direction
     }
-
+    public void spinPropeller(int direction){
+        if (direction==1) {
+            propellor.setPower(1);
+        }
+        else if (direction==-1){
+            propellor.setPower(-1);
+        }
+        else if (direction==0){
+            propellor.setPower(0);
+        }
+    }
+    public void alternatePropellor(){
+        timer++;
+        timer=timer*20;
+        if (timer%1000==0){
+            if (timer%2000==0){
+                spinPropeller(1);
+            }
+            else{
+                spinPropeller(-1);
+            }
+        }
+    }
     //moves tape measure based on direct
     public void moveTapeMeasure(double power){
         armMotor1.setPower(power);
@@ -219,7 +242,6 @@ public class OpHelperClean extends OpMode{
 
     //basic debugging and feedback
     public void basicTel(){
-        telemetry.addData("SERVO Position: ", plow1.getPosition());
 
         //left drive
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
@@ -301,15 +323,6 @@ public boolean setTargetValueTurn(double degrees) {
     }
     return false;
 }
-    public void setPlowPosition(boolean up){
-        if (up){
-            plow1.setPosition(PLOW_UP);
-        }
-        else{
-            plow1.setPosition(PLOW_DOWN);
-        }
-    }
-
     //TODO: Make a function to move drive at same speed as the tape measure (Eric's suggestion)
     public void upMountain(){
 
@@ -357,18 +370,6 @@ public boolean setTargetValueTurn(double degrees) {
         armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    public void plowFlicker(){
-        timer++;
-        timer=timer*20;
-            if (timer%200==0){
-                    if (timer%1000==0){
-                        plow1.setPosition(.1);
-                    }
-                    else{
-                        setPlowPosition(down);
-                    }
-                }
-    }
 
 
     public void stop(){
@@ -377,5 +378,7 @@ public boolean setTargetValueTurn(double degrees) {
         moveTapeMeasure(0);//brake the tape measure
         setArmPivot(0);//brake the arm pivot
         setZipLinePosition(0);
+        spinPropeller(0);
+
     }
 }

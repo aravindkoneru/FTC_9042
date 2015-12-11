@@ -164,8 +164,8 @@ public class BlueFloorZoneBlue extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
+                alternatePropellor();
                 setZipLinePosition(0);
-                setPlowPosition(down);
                 resetEncoders();
                 rs= RunState.FIRST_STATE;
                 break;
@@ -186,7 +186,6 @@ public class BlueFloorZoneBlue extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                setPlowPosition(down);
                 if (setTargetValueTurn(75)){
                     rs = RunState.SECOND_RESET;
                 }
@@ -235,10 +234,8 @@ public class BlueFloorZoneBlue extends OpHelperClean{
                 }
                 break;
             }
-            case FOURTH_RESET:
-            {
+            case FOURTH_RESET: {
                 setZipLinePosition(0);
-                setPlowPosition(up);
                 if (resetEncoders()){
                     rs= RunState.FIFTH_STATE;
                 }
@@ -253,6 +250,7 @@ public class BlueFloorZoneBlue extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
+                spinPropeller(0);
                 if (resetEncoders()){
                     rs= RunState.SIXTH_STATE;
                 }
