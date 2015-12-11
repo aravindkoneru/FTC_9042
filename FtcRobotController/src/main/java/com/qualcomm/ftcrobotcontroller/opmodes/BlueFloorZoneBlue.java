@@ -47,7 +47,6 @@ public class BlueFloorZoneBlue extends OpHelperClean{
             case RESET_STATE:
             {
                 setZipLinePosition(0);
-                setPlowPosition(down);
                 resetEncoders();
                 rs= RunState.FIRST_STATE;
                 break;
@@ -68,7 +67,6 @@ public class BlueFloorZoneBlue extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                setPlowPosition(down);
                 if (setTargetValueTurn(75)){
                     rs = RunState.SECOND_RESET;
                 }
@@ -120,7 +118,6 @@ public class BlueFloorZoneBlue extends OpHelperClean{
             case FOURTH_RESET:
             {
                 setZipLinePosition(0);
-                setPlowPosition(up);
                 if (resetEncoders()){
                     rs= RunState.FIFTH_STATE;
                 }

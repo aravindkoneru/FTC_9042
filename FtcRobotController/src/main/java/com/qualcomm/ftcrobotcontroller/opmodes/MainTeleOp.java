@@ -31,11 +31,14 @@ public class MainTeleOp extends OpHelperClean {
             setMotorPower(-1,-1);
         }
 
-        if (gamepad1.dpad_up){
-            setPlowPosition(up);
+        if (gamepad1.left_trigger>0){
+            propSpin(1);
         }
-        else if (gamepad1.dpad_down){
-            setPlowPosition(down);
+        else if (gamepad1.right_trigger>0){
+            propSpin(-1);
+        }
+        else {
+            propSpin(0);
         }
 
         //Handle zipliner positions
@@ -68,6 +71,9 @@ public class MainTeleOp extends OpHelperClean {
             moveTapeMeasure(-.8);
         }else{
             moveTapeMeasure(0);
+        }
+        if (gamepad2.b){
+            setArmPivot(-.05);
         }
     }
 

@@ -44,7 +44,6 @@ public class RedSideBlue extends OpHelperClean{
             case RESET_STATE:
             {
                 setZipLinePosition(0);
-                setPlowPosition(false);
                 resetEncoders();
                 rs= RunState.FIRST_STATE;
                 break;
@@ -65,7 +64,6 @@ public class RedSideBlue extends OpHelperClean{
                 break;
             }
             case SECOND_STATE: {
-                setPlowPosition(down);
                 if (setTargetValueTurn(-60)){
                     rs = RunState.SECOND_RESET;
                 }
@@ -94,7 +92,6 @@ public class RedSideBlue extends OpHelperClean{
             }
             case FOURTH_STATE: {
                 setZipLinePosition(1);
-                setPlowPosition(down);
                 if (setTargetValueTurn(-120)){
                     rs= RunState.FOURTH_RESET;
                 }
@@ -117,7 +114,6 @@ public class RedSideBlue extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
-                setPlowPosition(up);
                 if (resetEncoders()){
                     rs= RunState.SIXTH_STATE;
                 }

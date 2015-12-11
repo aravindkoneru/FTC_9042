@@ -21,11 +21,11 @@ public class OpHelperClean extends OpMode{
     //arm motors
     DcMotor armMotor1,
             armMotor2,
-            armPivot;
+            armPivot,
+            prop;
 
     //zipline servo
     Servo zipLiner;
-    Servo plow1;
 
     //encoder targets
     private int rightTarget,
@@ -34,9 +34,8 @@ public class OpHelperClean extends OpMode{
     //SERVO CONSTANTS
     private final double SERVO_MAX=.6,
             SERVO_MIN=.2,
-            SERVO_NEUTRAL = 9.0/17,//Stops the continuous servo
-            PLOW_UP = 0,
-            PLOW_DOWN = .5;
+            SERVO_NEUTRAL = 9.0/17;
+            //Stops the continuous servo
 
     //MOTOR RANGES
     private final double MOTOR_MAX=1,
@@ -79,9 +78,11 @@ public class OpHelperClean extends OpMode{
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
-        plow1 = hardwareMap.servo.get("plow");
 
-        setPlowPosition(false);
+        //propeller motor
+        prop = hardwareMap.dcMotor.get("prop");
+
+
 
         setDirection(); //ensures the proper motor directions
         resetEncoders(); //ensures that the encoders have reset
@@ -146,6 +147,23 @@ public class OpHelperClean extends OpMode{
                 (backRight.getCurrentPosition() == 0));
 
     }
+
+        public void propSpin(int direction){
+            if (direction==0){
+                prop.setPower(0);
+            }
+            else if (direction==1){
+                prop.setPower(1);
+            }
+            else if (direction==-1){
+                prop.setPower(-1);
+            }
+        }
+
+        public void alternatePropSpin(){
+            timer++;
+            timer=20*timer;
+        }
 
     //driving power
     public void setMotorPower(double leftPower, double rightPower){
@@ -221,8 +239,6 @@ public class OpHelperClean extends OpMode{
 
     //basic debugging and feedback
     public void basicTel(){
-        telemetry.addData("SERVO Position: ", plow1.getPosition());
-
         //left drive
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
@@ -282,7 +298,7 @@ public class OpHelperClean extends OpMode{
         double leftPower = gamepad1.left_stick_y;
 
         if(turtleDrive){
-            setMotorPower(rightPower*.5, leftPower*.5);
+            setMotorPower(rightPower*.3, leftPower*.3);
         } else{
             setMotorPower(rightPower, leftPower);
         }
@@ -303,14 +319,6 @@ public boolean setTargetValueTurn(double degrees) {
     }
     return false;
 }
-    public void setPlowPosition(boolean up){
-        if (up){
-            plow1.setPosition(PLOW_UP);
-        }
-        else{
-            plow1.setPosition(PLOW_DOWN);
-        }
-    }
 
     //TODO: Make a function to move drive at same speed as the tape measure (Eric's suggestion)
     public void upMountain(){
@@ -358,20 +366,6 @@ public boolean setTargetValueTurn(double degrees) {
         armMotor1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
-
-    public void plowFlicker(){
-        timer++;
-        timer=timer*20;
-            if (timer%200==0){
-                    if (timer%1000==0){
-                        plow1.setPosition(.1);
-                    }
-                    else{
-                        setPlowPosition(down);
-                    }
-                }
-    }
-
 
     public void stop(){
 
