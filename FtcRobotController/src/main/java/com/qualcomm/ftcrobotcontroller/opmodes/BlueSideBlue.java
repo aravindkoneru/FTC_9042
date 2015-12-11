@@ -41,7 +41,8 @@ public class BlueSideBlue extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                propSpin(1);
+                alternatePropellor();
+                setZipLinePosition(0);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
                 break;
@@ -112,7 +113,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
-                propSpin(0);
+                spinPropeller(0);
                 if (resetEncoders()){
                     rs= RunState.SIXTH_STATE;
                 }

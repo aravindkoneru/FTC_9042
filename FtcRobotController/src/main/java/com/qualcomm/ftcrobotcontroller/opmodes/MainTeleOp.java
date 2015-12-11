@@ -32,13 +32,16 @@ public class MainTeleOp extends OpHelperClean {
         }
 
         if (gamepad1.left_trigger>0){
-            propSpin(1);
+            spinPropeller(1);
         }
         else if (gamepad1.right_trigger>0){
-            propSpin(-1);
+            spinPropeller(-1);
         }
-        else {
-            propSpin(0);
+        else if (gamepad1.b) {
+            alternatePropellor();
+        }
+        else{
+            spinPropeller(0);
         }
 
         //Handle zipliner positions
@@ -58,9 +61,12 @@ public class MainTeleOp extends OpHelperClean {
         else if(gamepad2.dpad_up) {
             setArmPivot(.2);
         }
-        else {
-            setArmPivot(0);
+        else if(gamepad2.b){
+            setArmPivot(-.05);
         }
+        else setArmPivot(0);
+
+
 
             //handle tape measure movement
         if (gamepad2.y) {
