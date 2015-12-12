@@ -80,14 +80,7 @@ public class OpHelperClean extends OpMode{
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
-//<<<<<<< HEAD
 
-        //propeller motor
-        prop = hardwareMap.dcMotor.get("prop");
-
-
-//=======
-//>>>>>>> nsarda54-master
 
         setDirection(); //ensures the proper motor directions
         resetEncoders(); //ensures that the encoders have reset
@@ -174,18 +167,6 @@ public class OpHelperClean extends OpMode{
                 (backRight.getCurrentPosition() == 0));
 
     }
-
-        public void propSpin(int direction){
-            if (direction==0){
-                prop.setPower(0);
-            }
-            else if (direction==1){
-                prop.setPower(1);
-            }
-            else if (direction==-1){
-                prop.setPower(-1);
-            }
-        }
 
         public void alternatePropSpin(){
             timer++;
