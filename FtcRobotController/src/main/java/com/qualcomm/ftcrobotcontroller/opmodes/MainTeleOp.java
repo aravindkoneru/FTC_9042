@@ -1,14 +1,16 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.hardware.DcMotorController;
+
 public class MainTeleOp extends OpHelperClean {
 
     //operator = gamepad2; driver = gamepad1
 
-    public MainTeleOp(){
+    public MainTeleOp() {
 
     }
 
-    private int position = 0;
+    private int on = 1;
 
     @Override
     public void loop() {
@@ -25,26 +27,26 @@ public class MainTeleOp extends OpHelperClean {
         }
 
         if(gamepad1.a){
-            setMotorPower(1,1);
+            setMotorPower(1, 1);
         }
         else if(gamepad1.y){
             setMotorPower(-1,-1);
         }
 
-        if (gamepad1.left_trigger>0){
-            spinPropeller(1);
+        if (gamepad1.right_trigger>0){
+            propellor.setPower(.8);
         }
-        else if (gamepad1.right_trigger>0){
-            spinPropeller(-1);
-        }
-        else if (gamepad1.b) {
-            alternatePropellor();
+        if (gamepad1.left_trigger>1) {
+            propellor.setPower(-.8);
         }
         else{
-            spinPropeller(0);
+            propellor.setPower(0);
         }
 
-        //Handle zipliner positions
+        if (gamepad1.b && !resetEncoders()){
+            resetProp();
+        }
+
         if(gamepad2.right_bumper){
             setZipLinePosition(1);
         } else if(gamepad2.left_bumper){
@@ -56,10 +58,10 @@ public class MainTeleOp extends OpHelperClean {
 
         //handle arm pivot
         if(gamepad2.dpad_down){
-            setArmPivot(-.2);
+            setArmPivot(-1);
         }
         else if(gamepad2.dpad_up) {
-            setArmPivot(.2);
+            setArmPivot(1);
         }
         else if(gamepad2.b){
             setArmPivot(-.05);
@@ -71,15 +73,15 @@ public class MainTeleOp extends OpHelperClean {
             //handle tape measure movement
         if (gamepad2.y) {
             moveTapeMeasure(.2);
-        } else if (gamepad2.a) {
-            moveTapeMeasure(-.2);
-        } else if(gamepad2.x){
-            moveTapeMeasure(-.8);
-        }else{
-            moveTapeMeasure(0);
         }
-        if (gamepad2.b){
-            setArmPivot(-.05);
+        else if (gamepad2.a) {
+            moveTapeMeasure(-.2);
+        }
+        else if(gamepad2.x){
+            moveTapeMeasure(-.8);
+        }
+        else{
+            moveTapeMeasure(0);
         }
     }
 

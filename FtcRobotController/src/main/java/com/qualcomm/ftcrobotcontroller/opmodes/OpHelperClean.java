@@ -41,6 +41,8 @@ public class OpHelperClean extends OpMode{
     private final double MOTOR_MAX=1,
             MOTOR_MIN=-1;
 
+    private final int TICKS_PER_PROPELLER=280;
+
 
     //ENCODER CONSTANTS TODO: Calibrate all of these values
     private final double CIRCUMFERENCE_INCHES = 4*Math.PI,
@@ -126,18 +128,7 @@ public class OpHelperClean extends OpMode{
             propellor.setPower(0);
         }
     }
-    public void alternatePropellor(){
-        timer++;
-        timer=timer*20;
-        if (timer%1000==0){
-            if (timer%2000==0){
-                spinPropeller(1);
-            }
-            else{
-                spinPropeller(-1);
-            }
-        }
-    }
+
     //moves tape measure based on direct
     public void moveTapeMeasure(double power){
         armMotor1.setPower(power);
@@ -168,10 +159,9 @@ public class OpHelperClean extends OpMode{
 
     }
 
-        public void alternatePropSpin(){
-            timer++;
-            timer=20*timer;
-        }
+    public void resetPropellerEncoder(){
+        propellor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+    }
 
     //driving power
     public void setMotorPower(double leftPower, double rightPower){
@@ -187,9 +177,6 @@ public class OpHelperClean extends OpMode{
 
     //sets all drive motors to encoder mode
     public void setToEncoderMode(){
-    //    armMotor1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-    //    armMotor2.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
@@ -213,15 +200,31 @@ public class OpHelperClean extends OpMode{
         setTargetValueMotor();
 
         if(speed){
-            setMotorPower(.9, .9);//TODO: Stalling factor that Libby brought up; check for adequate power
+            setMotorPower(.7, .75);
         }
         else{
-            setMotorPower(.3,.3);
+            setMotorPower(.3,.35);
         }
 
         if (hasReached()) {
             setMotorPower(0, 0);
             return true;//done traveling
+        }
+        return false;
+    }
+
+    public boolean resetProp(){
+        propellor.setPower(0);
+        propellor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        int currentPos=propellor.getCurrentPosition();
+        int targetPos=currentPos-(currentPos%TICKS_PER_PROPELLER);
+
+        propellor.setTargetPosition(-targetPos);
+        propellor.setPower(.4);
+
+        if ((propellor.getCurrentPosition()-targetPos)<=10){
+            propellor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+            return true;
         }
         return false;
     }
@@ -259,6 +262,8 @@ public class OpHelperClean extends OpMode{
 
         telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
         telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
+
+        telemetry.addData("09 propellerPosition: ", propellor.getCurrentPosition());
     }
 
 
@@ -336,16 +341,12 @@ public boolean setTargetValueTurn(double degrees) {
 
     }
 
-    public boolean armHasReacher(int ticks){
-        if      (armMotor2.getCurrentPosition() == ticks
-                && armMotor1.getCurrentPosition() == ticks){
-            return true;
-        } else{
-            return false;
-        }
+    public boolean armHasReached(int ticks){
+        return (armMotor2.getCurrentPosition() == ticks
+                && armMotor1.getCurrentPosition() == ticks);
     }
 
-    public void runTapeMeasure(int ticks){
+    public boolean runTapeMeasure(int ticks){
         setTape();
 
         armMotor1.setTargetPosition(ticks);
@@ -354,11 +355,12 @@ public boolean setTargetValueTurn(double degrees) {
         armMotor1.setPower(.2);
         armMotor2.setPower(.2);
 
-        if(armHasReacher(ticks)){
+        if(armHasReached(ticks)){
             armMotor1.setPower(0);
             armMotor2.setPower(0);
+            return true;
         }
-
+        return false;
     }
 
     public boolean resetTape(){
@@ -379,8 +381,8 @@ public boolean setTargetValueTurn(double degrees) {
         setMotorPower(0,0);//brake the movement of drive
         moveTapeMeasure(0);//brake the tape measure
         setArmPivot(0);//brake the arm pivot
-        setZipLinePosition(0);
-        spinPropeller(0);
+        setZipLinePosition(0);//brake the ziplines
+        spinPropeller(0);//brake the propeller
 
     }
 }

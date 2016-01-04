@@ -34,7 +34,6 @@ public class FloorZone extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                alternatePropellor();
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;

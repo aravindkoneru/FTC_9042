@@ -20,6 +20,7 @@ public class FtcOpModeRegister implements OpModeRegister {
       manager.register("Red Alliance Red Mountain", RedSideBlue.class);
       manager.register("Blue Floor Zone and then Mountain", BlueFloorZoneBlue.class);
       manager.register("Floor Goal", FloorZone.class);
+      manager.register("Config Tester", configTest.class);
 
   }
 }
