@@ -2,91 +2,68 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 public class MainTeleOp extends OpHelperClean {
 
-    //operator = gamepad2; driver = gamepad1
-
     public MainTeleOp(){
 
     }
 
-    private int position = 0;
-
     @Override
     public void loop() {
-        //enable basic feedback
         basicTel();
 
 
-        //move robot using joysticks
+        //DRIVER CONTROLS
+        //driving
         if(gamepad1.right_bumper){
-            manualDrive(true);
-        }
-        else{
+            manualDrive(true); //turtle mode
+        } else{
             manualDrive(false);
         }
 
+        //constant driving
         if(gamepad1.a){
             setMotorPower(1,1);
-        }
-        else if(gamepad1.y){
+        } else if(gamepad1.y){
             setMotorPower(-1,-1);
         }
-
+        
+        //propeller
         if (gamepad1.left_trigger>0){
             spinPropeller(1);
-        }
-        else if (gamepad1.right_trigger>0){
+        } else if (gamepad1.right_trigger>0){
             spinPropeller(-1);
-        }
-        else if (gamepad1.b) {
-            alternatePropellor();
-        }
-        else{
+        } else{
             spinPropeller(0);
         }
 
-        //Handle zipliner positions
+
+
+        //OPERATOR CONTROLS
+        //zipliners
         if(gamepad2.right_bumper){
             setZipLinePosition(1);
         } else if(gamepad2.left_bumper){
             setZipLinePosition(-1);
-        }
-        else{
+        } else{
             setZipLinePosition(0);
         }
 
-        //handle arm pivot
+        //arm
         if(gamepad2.dpad_down){
-            setArmPivot(-.2);
+            setArmPivot(-.7);
+        } else if(gamepad2.dpad_up) {
+            setArmPivot(7);
+        } else{
+            setArmPivot(0);
         }
-        else if(gamepad2.dpad_up) {
-            setArmPivot(.2);
-        }
-        else if(gamepad2.b){
-            setArmPivot(-.05);
-        }
-        else setArmPivot(0);
-
-
-
-            //handle tape measure movement
+        
+        //tube
         if (gamepad2.y) {
-            moveTapeMeasure(.2);
+            moveTubing(1);
         } else if (gamepad2.a) {
-            moveTapeMeasure(-.2);
-        } else if(gamepad2.x){
-            moveTapeMeasure(-.8);
-        }else{
-            moveTapeMeasure(0);
+            moveTubing(-1);
+        } else{
+            moveTubing(0);
         }
-        if (gamepad2.b){
-            setArmPivot(-.05);
-        }
-    }
-
-
-    @Override
-    public void stop() {
-
     }
 
 }
