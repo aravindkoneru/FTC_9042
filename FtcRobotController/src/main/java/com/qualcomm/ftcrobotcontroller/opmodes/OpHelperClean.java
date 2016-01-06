@@ -43,13 +43,12 @@ public class OpHelperClean extends OpMode {
             MOTOR_MIN = -1;
 
 
-    //ENCODER CONSTANTS TODO: Calibrate all of these values
+    //ENCODER CONSTANTS
     private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
             TICKS_PER_ROTATION = 1200 / 1.05,
             TICKS_PER_INCH = TICKS_PER_ROTATION / CIRCUMFERENCE_INCHES,
             TOLERANCE = 40,
             ROBOT_WIDTH = 14.5;
-
 
     public OpHelperClean() {
 
@@ -105,7 +104,7 @@ public class OpHelperClean extends OpMode {
     }
 
 
-    //ENCODER SECTION
+    //ENCODER MANIPULATION
     public boolean resetEncoders() {
         frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         backLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -279,7 +278,6 @@ public class OpHelperClean extends OpMode {
 
     //MANDATORY METHODS
     public void loop() {
-
     }
 
     @Override
@@ -290,4 +288,5 @@ public class OpHelperClean extends OpMode {
         setZipLinePosition(0);
         spinPropeller(0);
     }
+
 }
