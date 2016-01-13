@@ -43,6 +43,7 @@ public class OpHelperClean extends OpMode {
             MOTOR_MIN = -1;
 
 
+
     //ENCODER CONSTANTS
     private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
             TICKS_PER_ROTATION = 1200 / 1.05,
@@ -124,6 +125,7 @@ public class OpHelperClean extends OpMode {
     }
 
     public void setToEncoderMode() {
+
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
@@ -173,6 +175,7 @@ public class OpHelperClean extends OpMode {
         return false;
     }
 
+
     public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
         backLeft.setTargetPosition(leftTarget);
@@ -201,6 +204,7 @@ public class OpHelperClean extends OpMode {
         } else {
             setMotorPower(rightPower, leftPower);
         }
+
     }
 
     public void setMotorPower(double leftPower, double rightPower) {
@@ -303,6 +307,7 @@ public class OpHelperClean extends OpMode {
         telemetry.addData("09 Propellor: ", propellor.getCurrentPosition());
 
         telemetry.addData("10 Target Position: ", targetPos);
+
     }
 
 
@@ -317,6 +322,7 @@ public class OpHelperClean extends OpMode {
         setArmPivot(0);//brake the arm pivot
         setZipLinePosition(0);
         spinPropeller(0);
+
     }
 
 }

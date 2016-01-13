@@ -90,7 +90,7 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FOURTH_STATE: {
                 setZipLinePosition(-1);
-                if (setTargetValueTurn(155)){
+                if (setTargetValueTurn(150)){
                     rs= RunState.FOURTH_RESET;
                 }
                 break;
@@ -112,7 +112,6 @@ public class BlueSideBlue extends OpHelperClean{
             }
             case FIFTH_RESET:
             {
-                spinPropeller(0);
                 if (resetEncoders()){
                     rs= RunState.SIXTH_STATE;
                 }
