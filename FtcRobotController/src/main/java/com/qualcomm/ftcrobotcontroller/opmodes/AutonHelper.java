@@ -12,7 +12,7 @@ public class AutonHelper extends OpHelperClean {
             TOLERANCE = 40;
 
     private int rightTarget,
-                    leftTarget;
+            leftTarget;
 
     private final double ROBOT_WIDTH = 14.5;
 

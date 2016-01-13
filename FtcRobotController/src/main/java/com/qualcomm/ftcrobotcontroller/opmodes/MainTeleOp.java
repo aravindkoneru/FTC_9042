@@ -25,12 +25,14 @@ public class MainTeleOp extends OpHelperClean {
         } else if(gamepad1.y){
             setMotorPower(-1,-1);
         }
-        
+
         //propeller
         if (gamepad1.left_trigger>0){
             spinPropeller(1);
         } else if (gamepad1.right_trigger>0){
             spinPropeller(-1);
+        } else if (gamepad1.b){
+            resetProp();
         } else{
             spinPropeller(0);
         }
@@ -55,7 +57,7 @@ public class MainTeleOp extends OpHelperClean {
         } else{
             setArmPivot(0);
         }
-        
+
         //tube
         if (gamepad2.y) {
             moveTubing(1);

@@ -42,7 +42,6 @@ public class BlueSideRed extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                alternatePropellor();
                 setZipLinePosition(0);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;

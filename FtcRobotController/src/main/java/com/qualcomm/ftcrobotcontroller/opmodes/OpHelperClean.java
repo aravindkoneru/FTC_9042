@@ -50,6 +50,10 @@ public class OpHelperClean extends OpMode {
             TOLERANCE = 40,
             ROBOT_WIDTH = 14.5;
 
+    private int turn=0,
+            targetPos;
+
+
     public OpHelperClean() {
 
     }
@@ -227,6 +231,29 @@ public class OpHelperClean extends OpMode {
         armMotor2.setPower(power);
     }
 
+    public boolean resetProp(){
+        propellor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        int currentPos = propellor.getCurrentPosition();
+        if (turn==0) {
+            if (targetPos==0) {
+                targetPos = currentPos + (280-(currentPos % 280));
+            }
+            propellor.setTargetPosition(targetPos);
+            propellor.setPower(.4);
+            if (targetPos - currentPos <= 6) {
+                resetPropellerEncoder();
+                propellor.setPower(0);
+                turn = 1;
+                return true;
+            } else return false;
+        } else return false;
+    }
+
+    public void resetPropellerEncoder(){
+        propellor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        propellor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    }
+
     public boolean setZipLinePosition(double pos) {//slider values
         if (pos == 1) {
             zipLiner.setPosition(SERVO_MAX);
@@ -273,6 +300,9 @@ public class OpHelperClean extends OpMode {
 
         telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
         telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
+        telemetry.addData("09 Propellor: ", propellor.getCurrentPosition());
+
+        telemetry.addData("10 Target Position: ", targetPos);
     }
 
 

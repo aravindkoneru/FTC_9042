@@ -1,4 +1,3 @@
-
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 /**
@@ -46,7 +45,6 @@ public class BlueFloorZoneBlue extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                alternatePropellor();
                 setZipLinePosition(0);
                 resetEncoders();
                 rs= RunState.FIRST_STATE;
