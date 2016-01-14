@@ -42,6 +42,7 @@ public class BlueSideBlue extends AutonHelper{
         switch(rs) {
             case RESET_STATE:
             {
+                spinPropeller(1);
                 setZipLinePosition(0);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
@@ -98,6 +99,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FOURTH_RESET:
             {
+                spinPropeller(0);
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.RESET_PROP;

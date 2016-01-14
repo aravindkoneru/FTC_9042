@@ -15,8 +15,6 @@ public class FloorZone extends AutonHelper{
 
         LAST_STATE
     }
-    int timer=0;
-    int counter=0;
 
 
     private RunState rs = RunState.RESET_STATE;
@@ -34,6 +32,7 @@ public class FloorZone extends AutonHelper{
         switch(rs) {
             case RESET_STATE:
             {
+                spinPropeller(1);
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;

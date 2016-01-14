@@ -2,7 +2,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-public class MainTeleOp extends OpHelperClean {
+public class MainTeleOp extends TeleOpHelper {
 
     public MainTeleOp() {
 
