@@ -5,7 +5,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 //STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-public class FloorZone extends OpHelperClean{
+public class FloorZone extends AutonHelper{
 
 
     //establish run states for auton

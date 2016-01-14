@@ -1,5 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.hardware.DcMotorController;
+
 /**
  * Created by Aravind on 12/30/2015.
  */
@@ -12,7 +14,8 @@ public class AutonHelper extends OpHelperClean {
             TOLERANCE = 40;
 
     private int rightTarget,
-            leftTarget;
+            leftTarget,
+            targetPos;
 
     private final double ROBOT_WIDTH = 14.5;
 
@@ -36,6 +39,22 @@ public class AutonHelper extends OpHelperClean {
         return false;
     }
 
+    public boolean resetProp(){
+        propellor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        int currentPos = propellor.getCurrentPosition();
+        if (targetPos==0) {
+            targetPos = currentPos + (280 - (currentPos % 280));
+        }
+            propellor.setTargetPosition(targetPos);
+            propellor.setPower(.4);
+            if (targetPos - currentPos <= 6) {
+                resetPropellerEncoder();
+                propellor.setPower(0);
+                targetPos=0;
+                return true;
+            } else return false;
+    }
+
 
     //sets the target position for the drive encoders
     public void setTargetValueMotor(){
@@ -46,7 +65,7 @@ public class AutonHelper extends OpHelperClean {
         backRight.setTargetPosition(rightTarget);
     }
 
-    //returns true if all the motors have reached the desired postiion
+    //returns true if all the motors have reached the desired position
     public boolean hasReached() {
         return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
                 Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
