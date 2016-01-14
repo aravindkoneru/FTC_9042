@@ -5,7 +5,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 //STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-public class FloorZone extends OpHelperClean{
+public class FloorZone extends AutonHelper{
 
 
     //establish run states for auton
@@ -15,8 +15,6 @@ public class FloorZone extends OpHelperClean{
 
         LAST_STATE
     }
-    int timer=0;
-    int counter=0;
 
 
     private RunState rs = RunState.RESET_STATE;
@@ -34,7 +32,7 @@ public class FloorZone extends OpHelperClean{
         switch(rs) {
             case RESET_STATE:
             {
-                alternatePropellor();
+                spinPropeller(1);
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;

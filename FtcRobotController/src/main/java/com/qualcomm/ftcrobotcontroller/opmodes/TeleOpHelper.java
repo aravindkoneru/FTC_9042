@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by aravindkoneru on 10/28/15.
  */
-public class OpHelperClean extends OpMode {
+public class TeleOpHelper extends OpMode {
 
     //driving motors
     DcMotor frontLeft,
@@ -23,7 +23,7 @@ public class OpHelperClean extends OpMode {
     DcMotor armMotor1,
             armMotor2,
             armPivot,
-            propellor;
+            propeller;
 
     //zipline servo
     Servo zipLiner;
@@ -43,6 +43,7 @@ public class OpHelperClean extends OpMode {
             MOTOR_MIN = -1;
 
 
+
     //ENCODER CONSTANTS
     private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
             TICKS_PER_ROTATION = 1200 / 1.05,
@@ -50,7 +51,11 @@ public class OpHelperClean extends OpMode {
             TOLERANCE = 40,
             ROBOT_WIDTH = 14.5;
 
-    public OpHelperClean() {
+    private int turn=0,
+            targetPos;
+
+
+    public TeleOpHelper() {
 
     }
 
@@ -70,7 +75,7 @@ public class OpHelperClean extends OpMode {
         //tape measure arms
         armMotor1 = hardwareMap.dcMotor.get("tm1");
         armMotor2 = hardwareMap.dcMotor.get("tm2");
-        propellor = hardwareMap.dcMotor.get("prop");
+        propeller = hardwareMap.dcMotor.get("prop");
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
@@ -120,6 +125,7 @@ public class OpHelperClean extends OpMode {
     }
 
     public void setToEncoderMode() {
+
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
@@ -136,55 +142,6 @@ public class OpHelperClean extends OpMode {
     }
 
 
-    //ENCODER BASED MOVEMENT
-    public boolean runStraight(double distance_in_inches, boolean speed) {
-        leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
-        rightTarget = leftTarget;
-        setTargetValueMotor();
-
-        if (speed) {
-            setMotorPower(.9, .9);
-        } else {
-            setMotorPower(.3, .3);
-        }
-
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean setTargetValueTurn(double degrees) {
-        int encoderTarget = (int) (degrees / 360 * Math.PI * ROBOT_WIDTH * TICKS_PER_INCH);     //theta/360*PI*D
-        leftTarget = encoderTarget;
-        rightTarget = -encoderTarget;
-        setTargetValueMotor();
-        setMotorPower(.4, .4);
-
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;
-        }
-        return false;
-    }
-
-    public void setTargetValueMotor() {
-        frontLeft.setTargetPosition(leftTarget);
-        backLeft.setTargetPosition(leftTarget);
-
-        frontRight.setTargetPosition(rightTarget);
-        backRight.setTargetPosition(rightTarget);
-    }
-
-    public boolean hasReached() {
-        return (Math.abs(frontLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
-                Math.abs(backLeft.getCurrentPosition() - leftTarget) <= TOLERANCE &&
-                Math.abs(frontRight.getCurrentPosition() - rightTarget) <= TOLERANCE &&
-                Math.abs(backRight.getCurrentPosition() - rightTarget) <= TOLERANCE);
-    }
-
-
     //MANUAL MOVEMENT (DRIVING)
     public void manualDrive(boolean turtleDrive) {
         setToWOEncoderMode();
@@ -197,6 +154,7 @@ public class OpHelperClean extends OpMode {
         } else {
             setMotorPower(rightPower, leftPower);
         }
+
     }
 
     public void setMotorPower(double leftPower, double rightPower) {
@@ -214,17 +172,40 @@ public class OpHelperClean extends OpMode {
     //MANUAL MOVEMENT (OPERATING)
     public void spinPropeller(int direction) {
         if (direction == 1) {
-            propellor.setPower(1);
+            propeller.setPower(1);
         } else if (direction == -1) {
-            propellor.setPower(-1);
+            propeller.setPower(-1);
         } else if (direction == 0) {
-            propellor.setPower(0);
+            propeller.setPower(0);
         }
     }
 
     public void moveTubing(double power) {
         armMotor1.setPower(power);
         armMotor2.setPower(power);
+    }
+
+    public boolean resetProp(){
+        propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        int currentPos = propeller.getCurrentPosition();
+        if (turn==0) {
+            if (targetPos==0) {
+                targetPos = currentPos + (280-(currentPos % 280));
+            }
+            propeller.setTargetPosition(targetPos);
+            propeller.setPower(.4);
+            if (targetPos - currentPos <= 6) {
+                resetPropellerEncoder();
+                propeller.setPower(0);
+                turn = 1;
+                return true;
+            } else return false;
+        } else return false;
+    }
+
+    public void resetPropellerEncoder(){
+        propeller.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public boolean setZipLinePosition(double pos) {//slider values
@@ -273,6 +254,10 @@ public class OpHelperClean extends OpMode {
 
         telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
         telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
+        telemetry.addData("09 propeller: ", propeller.getCurrentPosition());
+
+        telemetry.addData("10 Target Position: ", targetPos);
+
     }
 
 
@@ -287,6 +272,7 @@ public class OpHelperClean extends OpMode {
         setArmPivot(0);//brake the arm pivot
         setZipLinePosition(0);
         spinPropeller(0);
+
     }
 
 }
