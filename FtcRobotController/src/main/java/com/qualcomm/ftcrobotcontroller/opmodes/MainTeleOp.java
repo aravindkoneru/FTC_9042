@@ -55,7 +55,11 @@ public class MainTeleOp extends TeleOpHelper {
         if (gamepad2.dpad_down) {
             setArmPivot(-.7);
         } else if (gamepad2.dpad_up) {
-            setArmPivot(7);
+            setArmPivot(.7);
+        } else if(gamepad2.right_trigger > 0){
+            setArmPivot(-.2);
+        } else if(gamepad2.left_trigger > 0){
+            setArmPivot(.4);
         } else {
             setArmPivot(0);
         }

@@ -258,6 +258,8 @@ public class TeleOpHelper extends OpMode {
 
         telemetry.addData("10 Target Position: ", targetPos);
 
+        telemetry.addData("11 Pivot Arm Power: ", armPivot.getPower());
+
     }
 
 
