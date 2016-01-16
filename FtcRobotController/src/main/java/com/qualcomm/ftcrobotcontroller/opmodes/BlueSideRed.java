@@ -23,6 +23,7 @@ public class BlueSideRed extends AutonHelper{
         FIFTH_RESET,
         SIXTH_STATE,
         SIXTH_RESET,
+        SEVENTH_STATE,
         LAST_STATE,
         RESET_PROP
     }
@@ -64,7 +65,7 @@ public class BlueSideRed extends AutonHelper{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(70)){
+                if (setTargetValueTurn(90)){
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -77,7 +78,7 @@ public class BlueSideRed extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-45, false)) {
+                if (runStraight(-44, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -90,7 +91,7 @@ public class BlueSideRed extends AutonHelper{
                 break;
             }
             case FOURTH_STATE: {
-                if (setTargetValueTurn(125)){
+                if (setTargetValueTurn(135)){
                     rs=RunState.FOURTH_RESET;
                 }
                 break;
@@ -102,16 +103,9 @@ public class BlueSideRed extends AutonHelper{
                 }
                 break;
             }
-            case RESET_PROP:
-            {
-                if (resetProp()){
-                    rs=RunState.SIXTH_STATE;
-                }
-                break;
-            }
             case FIFTH_STATE:
             {
-                if (runStraight(-10, false)){
+                if (runStraight(-15, false)){
                     rs=RunState.FIFTH_RESET;
                 }
                 break;
@@ -124,9 +118,30 @@ public class BlueSideRed extends AutonHelper{
                 }
                 break;
             }
+            case RESET_PROP:
+            {
+                if (resetProp()){
+                    rs=RunState.SIXTH_STATE;
+                }
+                break;
+            }
             case SIXTH_STATE:
             {
-                if (runStraight(-70, true)){
+                if (runStraight(-30, false)){
+                    rs=RunState.SIXTH_RESET;
+                }
+                break;
+            }
+            case SIXTH_RESET:
+            {
+                if (resetEncoders()){
+                    rs= RunState.SEVENTH_STATE;
+                }
+                break;
+            }
+            case SEVENTH_STATE:
+            {
+                if (runStraight(-30, true)){
                     rs=RunState.LAST_STATE;
                 }
                 break;
