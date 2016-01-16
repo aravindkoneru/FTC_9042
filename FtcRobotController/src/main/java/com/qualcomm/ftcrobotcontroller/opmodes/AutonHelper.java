@@ -128,15 +128,6 @@ public class AutonHelper extends OpMode {
         backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    public void setToWOEncoderMode() {
-        frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-
-        frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-    }
-
-
     //ENCODER BASED MOVEMENT
     public boolean runStraight(double distance_in_inches, boolean speed) {
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
