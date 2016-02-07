@@ -41,7 +41,7 @@ public class FloorZone extends AutonHelper{
             }
             case FIRST_STATE:
             {
-                if (runStraight(-95, true)){
+                if (runStraight(-95, false)){
                     rs=RunState.LAST_STATE;
                 }
 

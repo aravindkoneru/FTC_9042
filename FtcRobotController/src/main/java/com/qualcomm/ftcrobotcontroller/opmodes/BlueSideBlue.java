@@ -36,6 +36,7 @@ public class BlueSideBlue extends AutonHelper{
 
     @Override
     public void loop() {
+        telemetry.addData("Current Runstate", rs);
 //        setZipLinePosition(0);
         basicTel();
         setToEncoderMode();
@@ -78,7 +79,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case THIRD_STATE:
             {
-                if (runStraight(-70, false)){
+                if (runStraight(-69, false)){
                     rs= RunState.THIRD_RESET;
                 }
                 break;
@@ -92,7 +93,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FOURTH_STATE: {
                 setZipLinePosition(-1);
-                if (setTargetValueTurn(145)){
+                if (setTargetValueTurn(132)){
                     rs= RunState.FOURTH_RESET;
                 }
                 break;
@@ -107,7 +108,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(-20, false)){
+                if (runStraight(-10, false)){
                     rs= RunState.FIFTH_RESET;
                 }
                 break;
@@ -129,22 +130,8 @@ public class BlueSideBlue extends AutonHelper{
             }
             case SIXTH_STATE:
             {
-                if (runStraight(-50, false)){
-                    rs= RunState.SIXTH_RESET;
-                }
-                break;
-            }
-            case SIXTH_RESET:
-            {
-                if (resetEncoders()){
-                    rs= RunState.SEVENTH_STATE;
-                }
-                break;
-            }
-            case SEVENTH_STATE:
-            {
-                if (runStraight(-10, true)){
-                    rs=RunState.LAST_STATE;
+                if (mountainClimb(-50)){
+                    rs= RunState.LAST_STATE;
                 }
                 break;
             }

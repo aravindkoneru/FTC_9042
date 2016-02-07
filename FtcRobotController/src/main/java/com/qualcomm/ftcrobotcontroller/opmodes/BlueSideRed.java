@@ -36,7 +36,7 @@ public class BlueSideRed extends AutonHelper{
 
     @Override
     public void loop() {
-
+        telemetry.addData("Current Runstate", rs);
 
         basicTel();
         setToEncoderMode();
@@ -125,24 +125,9 @@ public class BlueSideRed extends AutonHelper{
                 }
                 break;
             }
-            case SIXTH_STATE:
-            {
-                if (runStraight(-30, false)){
-                    rs=RunState.SIXTH_RESET;
-                }
-                break;
-            }
-            case SIXTH_RESET:
-            {
-                if (resetEncoders()){
-                    rs= RunState.SEVENTH_STATE;
-                }
-                break;
-            }
-            case SEVENTH_STATE:
-            {
-                if (runStraight(-30, true)){
-                    rs=RunState.LAST_STATE;
+            case SIXTH_STATE: {
+                if (mountainClimb(-50)) {
+                    rs = RunState.LAST_STATE;
                 }
                 break;
             }

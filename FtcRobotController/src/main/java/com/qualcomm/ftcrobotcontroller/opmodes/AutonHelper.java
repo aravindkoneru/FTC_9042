@@ -22,7 +22,8 @@ public class AutonHelper extends OpMode {
             propeller;
 
     //zipline servo
-    Servo zipLiner;
+    Servo zipLiner,
+          dropClimber;
 
     //encoder targets
     private int rightTarget,
@@ -32,11 +33,15 @@ public class AutonHelper extends OpMode {
     private final double SERVO_MAX = .6,
             SERVO_MIN = .2,
             SERVO_NEUTRAL = 9.0 / 17;
+
+    private final int PROPELLER_RIGHT = -213,
+            PROPELLER_LEFT = 213;
     //Stops the continuous servo
 
     //MOTOR RANGES
     private final double MOTOR_MAX = 1,
             MOTOR_MIN = -1;
+
 
 
 
@@ -74,6 +79,7 @@ public class AutonHelper extends OpMode {
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
+        dropClimber = hardwareMap.servo.get("drop");
 
 
         setDirection();
@@ -147,6 +153,20 @@ public class AutonHelper extends OpMode {
         return false;
     }
 
+    public boolean mountainClimb(double distance_in_inches) {
+        leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
+        rightTarget = leftTarget;
+        setTargetValueMotor();
+
+        setMotorPower(.2,.2);
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;
+        }
+        return false;
+    }
+
     public boolean setTargetValueTurn(double degrees) {
         int encoderTarget = (int) (degrees / 360 * Math.PI * ROBOT_WIDTH * TICKS_PER_INCH);     //theta/360*PI*D
         leftTarget = encoderTarget;
@@ -203,6 +223,8 @@ public class AutonHelper extends OpMode {
         armMotor2.setPower(power);
     }
 
+
+
     public boolean resetProp(){
         propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         int currentPos = propeller.getCurrentPosition();
@@ -210,8 +232,8 @@ public class AutonHelper extends OpMode {
             targetPos = currentPos + (280 - (currentPos % 280));
         }
             propeller.setTargetPosition(targetPos);
-            propeller.setPower(.4);
-            if (targetPos - currentPos <= 6) {
+            propeller.setPower(.2);
+            if (targetPos - currentPos <= 2) {
                 resetPropellerEncoder();
                 propeller.setPower(0);
                 targetPos=0;
@@ -257,6 +279,15 @@ public class AutonHelper extends OpMode {
         return finalval;
     }
 
+    public void dropClimber(boolean dump) {
+        if (dump) {
+            dropClimber.setPosition(.6);
+        }
+        else if (!dump){
+            dropClimber.setPosition(0);
+        }
+    }
+
 
     //DEBUG
     public void basicTel() {
@@ -273,6 +304,7 @@ public class AutonHelper extends OpMode {
         telemetry.addData("09 propeller: ", propeller.getCurrentPosition());
 
         telemetry.addData("10 Target Position: ", targetPos);
+        telemetry.addData("11 Drop Climber Position: ", dropClimber.getPosition());
 
     }
 

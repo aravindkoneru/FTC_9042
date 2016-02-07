@@ -17,7 +17,11 @@ public class MainTeleOp extends TeleOpHelper {
         //driving
         if (gamepad1.right_bumper) {
             manualDrive(true); //turtle mode
-        } else {
+        }
+        else if (gamepad1.left_bumper){
+            backDrive();
+        }
+        else {
             manualDrive(false);
         }
 
@@ -39,6 +43,14 @@ public class MainTeleOp extends TeleOpHelper {
             spinPropeller(0);
         }
 
+        //shelter climber drop
+        if (gamepad1.dpad_up){
+            dropClimber(true);
+        }
+        else if (gamepad1.dpad_down){
+            dropClimber(false);
+        }
+
 
         //OPERATOR CONTROLS
         //zipliners
@@ -55,7 +67,7 @@ public class MainTeleOp extends TeleOpHelper {
         if (gamepad2.dpad_down) {
             setArmPivot(-.7);
         } else if (gamepad2.dpad_up) {
-            setArmPivot(7);
+            setArmPivot(.7);
         } else {
             setArmPivot(0);
         }

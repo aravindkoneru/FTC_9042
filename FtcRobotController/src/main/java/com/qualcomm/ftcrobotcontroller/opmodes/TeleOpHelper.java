@@ -26,11 +26,9 @@ public class TeleOpHelper extends OpMode {
             propeller;
 
     //zipline servo
-    Servo zipLiner;
+    Servo zipLiner,
+          dropClimber;
 
-    //encoder targets
-    private int rightTarget,
-            leftTarget;
 
     //SERVO CONSTANTS
     private final double SERVO_MAX = .6,
@@ -79,6 +77,7 @@ public class TeleOpHelper extends OpMode {
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
+        dropClimber = hardwareMap.servo.get("drop");
 
 
         setDirection();
@@ -141,7 +140,6 @@ public class TeleOpHelper extends OpMode {
         backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-
     //MANUAL MOVEMENT (DRIVING)
     public void manualDrive(boolean turtleDrive) {
         setToWOEncoderMode();
@@ -154,6 +152,16 @@ public class TeleOpHelper extends OpMode {
         } else {
             setMotorPower(rightPower, leftPower);
         }
+
+    }
+
+    public void backDrive() {
+        setToWOEncoderMode();
+
+        double rightPower = -gamepad1.right_stick_y;
+        double leftPower = -gamepad1.left_stick_y;
+
+        setMotorPower(.3*rightPower, .3*leftPower);
 
     }
 
@@ -183,6 +191,15 @@ public class TeleOpHelper extends OpMode {
     public void moveTubing(double power) {
         armMotor1.setPower(power);
         armMotor2.setPower(power);
+    }
+
+    public void dropClimber(boolean dump) {
+        if (dump) {
+            dropClimber.setPosition(1);
+        }
+        else if (!dump){
+            dropClimber.setPosition(.8);
+        }
     }
 
     public boolean resetProp(){
@@ -241,22 +258,20 @@ public class TeleOpHelper extends OpMode {
         return finalval;
     }
 
-
     //DEBUG
     public void basicTel() {
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
-        telemetry.addData("03 LeftTarget: ", leftTarget);
 
         telemetry.addData("04 frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("05 backRightPos: ", backRight.getCurrentPosition());
-        telemetry.addData("06 RightTarget: ", rightTarget);
 
         telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
         telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
         telemetry.addData("09 propeller: ", propeller.getCurrentPosition());
 
         telemetry.addData("10 Target Position: ", targetPos);
+        telemetry.addData("Dump position",dropClimber.getPosition());
 
     }
 
