@@ -34,10 +34,7 @@ public class BlueSideRed extends AutonHelper{
     public BlueSideRed() {}
 
 
-    @Override
     public void loop() {
-        telemetry.addData("Current Runstate", rs);
-
         basicTel();
         setToEncoderMode();
 
