@@ -52,7 +52,8 @@ public class AutonHelper extends OpMode {
             TOLERANCE = 40,
             ROBOT_WIDTH = 14.5;
 
-    private int targetPos;
+    private int targetPos,
+                propellerTargetPos;
 
 
     public AutonHelper() {
@@ -125,6 +126,10 @@ public class AutonHelper extends OpMode {
 
     }
 
+    public void propellerSetToEncoderMode(){
+        propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+    }
+
     public void setToEncoderMode() {
 
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -143,22 +148,8 @@ public class AutonHelper extends OpMode {
         if (speed) {
             setMotorPower(.9, .9);
         } else {
-            setMotorPower(.3, .3);
+            setMotorPower(.2, .2);
         }
-
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean mountainClimb(double distance_in_inches) {
-        leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
-        rightTarget = leftTarget;
-        setTargetValueMotor();
-
-        setMotorPower(.2,.2);
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -208,6 +199,28 @@ public class AutonHelper extends OpMode {
         backRight.setPower(rightPower);
     }
 
+
+    //Propeller Manipulation
+    public boolean alternatePropeller(boolean on){
+        propeller.setTargetPosition(propellerTargetPos);
+        propeller.setPower(.7);
+        if (on){
+            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=0){
+                propellerTargetPos=PROPELLER_LEFT;
+            }
+            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=0){
+                propellerTargetPos=PROPELLER_RIGHT;
+            }
+            return true;
+        }
+
+        else{
+            propeller.setPower(0);
+            resetPropellerEncoder();
+            return false;
+        }
+    }
+
     public void spinPropeller(int direction) {
         if (direction == 1) {
             propeller.setPower(1);
@@ -217,13 +230,6 @@ public class AutonHelper extends OpMode {
             propeller.setPower(0);
         }
     }
-
-    public void moveTubing(double power) {
-        armMotor1.setPower(power);
-        armMotor2.setPower(power);
-    }
-
-
 
     public boolean resetProp(){
         propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -242,9 +248,10 @@ public class AutonHelper extends OpMode {
     }
 
     public void resetPropellerEncoder(){
-        propeller.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        resetProp();
         propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
+
 
     public boolean setZipLinePosition(double pos) {//slider values
         if (pos == 1) {
@@ -257,11 +264,6 @@ public class AutonHelper extends OpMode {
         telemetry.addData("00 Zipline moving at: ", pos);
         return true;
     }
-
-    public void setArmPivot(double power) {
-        armPivot.setPower(power);
-    }
-
 
     //HELPER METHODS
     enum ComponentType {
@@ -316,8 +318,6 @@ public class AutonHelper extends OpMode {
     @Override
     public void stop() {
         setMotorPower(0, 0);//brake the movement of drive
-        moveTubing(0);//brake the tape measure
-        setArmPivot(0);//brake the arm pivot
         setZipLinePosition(0);
         spinPropeller(0);
 

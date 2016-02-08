@@ -30,6 +30,7 @@ public class ShelterDumper extends AutonHelper{
 
 
     private RunState rs = RunState.RESET_STATE;
+    private boolean on = true;
 
     public ShelterDumper() {}
 
@@ -39,13 +40,13 @@ public class ShelterDumper extends AutonHelper{
 
         telemetry.addData("Current Runstate", rs);
 
-//        setZipLinePosition(0);
         basicTel();
+        alternatePropeller(on);
         setToEncoderMode();
+        propellerSetToEncoderMode();
 
         switch(rs) {
             case RESET_STATE: {
-                spinPropeller(1);
                 setZipLinePosition(0);
                 resetEncoders();
                 rs = RunState.FIRST_STATE;
@@ -77,7 +78,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-98, false)) {
+                if (runStraight(-101, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -106,7 +107,7 @@ public class ShelterDumper extends AutonHelper{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(7, false)){
+                if (runStraight(4, false)){
                     rs = RunState.FIFTH_RESET;
                 }
                 break;
@@ -120,19 +121,15 @@ public class ShelterDumper extends AutonHelper{
             }
             case SIXTH_STATE:
             {
-                spinPropeller(0);
-                if (dropClimber.getPosition()>=.6){
-                    dropClimber (false);
-                    rs=RunState.LAST_STATE;
-                }
-                else if(dropClimber.getPosition()<.6){
-                    dropClimber(true);
+                on=false;
+                dropClimber(true);
+                if (resetProp()) {
+                    rs = RunState.LAST_STATE;
                 }
                 break;
             }
 
-            case LAST_STATE:
-            {
+            case LAST_STATE: {
                 stop();
             }
         }

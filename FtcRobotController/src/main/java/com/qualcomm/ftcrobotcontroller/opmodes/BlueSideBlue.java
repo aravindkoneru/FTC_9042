@@ -130,7 +130,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case SIXTH_STATE:
             {
-                if (mountainClimb(-50)){
+                if (runStraight(-50, false)){
                     rs= RunState.LAST_STATE;
                 }
                 break;

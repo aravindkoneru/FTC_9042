@@ -195,10 +195,10 @@ public class TeleOpHelper extends OpMode {
 
     public void dropClimber(boolean dump) {
         if (dump) {
-            dropClimber.setPosition(1);
+            dropClimber.setPosition(.5);
         }
         else if (!dump){
-            dropClimber.setPosition(.8);
+            dropClimber.setPosition(0);
         }
     }
 
@@ -272,7 +272,6 @@ public class TeleOpHelper extends OpMode {
 
         telemetry.addData("10 Target Position: ", targetPos);
         telemetry.addData("Dump position",dropClimber.getPosition());
-
         telemetry.addData("11 Pivot Arm Power: ", armPivot.getPower());
 
     }
