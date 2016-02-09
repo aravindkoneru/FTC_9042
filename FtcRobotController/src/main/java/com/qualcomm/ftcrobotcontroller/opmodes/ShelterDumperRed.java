@@ -5,7 +5,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  */
 //STARTING POSITION = Middle on crack of 2 Mats from side non mountain corner
 
-public class ShelterDumper extends AutonHelper{
+public class ShelterDumperRed extends AutonHelper{
 
 
     //establish run states for auton
@@ -32,7 +32,7 @@ public class ShelterDumper extends AutonHelper{
     private RunState rs = RunState.RESET_STATE;
     private boolean on = true;
 
-    public ShelterDumper() {}
+    public ShelterDumperRed() {}
 
 
     @Override
@@ -67,7 +67,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(80)) {
+                if (setTargetValueTurn(-80)) {
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -94,7 +94,7 @@ public class ShelterDumper extends AutonHelper{
             case FOURTH_STATE:
             {
                 //330 worked for longer turn
-                if (setTargetValueTurn(-210)){
+                if (setTargetValueTurn(210)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;

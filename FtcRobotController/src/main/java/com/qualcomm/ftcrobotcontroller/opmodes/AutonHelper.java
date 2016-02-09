@@ -53,7 +53,7 @@ public class AutonHelper extends OpMode {
             ROBOT_WIDTH = 14.5;
 
     private int targetPos,
-                propellerTargetPos;
+                propellerTargetPos = PROPELLER_RIGHT;
 
 
     public AutonHelper() {
@@ -172,7 +172,6 @@ public class AutonHelper extends OpMode {
         return false;
     }
 
-
     public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
         backLeft.setTargetPosition(leftTarget);
@@ -198,7 +197,6 @@ public class AutonHelper extends OpMode {
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
     }
-
 
     //Propeller Manipulation
     public boolean alternatePropeller(boolean on){
@@ -251,7 +249,6 @@ public class AutonHelper extends OpMode {
         resetProp();
         propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
-
 
     public boolean setZipLinePosition(double pos) {//slider values
         if (pos == 1) {
@@ -309,7 +306,6 @@ public class AutonHelper extends OpMode {
         telemetry.addData("11 Drop Climber Position: ", dropClimber.getPosition());
 
     }
-
 
     //MANDATORY METHODS
     public void loop() {

@@ -75,7 +75,7 @@ public class TeleOpHelper extends OpMode {
         armMotor2 = hardwareMap.dcMotor.get("tm2");
         propeller = hardwareMap.dcMotor.get("prop");
 
-        //zipline servo
+        //servos
         zipLiner = hardwareMap.servo.get("zip");
         dropClimber = hardwareMap.servo.get("drop");
 
@@ -121,15 +121,6 @@ public class TeleOpHelper extends OpMode {
                 (frontRight.getCurrentPosition() == 0) &&
                 (backRight.getCurrentPosition() == 0));
 
-    }
-
-    public void setToEncoderMode() {
-
-        frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
-        frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
     public void setToWOEncoderMode() {
@@ -210,8 +201,8 @@ public class TeleOpHelper extends OpMode {
                 targetPos = currentPos + (280-(currentPos % 280));
             }
             propeller.setTargetPosition(targetPos);
-            propeller.setPower(.4);
-            if (targetPos - currentPos <= 6) {
+            propeller.setPower(.2);
+            if (targetPos - currentPos <= 2) {
                 resetPropellerEncoder();
                 propeller.setPower(0);
                 turn = 1;
