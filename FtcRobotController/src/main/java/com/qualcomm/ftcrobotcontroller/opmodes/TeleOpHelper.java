@@ -52,6 +52,10 @@ public class TeleOpHelper extends OpMode {
     private int turn=0,
             targetPos;
 
+    private final int PROPELLER_RIGHT = -140,
+            PROPELLER_LEFT = 140;
+
+    private int propellerTargetPos = PROPELLER_RIGHT;
 
     public TeleOpHelper() {
 
@@ -190,6 +194,26 @@ public class TeleOpHelper extends OpMode {
         }
         else if (!dump){
             dropClimber.setPosition(0);
+        }
+    }
+
+    public boolean alternatePropeller(boolean on){
+        propeller.setTargetPosition(propellerTargetPos);
+        propeller.setPower(.7);
+        if (on){
+            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=0){
+                propellerTargetPos=PROPELLER_LEFT;
+            }
+            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=0){
+                propellerTargetPos=PROPELLER_RIGHT;
+            }
+            return true;
+        }
+
+        else{
+            propeller.setPower(0);
+            resetPropellerEncoder();
+            return false;
         }
     }
 

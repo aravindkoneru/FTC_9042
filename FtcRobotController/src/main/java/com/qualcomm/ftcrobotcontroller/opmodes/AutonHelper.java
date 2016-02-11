@@ -1,9 +1,13 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+        import android.hardware.Sensor;
+
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+        import com.qualcomm.robotcore.hardware.ColorSensor;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorController;
         import com.qualcomm.robotcore.hardware.Servo;
+        import com.qualcomm.robotcore.hardware.TouchSensor;
         import com.qualcomm.robotcore.util.Range;
 
 public class AutonHelper extends OpMode {
@@ -25,6 +29,10 @@ public class AutonHelper extends OpMode {
     Servo zipLiner,
           dropClimber;
 
+//    TouchSensor backBumper;
+//
+//    ColorSensor colorSensor;
+
     //encoder targets
     private int rightTarget,
             leftTarget;
@@ -34,16 +42,15 @@ public class AutonHelper extends OpMode {
             SERVO_MIN = .2,
             SERVO_NEUTRAL = 9.0 / 17;
 
-    private final int PROPELLER_RIGHT = -213,
-            PROPELLER_LEFT = 213;
+    private final int PROPELLER_RIGHT = -140,
+            PROPELLER_LEFT = 140;
     //Stops the continuous servo
 
     //MOTOR RANGES
     private final double MOTOR_MAX = 1,
             MOTOR_MIN = -1;
 
-
-
+    protected boolean on = true;
 
     //ENCODER CONSTANTS
     private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
@@ -52,7 +59,7 @@ public class AutonHelper extends OpMode {
             TOLERANCE = 40,
             ROBOT_WIDTH = 14.5;
 
-    private int targetPos,
+    protected int targetPos,
                 propellerTargetPos = PROPELLER_RIGHT;
 
 
@@ -81,6 +88,10 @@ public class AutonHelper extends OpMode {
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
         dropClimber = hardwareMap.servo.get("drop");
+
+//        backBumper = hardwareMap.touchSensor.get("Bumper");
+//        colorSensor = hardwareMap.colorSensor.get("Color");
+
 
 
         setDirection();
@@ -139,6 +150,26 @@ public class AutonHelper extends OpMode {
         backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
+    public void setToWOEncoderMode() {
+
+        frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+
+        frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    }
+
+//    public boolean runUntilBumped(){
+//        setMotorPower(.3, .3);
+//        if (backBumper.isPressed()){
+//            setMotorPower(0,0);
+//            setToEncoderMode();
+//            return true;
+//        }
+//        return false;
+//    }
+
+
     //ENCODER BASED MOVEMENT
     public boolean runStraight(double distance_in_inches, boolean speed) {
         leftTarget = (int) (distance_in_inches * TICKS_PER_INCH);
@@ -163,7 +194,7 @@ public class AutonHelper extends OpMode {
         leftTarget = encoderTarget;
         rightTarget = -encoderTarget;
         setTargetValueMotor();
-        setMotorPower(.4, .4);
+        setMotorPower(.3, .3);
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -171,6 +202,13 @@ public class AutonHelper extends OpMode {
         }
         return false;
     }
+
+//    public void colorTrial(){
+//        if (colorSensor.green()==0){
+//
+//        }
+//    }
+
 
     public void setTargetValueMotor() {
         frontLeft.setTargetPosition(leftTarget);
@@ -201,12 +239,12 @@ public class AutonHelper extends OpMode {
     //Propeller Manipulation
     public boolean alternatePropeller(boolean on){
         propeller.setTargetPosition(propellerTargetPos);
-        propeller.setPower(.7);
+        propeller.setPower(.9);
         if (on){
-            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=0){
+            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=2){
                 propellerTargetPos=PROPELLER_LEFT;
             }
-            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=0){
+            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=2){
                 propellerTargetPos=PROPELLER_RIGHT;
             }
             return true;

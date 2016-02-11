@@ -37,14 +37,15 @@ public class BlueSideBlue extends AutonHelper{
     @Override
     public void loop() {
         telemetry.addData("Current Runstate", rs);
-//        setZipLinePosition(0);
+        alternatePropeller(on);
         basicTel();
         setToEncoderMode();
+        propellerSetToEncoderMode();
+
 
         switch(rs) {
             case RESET_STATE:
             {
-                spinPropeller(1);
                 setZipLinePosition(0);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
@@ -115,9 +116,9 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FIFTH_RESET:
             {
-                spinPropeller(0);
                 if (resetEncoders()){
                     rs= RunState.RESET_PROP;
+                    on = false;
                 }
                 break;
             }

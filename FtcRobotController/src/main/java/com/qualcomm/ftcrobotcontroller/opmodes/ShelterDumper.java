@@ -30,7 +30,6 @@ public class ShelterDumper extends AutonHelper{
 
 
     private RunState rs = RunState.RESET_STATE;
-    private boolean on = true;
 
     public ShelterDumper() {}
 
@@ -39,11 +38,14 @@ public class ShelterDumper extends AutonHelper{
     public void loop() {
 
         telemetry.addData("Current Runstate", rs);
+        telemetry.addData("Alternating Propeller is ", on);
+        telemetry.addData("Propeller Target Position is ", propellerTargetPos);
 
         basicTel();
         alternatePropeller(on);
         setToEncoderMode();
         propellerSetToEncoderMode();
+
 
         switch(rs) {
             case RESET_STATE: {
@@ -67,7 +69,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(80)) {
+                if (setTargetValueTurn(70)) {
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -79,7 +81,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-101, false)) {
+                if (runStraight(-95, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -94,7 +96,7 @@ public class ShelterDumper extends AutonHelper{
             case FOURTH_STATE:
             {
                 //330 worked for longer turn
-                if (setTargetValueTurn(-210)){
+                if (setTargetValueTurn(-230)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -103,15 +105,21 @@ public class ShelterDumper extends AutonHelper{
             {
                 if (resetEncoders()){
                     rs = RunState.FIFTH_STATE;
+//                    setToWOEncoderMode();
                 }
                 break;
             }
             case FIFTH_STATE:
             {
-                if (runStraight(4, false)){
+                if (runStraight(16, false)){
                     rs = RunState.FIFTH_RESET;
                 }
                 break;
+
+//                if (runUntilBumped()){
+//                    rs = RunState.FIFTH_RESET;
+//                }
+//                break;
             }
             case FIFTH_RESET:
             {

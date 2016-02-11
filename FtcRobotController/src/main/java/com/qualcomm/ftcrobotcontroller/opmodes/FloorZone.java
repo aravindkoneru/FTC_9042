@@ -17,7 +17,6 @@ public class FloorZone extends AutonHelper{
 
 
     private RunState rs = RunState.RESET_STATE;
-    private boolean on = true;
 
     public FloorZone() {}
 
@@ -28,12 +27,12 @@ public class FloorZone extends AutonHelper{
         basicTel();
         telemetry.addData("state: ", rs);
         setToEncoderMode();
+        propellerSetToEncoderMode();
         alternatePropeller(on);
 
         switch(rs) {
             case RESET_STATE:
             {
-                spinPropeller(1);
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;
