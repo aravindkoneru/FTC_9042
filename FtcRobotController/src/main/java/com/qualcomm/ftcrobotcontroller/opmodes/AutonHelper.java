@@ -29,9 +29,7 @@ public class AutonHelper extends OpMode {
     Servo zipLiner,
           dropClimber;
 
-//    TouchSensor backBumper;
-//
-//    ColorSensor colorSensor;
+    TouchSensor backBumper;
 
     //encoder targets
     private int rightTarget,
@@ -89,8 +87,7 @@ public class AutonHelper extends OpMode {
         zipLiner = hardwareMap.servo.get("zip");
         dropClimber = hardwareMap.servo.get("drop");
 
-//        backBumper = hardwareMap.touchSensor.get("Bumper");
-//        colorSensor = hardwareMap.colorSensor.get("Color");
+        backBumper = hardwareMap.touchSensor.get("bumper");
 
 
 
@@ -159,15 +156,16 @@ public class AutonHelper extends OpMode {
         backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-//    public boolean runUntilBumped(){
-//        setMotorPower(.3, .3);
-//        if (backBumper.isPressed()){
-//            setMotorPower(0,0);
-//            setToEncoderMode();
-//            return true;
-//        }
-//        return false;
-//    }
+
+    public boolean runUntilBumped(){
+        setMotorPower(.3, .3);
+        if (backBumper.isPressed()){
+            setMotorPower(0,0);
+            setToEncoderMode();
+            return true;
+        }
+        return false;
+    }
 
 
     //ENCODER BASED MOVEMENT
@@ -203,11 +201,20 @@ public class AutonHelper extends OpMode {
         return false;
     }
 
-//    public void colorTrial(){
-//        if (colorSensor.green()==0){
-//
-//        }
-//    }
+    public boolean setTargetValueTurnRight(double degrees) {
+        int encoderTarget = (int) (degrees / 360 * Math.PI * ROBOT_WIDTH * TICKS_PER_INCH);     //theta/360*PI*D
+        leftTarget = encoderTarget;
+        rightTarget = -encoderTarget;
+        setTargetValueMotor();
+        setMotorPower(.27, .33);
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;
+        }
+        return false;
+    }
+
 
 
     public void setTargetValueMotor() {
@@ -239,12 +246,12 @@ public class AutonHelper extends OpMode {
     //Propeller Manipulation
     public boolean alternatePropeller(boolean on){
         propeller.setTargetPosition(propellerTargetPos);
-        propeller.setPower(.9);
+        propeller.setPower(.7);
         if (on){
-            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=2){
+            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=0){
                 propellerTargetPos=PROPELLER_LEFT;
             }
-            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=2){
+            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=0){
                 propellerTargetPos=PROPELLER_RIGHT;
             }
             return true;
@@ -318,7 +325,7 @@ public class AutonHelper extends OpMode {
 
     public void dropClimber(boolean dump) {
         if (dump) {
-            dropClimber.setPosition(.6);
+            dropClimber.setPosition(.5);
         }
         else if (!dump){
             dropClimber.setPosition(0);
@@ -342,6 +349,7 @@ public class AutonHelper extends OpMode {
 
         telemetry.addData("10 Target Position: ", targetPos);
         telemetry.addData("11 Drop Climber Position: ", dropClimber.getPosition());
+        telemetry.addData("12 Back Bumper Pushed is ", backBumper.isPressed());
 
     }
 
@@ -351,10 +359,10 @@ public class AutonHelper extends OpMode {
 
     @Override
     public void stop() {
+        telemetry.addData("Stop has started", backLeft.getPower());
         setMotorPower(0, 0);//brake the movement of drive
         setZipLinePosition(0);
-        spinPropeller(0);
-
+        telemetry.addData("Stop has started", backLeft.getPower());
     }
 
 }

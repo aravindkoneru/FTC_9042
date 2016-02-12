@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -29,6 +30,7 @@ public class TeleOpHelper extends OpMode {
     Servo zipLiner,
           dropClimber;
 
+    TouchSensor backBumper;
 
     //SERVO CONSTANTS
     private final double SERVO_MAX = .6,
@@ -82,6 +84,8 @@ public class TeleOpHelper extends OpMode {
         //servos
         zipLiner = hardwareMap.servo.get("zip");
         dropClimber = hardwareMap.servo.get("drop");
+
+        backBumper = hardwareMap.touchSensor.get("bumper");
 
 
         setDirection();
@@ -286,8 +290,11 @@ public class TeleOpHelper extends OpMode {
         telemetry.addData("09 propeller: ", propeller.getCurrentPosition());
 
         telemetry.addData("10 Target Position: ", targetPos);
-        telemetry.addData("Dump position",dropClimber.getPosition());
-        telemetry.addData("11 Pivot Arm Power: ", armPivot.getPower());
+        telemetry.addData("11 Dump position",dropClimber.getPosition());
+        telemetry.addData("12 Pivot Arm Power: ", armPivot.getPower());
+        telemetry.addData("13 Back Bumper Pushed is ", backBumper.getValue());
+
+
 
     }
 

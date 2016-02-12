@@ -69,7 +69,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case SECOND_STATE: {
-                if (setTargetValueTurn(70)) {
+                if (setTargetValueTurn(80)) {
                     rs = RunState.SECOND_RESET;
                 }
                 break;
@@ -81,7 +81,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-95, false)) {
+                if (runStraight(-97, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -105,22 +105,18 @@ public class ShelterDumper extends AutonHelper{
             {
                 if (resetEncoders()){
                     rs = RunState.FIFTH_STATE;
-//                    setToWOEncoderMode();
                 }
                 break;
             }
             case FIFTH_STATE:
             {
-                if (runStraight(16, false)){
+                if(runStraight(16, false) || backBumper.isPressed()){
                     rs = RunState.FIFTH_RESET;
                 }
                 break;
 
-//                if (runUntilBumped()){
-//                    rs = RunState.FIFTH_RESET;
-//                }
-//                break;
             }
+
             case FIFTH_RESET:
             {
                 if (resetEncoders()){
@@ -131,7 +127,10 @@ public class ShelterDumper extends AutonHelper{
             case SIXTH_STATE:
             {
                 on=false;
-                dropClimber(true);
+                if (backBumper.isPressed()){
+                    dropClimber(true);
+                    rs = RunState.LAST_STATE;
+                }
                 if (resetProp()) {
                     rs = RunState.LAST_STATE;
                 }

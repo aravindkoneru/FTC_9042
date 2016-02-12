@@ -36,12 +36,13 @@ public class FloorZone extends AutonHelper{
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;
+                    setToWOEncoderMode();
                 }
                 break;
             }
             case FIRST_STATE:
             {
-                if (runStraight(-95, false)) {
+                if (runUntilBumped()) {
                     rs = RunState.LAST_STATE;
                 }
                 break;

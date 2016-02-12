@@ -77,7 +77,7 @@ public class ShelterDumperRed extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-89, false)) {
+                if (runStraight(-84, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -92,7 +92,7 @@ public class ShelterDumperRed extends AutonHelper{
             case FOURTH_STATE:
             {
                 //330 worked for longer turn
-                if (setTargetValueTurn(150)){
+                if (setTargetValueTurnRight(195)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -106,7 +106,7 @@ public class ShelterDumperRed extends AutonHelper{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(16, false)){
+                if (runStraight(18, false) || backBumper.isPressed()){
                     rs = RunState.FIFTH_RESET;
                 }
                 break;
@@ -121,7 +121,10 @@ public class ShelterDumperRed extends AutonHelper{
             case SIXTH_STATE:
             {
                 on=false;
-                dropClimber(true);
+                if (backBumper.isPressed()){
+                    dropClimber(true);
+                    rs = RunState.LAST_STATE;
+                }
                 if (resetProp()) {
                     rs = RunState.LAST_STATE;
                 }
