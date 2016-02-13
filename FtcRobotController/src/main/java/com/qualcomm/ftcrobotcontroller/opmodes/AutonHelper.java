@@ -40,8 +40,8 @@ public class AutonHelper extends OpMode {
             SERVO_MIN = .2,
             SERVO_NEUTRAL = 9.0 / 17;
 
-    private final int PROPELLER_RIGHT = -140,
-            PROPELLER_LEFT = 140;
+    private final int PROPELLER_RIGHT = -120,
+            PROPELLER_LEFT = 120;
     //Stops the continuous servo
 
     //MOTOR RANGES

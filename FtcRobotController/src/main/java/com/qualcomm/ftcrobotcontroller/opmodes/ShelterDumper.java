@@ -81,7 +81,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-97, false)) {
+                if (runStraight(-100, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -112,7 +112,7 @@ public class ShelterDumper extends AutonHelper{
             {
                 on = false;
                 spinPropeller(0);
-                if(runStraight(50, false) || backBumper.isPressed()){
+                if(runStraight(15, false) || backBumper.isPressed()){
                     rs = RunState.FIFTH_RESET;
                 }
                 break;

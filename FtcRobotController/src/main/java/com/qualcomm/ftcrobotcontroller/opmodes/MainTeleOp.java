@@ -9,8 +9,6 @@ public class MainTeleOp extends TeleOpHelper {
     @Override
     public void loop() {
         basicTel();
-        alternatePropeller(true);
-
 
         //DRIVER CONTROLS
         //driving

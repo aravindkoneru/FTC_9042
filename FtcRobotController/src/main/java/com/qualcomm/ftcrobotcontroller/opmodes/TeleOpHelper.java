@@ -201,7 +201,7 @@ public class TeleOpHelper extends OpMode {
         }
     }
 
-    public boolean alternatePropeller(boolean on){
+    public void alternatePropeller(boolean on){
         propeller.setTargetPosition(propellerTargetPos);
         propeller.setPower(.7);
         if (on){
@@ -211,13 +211,6 @@ public class TeleOpHelper extends OpMode {
             else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=0){
                 propellerTargetPos=PROPELLER_RIGHT;
             }
-            return true;
-        }
-
-        else{
-            propeller.setPower(0);
-            resetPropellerEncoder();
-            return false;
         }
     }
 
