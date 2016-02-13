@@ -42,10 +42,9 @@ public class ShelterDumper extends AutonHelper{
         telemetry.addData("Propeller Target Position is ", propellerTargetPos);
 
         basicTel();
-        alternatePropeller(on);
-        setToEncoderMode();
         propellerSetToEncoderMode();
-
+        setToEncoderMode();
+        alternatePropeller(on);
 
         switch(rs) {
             case RESET_STATE: {
@@ -56,6 +55,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case FIRST_STATE: {
+                on = true;
                 if (runStraight(-12, false)) {
                     rs = RunState.FIRST_RESET;
                 }
@@ -110,7 +110,9 @@ public class ShelterDumper extends AutonHelper{
             }
             case FIFTH_STATE:
             {
-                if(runStraight(16, false) || backBumper.isPressed()){
+                on = false;
+                spinPropeller(0);
+                if(runStraight(50, false) || backBumper.isPressed()){
                     rs = RunState.FIFTH_RESET;
                 }
                 break;
@@ -122,18 +124,16 @@ public class ShelterDumper extends AutonHelper{
                 if (resetEncoders()){
                     rs = RunState.SIXTH_STATE;
                 }
+
                 break;
+
             }
             case SIXTH_STATE:
             {
-                on=false;
                 if (backBumper.isPressed()){
                     dropClimber(true);
-                    rs = RunState.LAST_STATE;
                 }
-                if (resetProp()) {
-                    rs = RunState.LAST_STATE;
-                }
+                rs = RunState.LAST_STATE;
                 break;
             }
 

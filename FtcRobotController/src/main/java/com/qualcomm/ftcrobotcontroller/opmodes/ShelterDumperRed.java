@@ -35,7 +35,8 @@ public class ShelterDumperRed extends AutonHelper{
 
     @Override
     public void loop() {
-
+        telemetry.addData("Alternating Propeller is ", on);
+        telemetry.addData("Propeller Target Position is ", propellerTargetPos);
         telemetry.addData("Current Runstate", rs);
 
         basicTel();
@@ -52,6 +53,7 @@ public class ShelterDumperRed extends AutonHelper{
                 break;
             }
             case FIRST_STATE: {
+                on = true;
                 if (runStraight(-12, false)) {
                     rs = RunState.FIRST_RESET;
                 }
@@ -77,7 +79,7 @@ public class ShelterDumperRed extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-84, false)) {
+                if (runStraight(-86, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -92,7 +94,7 @@ public class ShelterDumperRed extends AutonHelper{
             case FOURTH_STATE:
             {
                 //330 worked for longer turn
-                if (setTargetValueTurnRight(195)){
+                if (setTargetValueTurnRight(210)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
@@ -106,7 +108,9 @@ public class ShelterDumperRed extends AutonHelper{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(18, false) || backBumper.isPressed()){
+                on = false;
+                spinPropeller(0);
+                if (runStraight(25, false) || backBumper.isPressed()){
                     rs = RunState.FIFTH_RESET;
                 }
                 break;
@@ -120,14 +124,10 @@ public class ShelterDumperRed extends AutonHelper{
             }
             case SIXTH_STATE:
             {
-                on=false;
-                if (backBumper.isPressed()){
+                if (backBumper.isPressed()) {
                     dropClimber(true);
-                    rs = RunState.LAST_STATE;
                 }
-                if (resetProp()) {
-                    rs = RunState.LAST_STATE;
-                }
+                rs = RunState.LAST_STATE;
                 break;
             }
 

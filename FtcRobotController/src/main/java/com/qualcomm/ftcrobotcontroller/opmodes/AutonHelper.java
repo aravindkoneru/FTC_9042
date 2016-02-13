@@ -48,7 +48,7 @@ public class AutonHelper extends OpMode {
     private final double MOTOR_MAX = 1,
             MOTOR_MIN = -1;
 
-    protected boolean on = true;
+    protected boolean on = false;
 
     //ENCODER CONSTANTS
     private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
@@ -244,23 +244,15 @@ public class AutonHelper extends OpMode {
     }
 
     //Propeller Manipulation
-    public boolean alternatePropeller(boolean on){
+    public void alternatePropeller(boolean on){
         propeller.setTargetPosition(propellerTargetPos);
-        propeller.setPower(.7);
-        if (on){
-            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=0){
-                propellerTargetPos=PROPELLER_LEFT;
+        propeller.setPower(.8);
+        if (on) {
+            if (propeller.getCurrentPosition() - PROPELLER_RIGHT <= 5) {
+                propellerTargetPos = PROPELLER_LEFT;
+            } else if (propeller.getCurrentPosition() - PROPELLER_LEFT >= -5) {
+                propellerTargetPos = PROPELLER_RIGHT;
             }
-            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=0){
-                propellerTargetPos=PROPELLER_RIGHT;
-            }
-            return true;
-        }
-
-        else{
-            propeller.setPower(0);
-            resetPropellerEncoder();
-            return false;
         }
     }
 
