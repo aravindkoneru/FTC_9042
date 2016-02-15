@@ -45,7 +45,7 @@ public class FloorZoneDelay extends AutonHelper{
             }
             case DELAY_STATE:
             {
-                elapsedTime+=18;
+                elapsedTime+=21;
                 if (elapsedTime>=10000){
                     rs = RunState.FIRST_STATE;
                 }

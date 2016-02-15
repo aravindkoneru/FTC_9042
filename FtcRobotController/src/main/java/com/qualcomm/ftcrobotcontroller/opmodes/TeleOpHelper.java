@@ -201,19 +201,6 @@ public class TeleOpHelper extends OpMode {
         }
     }
 
-    public void alternatePropeller(boolean on){
-        propeller.setTargetPosition(propellerTargetPos);
-        propeller.setPower(.7);
-        if (on){
-            if (propeller.getCurrentPosition()-PROPELLER_RIGHT<=0){
-                propellerTargetPos=PROPELLER_LEFT;
-            }
-            else if (propeller.getCurrentPosition()-PROPELLER_LEFT>=0){
-                propellerTargetPos=PROPELLER_RIGHT;
-            }
-        }
-    }
-
     public boolean resetProp(){
         propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         int currentPos = propeller.getCurrentPosition();
@@ -224,17 +211,11 @@ public class TeleOpHelper extends OpMode {
             propeller.setTargetPosition(targetPos);
             propeller.setPower(.2);
             if (targetPos - currentPos <= 2) {
-                resetPropellerEncoder();
                 propeller.setPower(0);
                 turn = 1;
                 return true;
             } else return false;
         } else return false;
-    }
-
-    public void resetPropellerEncoder(){
-        propeller.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public boolean setZipLinePosition(double pos) {//slider values

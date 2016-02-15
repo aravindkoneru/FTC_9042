@@ -81,7 +81,7 @@ public class ShelterDumper extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-100, false)) {
+                if (runStraight(-97, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;

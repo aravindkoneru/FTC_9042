@@ -79,7 +79,7 @@ public class ShelterDumperRed extends AutonHelper{
                 break;
             }
             case THIRD_STATE: {
-                if (runStraight(-88, false)) {
+                if (runStraight(-93, false)) {
                     rs = RunState.THIRD_RESET;
                 }
                 break;
@@ -94,7 +94,7 @@ public class ShelterDumperRed extends AutonHelper{
             case FOURTH_STATE:
             {
                 //330 worked for longer turn
-                if (setTargetValueTurnRight(195)){
+                if (setTargetValueTurnRight(200)){
                     rs = RunState.FOURTH_RESET;
                 }
                 break;
