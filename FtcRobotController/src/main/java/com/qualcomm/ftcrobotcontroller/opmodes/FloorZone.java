@@ -29,6 +29,7 @@ public class FloorZone extends AutonHelper{
         setToEncoderMode();
         propellerSetToEncoderMode();
         alternatePropeller(on);
+        isPropellerStuck();
 
         switch(rs) {
             case RESET_STATE:

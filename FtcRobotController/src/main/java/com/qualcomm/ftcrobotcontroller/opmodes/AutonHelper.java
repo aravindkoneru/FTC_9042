@@ -60,7 +60,10 @@ public class AutonHelper extends OpMode {
             ROBOT_WIDTH = 14.5;
 
     protected int targetPos,
+                propellerPos=0,
                 propellerTargetPos = PROPELLER_RIGHT;
+
+    protected int timer;
 
 
     public AutonHelper() {
@@ -233,6 +236,7 @@ public class AutonHelper extends OpMode {
             return true;
         }
     }
+
     public boolean driveWithoutVeer(int inches, boolean speed){
         leftTarget = (int) (inches * TICKS_PER_INCH);
         rightTarget = leftTarget;
@@ -297,6 +301,7 @@ public class AutonHelper extends OpMode {
         backRight.setPower(rightPower);
     }
 
+
     //Propeller Manipulation
     public void alternatePropeller(boolean on){
         propeller.setTargetPosition(propellerTargetPos);
@@ -307,6 +312,24 @@ public class AutonHelper extends OpMode {
             } else if (propeller.getCurrentPosition() - PROPELLER_LEFT >= -8) {
                 propellerTargetPos = PROPELLER_RIGHT;
             }
+        }
+    }
+
+    public void isPropellerStuck(){
+        if (timer==0){
+            propellerPos = Math.abs(propeller.getCurrentPosition());
+        }
+        timer++;
+        if (Math.abs(propeller.getCurrentPosition())-propellerPos<=5 && timer>3){
+            if (propellerTargetPos==PROPELLER_LEFT) {
+                propellerTargetPos = PROPELLER_RIGHT;
+            }
+            if (propellerTargetPos==PROPELLER_RIGHT) {
+                propellerTargetPos = PROPELLER_LEFT;
+            }
+        }
+        else{
+            timer=0;
         }
     }
 

@@ -32,6 +32,7 @@ public class FloorZoneDelay extends AutonHelper{
         setToEncoderMode();
         propellerSetToEncoderMode();
         alternatePropeller(on);
+        isPropellerStuck();
 
         switch(rs) {
             case RESET_STATE:

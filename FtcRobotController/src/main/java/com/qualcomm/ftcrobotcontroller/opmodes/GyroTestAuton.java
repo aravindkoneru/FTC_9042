@@ -31,6 +31,7 @@ public class GyroTestAuton extends AutonHelper{
 
         basicTel();
         propellerSetToEncoderMode();
+        isPropellerStuck();
         setToEncoderMode();
         alternatePropeller(on);
 
