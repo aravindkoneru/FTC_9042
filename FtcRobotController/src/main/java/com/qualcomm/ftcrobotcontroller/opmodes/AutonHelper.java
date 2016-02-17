@@ -8,6 +8,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
         import com.qualcomm.robotcore.hardware.GyroSensor;
         import com.qualcomm.robotcore.hardware.Servo;
         import com.qualcomm.robotcore.hardware.TouchSensor;
+        import com.qualcomm.robotcore.hardware.VoltageSensor;
+        import com.qualcomm.robotcore.hardware.HardwareDevice;
+        import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
 
 public class AutonHelper extends OpMode {
@@ -29,9 +32,11 @@ public class AutonHelper extends OpMode {
     Servo zipLiner,
           dropClimber;
 
-    GyroSensor gyro;
+//    GyroSensor gyro;
 
     TouchSensor backBumper;
+
+
 
     //encoder targets
     private int rightTarget,
@@ -63,9 +68,6 @@ public class AutonHelper extends OpMode {
                 propellerPos=0,
                 propellerTargetPos = PROPELLER_RIGHT;
 
-    protected int timer;
-
-
     public AutonHelper() {
 
     }
@@ -93,8 +95,7 @@ public class AutonHelper extends OpMode {
         dropClimber = hardwareMap.servo.get("drop");
 
         backBumper = hardwareMap.touchSensor.get("bumper");
-        gyro = hardwareMap.gyroSensor.get("gyro");
-
+//        gyro = hardwareMap.gyroSensor.get("gyro");
 
 
         setDirection();
@@ -143,9 +144,13 @@ public class AutonHelper extends OpMode {
         propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
     }
 
-    public boolean calibratingGyro(){
-        return gyro.isCalibrating();
+    public double elapsedTime(){
+        return time;
     }
+//
+//    public boolean calibratingGyro(){
+//        return gyro.isCalibrating();
+//    }
 
     public void setToEncoderMode() {
 
@@ -154,6 +159,7 @@ public class AutonHelper extends OpMode {
 
         frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
     }
 
     public void setToWOEncoderMode() {
@@ -213,65 +219,66 @@ public class AutonHelper extends OpMode {
         return false;
     }
 
-    public boolean turnRightToDegree(int degrees){
-        int robotAngle = gyro.getHeading();
-        if (robotAngle<=degrees){
-            setMotorPower(.3, -.3);
-            return false;
-        }
-        else{
-            setMotorPower(0,0);
-            return true;
-        }
-    }
 
-    public boolean turnLeftToDegree(int degrees){
-        int robotAngle = gyro.getHeading();
-        if (robotAngle<=degrees){
-            setMotorPower(-.3, .3);
-            return false;
-        }
-        else{
-            setMotorPower(0, 0);
-            return true;
-        }
-    }
+//    public boolean turnRightToDegree(int degrees){
+//        int robotAngle = gyro.getHeading();
+//        if (robotAngle<=degrees){
+//            setMotorPower(.3, -.3);
+//            return false;
+//        }
+//        else{
+//            setMotorPower(0,0);
+//            return true;
+//        }
+//    }
+//
+//    public boolean turnLeftToDegree(int degrees){
+//        int robotAngle = gyro.getHeading();
+//        if (robotAngle<=degrees){
+//            setMotorPower(-.3, .3);
+//            return false;
+//        }
+//        else{
+//            setMotorPower(0, 0);
+//            return true;
+//        }
+//    }
 
-    public boolean driveWithoutVeer(int inches, boolean speed){
-        leftTarget = (int) (inches * TICKS_PER_INCH);
-        rightTarget = leftTarget;
-        setTargetValueMotor();
-
-        if (speed) {
-            if (gyro.getHeading()>3 && (gyro.getHeading()<10)){
-                setMotorPower(.85 , .9);
-            }
-            else if (gyro.getHeading()<357 && (gyro.getHeading()>350)) {
-                setMotorPower(.9 , .85);
-            }
-            else if (gyro.getHeading()>357 && (gyro.getHeading()<3)){
-                setMotorPower(9 , 9);
-            }
-
-        }
-        else {
-            if (gyro.getHeading()>2 && (gyro.getHeading()<10)){
-                setMotorPower(.2 , .25);
-            }
-            else if (gyro.getHeading()<358 && (gyro.getHeading()>350)) {
-                setMotorPower(.25 , .2);
-            }
-            else if (gyro.getHeading()>358 && (gyro.getHeading()<2)){
-                setMotorPower(.25 , .25);
-            }
-        }
-
-        if (hasReached()) {
-            setMotorPower(0, 0);
-            return true;
-        }
-        return false;
-    }
+//    public boolean driveWithoutVeer(int inches, boolean speed){
+//        leftTarget = (int) (inches * TICKS_PER_INCH);
+//        rightTarget = leftTarget;
+//        setTargetValueMotor();
+//
+//        if (speed) {
+//            if (gyro.getHeading()>3 && (gyro.getHeading()<10)){
+//                setMotorPower(.85 , .9);
+//            }
+//            else if (gyro.getHeading()<357 && (gyro.getHeading()>350)) {
+//                setMotorPower(.9 , .85);
+//            }
+//            else if (gyro.getHeading()>357 && (gyro.getHeading()<3)){
+//                setMotorPower(9 , 9);
+//            }
+//
+//        }
+//        else {
+//            if (gyro.getHeading()>2 && (gyro.getHeading()<10)){
+//                setMotorPower(.2 , .25);
+//            }
+//            else if (gyro.getHeading()<358 && (gyro.getHeading()>350)) {
+//                setMotorPower(.25 , .2);
+//            }
+//            else if (gyro.getHeading()>358 && (gyro.getHeading()<2)){
+//                setMotorPower(.25 , .25);
+//            }
+//        }
+//
+//        if (hasReached()) {
+//            setMotorPower(0, 0);
+//            return true;
+//        }
+//        return false;
+//    }
 
 
 
@@ -315,23 +322,6 @@ public class AutonHelper extends OpMode {
         }
     }
 
-    public void isPropellerStuck(){
-        if (timer==0){
-            propellerPos = Math.abs(propeller.getCurrentPosition());
-        }
-        timer++;
-        if (Math.abs(propeller.getCurrentPosition())-propellerPos<=5 && timer>3){
-            if (propellerTargetPos==PROPELLER_LEFT) {
-                propellerTargetPos = PROPELLER_RIGHT;
-            }
-            if (propellerTargetPos==PROPELLER_RIGHT) {
-                propellerTargetPos = PROPELLER_LEFT;
-            }
-        }
-        else{
-            timer=0;
-        }
-    }
 
     public void spinPropeller(int direction) {
         if (direction == 1) {
@@ -340,6 +330,24 @@ public class AutonHelper extends OpMode {
             propeller.setPower(-1);
         } else if (direction == 0) {
             propeller.setPower(0);
+        }
+    }
+
+    public void isPropellerStuck(){
+        if (elapsedTime()<=5){
+            propellerPos = Math.abs(propeller.getCurrentPosition());
+        }
+        if (elapsedTime()>=10 && Math.abs(propeller.getCurrentPosition())-propellerPos<=5){
+            resetStartTime();
+            if (propeller.getTargetPosition()==PROPELLER_LEFT){
+                propeller.setTargetPosition(PROPELLER_RIGHT);
+            }
+            else if (propeller.getTargetPosition()==PROPELLER_RIGHT){
+                propeller.setTargetPosition(PROPELLER_LEFT);
+            }
+        }
+        else{
+            resetStartTime();
         }
     }
 
@@ -429,7 +437,9 @@ public class AutonHelper extends OpMode {
 
         //Sensors
         telemetry.addData("14 Back Bumper Pushed is: ", backBumper.isPressed());
-        telemetry.addData("15 Robot is facing: ", gyro.getHeading());
+//        telemetry.addData("15 Robot is facing: ", gyro.getHeading());
+
+        telemetry.addData("0 Time Elapsed: ", time);
 
 
     }

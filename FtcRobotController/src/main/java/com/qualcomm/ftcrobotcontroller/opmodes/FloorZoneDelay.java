@@ -1,5 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 /**
  * Created by Tim on 10/25/2015.
  */
@@ -18,8 +20,6 @@ public class FloorZoneDelay extends AutonHelper{
 
 
     private RunState rs = RunState.RESET_STATE;
-    int elapsedTime=0;
-
     public FloorZoneDelay() {}
 
 
@@ -28,11 +28,9 @@ public class FloorZoneDelay extends AutonHelper{
 
         basicTel();
         telemetry.addData("state: ", rs);
-        telemetry.addData("Elapsed Time: ", elapsedTime/1000);
         setToEncoderMode();
         propellerSetToEncoderMode();
         alternatePropeller(on);
-        isPropellerStuck();
 
         switch(rs) {
             case RESET_STATE:
@@ -40,14 +38,12 @@ public class FloorZoneDelay extends AutonHelper{
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.DELAY_STATE;
-                    setToWOEncoderMode();
                 }
                 break;
             }
             case DELAY_STATE:
             {
-                elapsedTime+=21;
-                if (elapsedTime>=10000){
+                if (time>=7){
                     rs = RunState.FIRST_STATE;
                 }
                 break;

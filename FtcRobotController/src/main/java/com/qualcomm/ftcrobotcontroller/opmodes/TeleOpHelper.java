@@ -160,7 +160,7 @@ public class TeleOpHelper extends OpMode {
         double rightPower = -gamepad1.right_stick_y;
         double leftPower = -gamepad1.left_stick_y;
 
-        setMotorPower(.3*rightPower, .3*leftPower);
+        setMotorPower(.7*rightPower, .7*leftPower);
 
     }
 

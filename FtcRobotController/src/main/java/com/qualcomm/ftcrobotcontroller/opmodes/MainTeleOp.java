@@ -27,7 +27,7 @@ public class MainTeleOp extends TeleOpHelper {
             setMotorPower(1, 1);
         }
         else if (gamepad1.y) {
-            setMotorPower(-1, -1);
+            setMotorPower(-.2, -1);
         }
 
         //propeller
