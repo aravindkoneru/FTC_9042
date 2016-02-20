@@ -36,7 +36,6 @@ public class FloorZone extends AutonHelper{
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;
-                    setToWOEncoderMode();
                 }
                 break;
             }

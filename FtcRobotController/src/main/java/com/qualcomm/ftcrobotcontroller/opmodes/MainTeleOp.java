@@ -24,10 +24,11 @@ public class MainTeleOp extends TeleOpHelper {
 
         //constant driving
         if (gamepad1.a) {
-            setMotorPower(1, 1);
+            setMotorPower(-.2, -.2);
         }
         else if (gamepad1.y) {
-            setMotorPower(-.2, -1);
+//            setMotorPower(-.2, -1);
+            setMotorPower(.2 , .2);
         }
 
         //propeller
@@ -51,6 +52,9 @@ public class MainTeleOp extends TeleOpHelper {
         else if (gamepad1.dpad_down){
             dropClimber(false);
         }
+        else if (gamepad1.dpad_left){
+            dropClimber.setPosition(.4);
+        }
 
 
         //OPERATOR CONTROLS
@@ -72,12 +76,6 @@ public class MainTeleOp extends TeleOpHelper {
         }
         else if (gamepad2.dpad_up) {
             setArmPivot(.7);
-        }
-        else if(gamepad2.right_trigger > 0){
-            setArmPivot(-.2);
-        }
-        else if(gamepad2.left_trigger > 0){
-            setArmPivot(.4);
         }
         else {
             setArmPivot(0);

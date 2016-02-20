@@ -53,6 +53,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FIRST_STATE:
             {
+                on = true;
                 if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
                 }
@@ -80,7 +81,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case THIRD_STATE:
             {
-                if (runStraight(-69, false)){
+                if (runStraight(-51, false)){
                     rs= RunState.THIRD_RESET;
                 }
                 break;
@@ -94,7 +95,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FOURTH_STATE: {
                 setZipLinePosition(-1);
-                if (setTargetValueTurn(132)){
+                if (setTargetValueTurn(142)){
                     rs= RunState.FOURTH_RESET;
                 }
                 break;
@@ -109,16 +110,16 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(-10, false)){
+                if (runStraight(-5, false)){
                     rs= RunState.FIFTH_RESET;
                 }
                 break;
             }
             case FIFTH_RESET:
             {
+                on = false;
                 if (resetEncoders()){
                     rs= RunState.RESET_PROP;
-                    on = false;
                 }
                 break;
             }

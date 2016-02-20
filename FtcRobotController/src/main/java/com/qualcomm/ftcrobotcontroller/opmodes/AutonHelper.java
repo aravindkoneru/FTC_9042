@@ -3,6 +3,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
         import android.hardware.Sensor;
 
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+        import com.qualcomm.robotcore.hardware.ColorSensor;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorController;
         import com.qualcomm.robotcore.hardware.GyroSensor;
@@ -35,6 +36,7 @@ public class AutonHelper extends OpMode {
 //    GyroSensor gyro;
 
     TouchSensor backBumper;
+    ColorSensor colorSensor;
 
 
 
@@ -96,6 +98,7 @@ public class AutonHelper extends OpMode {
 
         backBumper = hardwareMap.touchSensor.get("bumper");
 //        gyro = hardwareMap.gyroSensor.get("gyro");
+        colorSensor = hardwareMap.colorSensor.get("color");
 
 
         setDirection();
@@ -360,9 +363,8 @@ public class AutonHelper extends OpMode {
             propeller.setTargetPosition(targetPos);
             propeller.setPower(.2);
             if (targetPos - currentPos <= 2) {
-                resetPropellerEncoder();
                 propeller.setPower(0);
-                targetPos=0;
+                resetPropellerEncoder();
                 return true;
             } else return false;
     }
@@ -400,11 +402,11 @@ public class AutonHelper extends OpMode {
     }
 
     public void dropClimber(boolean dump) {
-        if (dump) {
-            dropClimber.setPosition(.5);
-        }
-        else if (!dump){
+        if (!dump) {
             dropClimber.setPosition(0);
+        }
+        else if (dump){
+            dropClimber.setPosition(.75);
         }
     }
 
@@ -438,6 +440,10 @@ public class AutonHelper extends OpMode {
         //Sensors
         telemetry.addData("14 Back Bumper Pushed is: ", backBumper.isPressed());
 //        telemetry.addData("15 Robot is facing: ", gyro.getHeading());
+        telemetry.addData("15 Redness", colorSensor.red());
+        telemetry.addData("16 Blue", colorSensor.blue());
+        telemetry.addData("17 Greenness", colorSensor.green());
+
 
         telemetry.addData("0 Time Elapsed: ", time);
 

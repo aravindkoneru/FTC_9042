@@ -2,6 +2,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftcrobotcontroller.BuildConfig;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -31,6 +32,9 @@ public class TeleOpHelper extends OpMode {
           dropClimber;
 
     TouchSensor backBumper;
+
+    ColorSensor colorSensor;
+
 
     //SERVO CONSTANTS
     private final double SERVO_MAX = .6,
@@ -86,10 +90,13 @@ public class TeleOpHelper extends OpMode {
         dropClimber = hardwareMap.servo.get("drop");
 
         backBumper = hardwareMap.touchSensor.get("bumper");
+        colorSensor = hardwareMap.colorSensor.get("color");
 
 
         setDirection();
         resetEncoders();
+        dropClimber(false);
+        setZipLinePosition(0);
     }
 
 
@@ -194,7 +201,7 @@ public class TeleOpHelper extends OpMode {
 
     public void dropClimber(boolean dump) {
         if (dump) {
-            dropClimber.setPosition(.5);
+            dropClimber.setPosition(.57);
         }
         else if (!dump){
             dropClimber.setPosition(0);
@@ -255,9 +262,13 @@ public class TeleOpHelper extends OpMode {
     public void basicTel() {
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
+        telemetry.addData("03a Back Left Power ", backLeft.getPower());
+        telemetry.addData("03b Front Left Power ", frontLeft.getPower());
 
         telemetry.addData("04 frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("05 backRightPos: ", backRight.getCurrentPosition());
+        telemetry.addData("06a Back Right Power ", backRight.getPower());
+        telemetry.addData("06b Front Right Power ", frontRight.getPower());
 
         telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
         telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
@@ -267,8 +278,9 @@ public class TeleOpHelper extends OpMode {
         telemetry.addData("11 Dump position",dropClimber.getPosition());
         telemetry.addData("12 Pivot Arm Power: ", armPivot.getPower());
         telemetry.addData("13 Back Bumper Pushed is ", backBumper.getValue());
-
-
+        telemetry.addData("15 Redness", colorSensor.red());
+        telemetry.addData("16 Blue", colorSensor.blue());
+        telemetry.addData("17 Greenness", colorSensor.green());
 
     }
 
