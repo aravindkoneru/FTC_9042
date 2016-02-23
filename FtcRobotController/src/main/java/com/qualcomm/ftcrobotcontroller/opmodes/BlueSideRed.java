@@ -34,17 +34,16 @@ public class BlueSideRed extends AutonHelper{
     public BlueSideRed() {}
 
 
-    @Override
     public void loop() {
-
-
         basicTel();
         setToEncoderMode();
+        alternatePropeller(on);
+        propellerSetToEncoderMode();
+
 
         switch(rs) {
             case RESET_STATE:
             {
-                spinPropeller(1);
                 setZipLinePosition(0);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
@@ -112,9 +111,9 @@ public class BlueSideRed extends AutonHelper{
             }
             case FIFTH_RESET:
             {
-                spinPropeller(0);
                 if (resetEncoders()){
                     rs=RunState.RESET_PROP;
+                    on = false;
                 }
                 break;
             }
@@ -125,24 +124,9 @@ public class BlueSideRed extends AutonHelper{
                 }
                 break;
             }
-            case SIXTH_STATE:
-            {
-                if (runStraight(-30, false)){
-                    rs=RunState.SIXTH_RESET;
-                }
-                break;
-            }
-            case SIXTH_RESET:
-            {
-                if (resetEncoders()){
-                    rs= RunState.SEVENTH_STATE;
-                }
-                break;
-            }
-            case SEVENTH_STATE:
-            {
-                if (runStraight(-30, true)){
-                    rs=RunState.LAST_STATE;
+            case SIXTH_STATE: {
+                if (runStraight(-50, false)) {
+                    rs = RunState.LAST_STATE;
                 }
                 break;
             }

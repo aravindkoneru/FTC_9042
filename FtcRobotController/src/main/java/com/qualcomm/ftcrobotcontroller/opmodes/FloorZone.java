@@ -12,7 +12,6 @@ public class FloorZone extends AutonHelper{
     enum RunState{
         RESET_STATE,
         FIRST_STATE,
-
         LAST_STATE
     }
 
@@ -28,11 +27,12 @@ public class FloorZone extends AutonHelper{
         basicTel();
         telemetry.addData("state: ", rs);
         setToEncoderMode();
+        propellerSetToEncoderMode();
+        alternatePropeller(on);
 
         switch(rs) {
             case RESET_STATE:
             {
-                spinPropeller(1);
                 setZipLinePosition(0);
                 if (resetEncoders()){
                     rs= RunState.FIRST_STATE;
@@ -41,14 +41,15 @@ public class FloorZone extends AutonHelper{
             }
             case FIRST_STATE:
             {
-                if (runStraight(-95, true)){
-                    rs=RunState.LAST_STATE;
+                on = true;
+                if (runStraight(-99,false)) {
+                    rs = RunState.LAST_STATE;
                 }
-
                 break;
             }
             case LAST_STATE:
             {
+                on=false;
                 stop();
             }
         }

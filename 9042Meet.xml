@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<Robot>
+    <DeviceInterfaceModule name="Device Interface Module 1" serialNumber="AL00XK2I">
+        <TouchSensor name="bumper" port="0" />
+    </DeviceInterfaceModule>
+    <ServoController name="Servo Controller 1" serialNumber="AI02RMR4">
+        <Servo name="zip" port="1" />
+        <Servo name="drop" port="2" />
+    </ServoController>
+    <MotorController name="Tape Measures" serialNumber="AL00XUYW">
+        <Motor name="tm1" port="1" />
+        <Motor name="tm2" port="2" />
+    </MotorController>
+    <MotorController name="MC3" serialNumber="AH00QJ39">
+        <Motor name="r1" port="1" />
+        <Motor name="r2" port="2" />
+    </MotorController>
+    <MotorController name="MC2" serialNumber="AL00XPUH">
+        <Motor name="l1" port="1" />
+        <Motor name="l2" port="2" />
+    </MotorController>
+    <MotorController name="MC1" serialNumber="AL00XUZ3">
+        <Motor name="prop" port="1" />
+        <Motor name="arm" port="2" />
+    </MotorController>
+</Robot>

@@ -1,9 +1,17 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+        import android.hardware.Sensor;
+
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+        import com.qualcomm.robotcore.hardware.ColorSensor;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorController;
+        import com.qualcomm.robotcore.hardware.GyroSensor;
         import com.qualcomm.robotcore.hardware.Servo;
+        import com.qualcomm.robotcore.hardware.TouchSensor;
+        import com.qualcomm.robotcore.hardware.VoltageSensor;
+        import com.qualcomm.robotcore.hardware.HardwareDevice;
+        import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
 
 public class AutonHelper extends OpMode {
@@ -22,7 +30,15 @@ public class AutonHelper extends OpMode {
             propeller;
 
     //zipline servo
-    Servo zipLiner;
+    Servo zipLiner,
+          dropClimber;
+
+//    GyroSensor gyro;
+
+    TouchSensor backBumper;
+    ColorSensor colorSensor;
+
+
 
     //encoder targets
     private int rightTarget,
@@ -32,13 +48,16 @@ public class AutonHelper extends OpMode {
     private final double SERVO_MAX = .6,
             SERVO_MIN = .2,
             SERVO_NEUTRAL = 9.0 / 17;
+
+    private final int PROPELLER_RIGHT = -140,
+            PROPELLER_LEFT = 140;
     //Stops the continuous servo
 
     //MOTOR RANGES
     private final double MOTOR_MAX = 1,
             MOTOR_MIN = -1;
 
-
+    protected boolean on = false;
 
     //ENCODER CONSTANTS
     private final double CIRCUMFERENCE_INCHES = 4 * Math.PI,
@@ -47,8 +66,9 @@ public class AutonHelper extends OpMode {
             TOLERANCE = 40,
             ROBOT_WIDTH = 14.5;
 
-    private int targetPos;
-
+    protected int targetPos,
+                propellerPos=0,
+                propellerTargetPos = PROPELLER_RIGHT;
 
     public AutonHelper() {
 
@@ -74,6 +94,11 @@ public class AutonHelper extends OpMode {
 
         //zipline servo
         zipLiner = hardwareMap.servo.get("zip");
+        dropClimber = hardwareMap.servo.get("drop");
+
+        backBumper = hardwareMap.touchSensor.get("bumper");
+//        gyro = hardwareMap.gyroSensor.get("gyro");
+        colorSensor = hardwareMap.colorSensor.get("color");
 
 
         setDirection();
@@ -103,7 +128,6 @@ public class AutonHelper extends OpMode {
         }
     }
 
-
     //ENCODER MANIPULATION
     public boolean resetEncoders() {
         frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -119,6 +143,18 @@ public class AutonHelper extends OpMode {
 
     }
 
+    public void propellerSetToEncoderMode(){
+        propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+    }
+
+    public double elapsedTime(){
+        return time;
+    }
+//
+//    public boolean calibratingGyro(){
+//        return gyro.isCalibrating();
+//    }
+
     public void setToEncoderMode() {
 
         frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
@@ -126,7 +162,18 @@ public class AutonHelper extends OpMode {
 
         frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
     }
+
+    public void setToWOEncoderMode() {
+
+        frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+
+        frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    }
+
 
     //ENCODER BASED MOVEMENT
     public boolean runStraight(double distance_in_inches, boolean speed) {
@@ -137,7 +184,7 @@ public class AutonHelper extends OpMode {
         if (speed) {
             setMotorPower(.9, .9);
         } else {
-            setMotorPower(.3, .3);
+            setMotorPower(.2, .2);
         }
 
         if (hasReached()) {
@@ -152,7 +199,7 @@ public class AutonHelper extends OpMode {
         leftTarget = encoderTarget;
         rightTarget = -encoderTarget;
         setTargetValueMotor();
-        setMotorPower(.4, .4);
+        setMotorPower(.3, .3);
 
         if (hasReached()) {
             setMotorPower(0, 0);
@@ -160,6 +207,82 @@ public class AutonHelper extends OpMode {
         }
         return false;
     }
+
+    public boolean setTargetValueTurnRight(double degrees) {
+        int encoderTarget = (int) (degrees / 360 * Math.PI * ROBOT_WIDTH * TICKS_PER_INCH);     //theta/360*PI*D
+        leftTarget = encoderTarget;
+        rightTarget = -encoderTarget;
+        setTargetValueMotor();
+        setMotorPower(.27, .33);
+
+        if (hasReached()) {
+            setMotorPower(0, 0);
+            return true;
+        }
+        return false;
+    }
+
+
+//    public boolean turnRightToDegree(int degrees){
+//        int robotAngle = gyro.getHeading();
+//        if (robotAngle<=degrees){
+//            setMotorPower(.3, -.3);
+//            return false;
+//        }
+//        else{
+//            setMotorPower(0,0);
+//            return true;
+//        }
+//    }
+//
+//    public boolean turnLeftToDegree(int degrees){
+//        int robotAngle = gyro.getHeading();
+//        if (robotAngle<=degrees){
+//            setMotorPower(-.3, .3);
+//            return false;
+//        }
+//        else{
+//            setMotorPower(0, 0);
+//            return true;
+//        }
+//    }
+
+//    public boolean driveWithoutVeer(int inches, boolean speed){
+//        leftTarget = (int) (inches * TICKS_PER_INCH);
+//        rightTarget = leftTarget;
+//        setTargetValueMotor();
+//
+//        if (speed) {
+//            if (gyro.getHeading()>3 && (gyro.getHeading()<10)){
+//                setMotorPower(.85 , .9);
+//            }
+//            else if (gyro.getHeading()<357 && (gyro.getHeading()>350)) {
+//                setMotorPower(.9 , .85);
+//            }
+//            else if (gyro.getHeading()>357 && (gyro.getHeading()<3)){
+//                setMotorPower(9 , 9);
+//            }
+//
+//        }
+//        else {
+//            if (gyro.getHeading()>2 && (gyro.getHeading()<10)){
+//                setMotorPower(.2 , .25);
+//            }
+//            else if (gyro.getHeading()<358 && (gyro.getHeading()>350)) {
+//                setMotorPower(.25 , .2);
+//            }
+//            else if (gyro.getHeading()>358 && (gyro.getHeading()<2)){
+//                setMotorPower(.25 , .25);
+//            }
+//        }
+//
+//        if (hasReached()) {
+//            setMotorPower(0, 0);
+//            return true;
+//        }
+//        return false;
+//    }
+
 
 
     public void setTargetValueMotor() {
@@ -188,6 +311,21 @@ public class AutonHelper extends OpMode {
         backRight.setPower(rightPower);
     }
 
+
+    //Propeller Manipulation
+    public void alternatePropeller(boolean on){
+        propeller.setTargetPosition(propellerTargetPos);
+        propeller.setPower(1);
+        if (on) {
+            if (propeller.getCurrentPosition() - PROPELLER_RIGHT <= 8) {
+                propellerTargetPos = PROPELLER_LEFT;
+            } else if (propeller.getCurrentPosition() - PROPELLER_LEFT >= -8) {
+                propellerTargetPos = PROPELLER_RIGHT;
+            }
+        }
+    }
+
+
     public void spinPropeller(int direction) {
         if (direction == 1) {
             propeller.setPower(1);
@@ -198,9 +336,22 @@ public class AutonHelper extends OpMode {
         }
     }
 
-    public void moveTubing(double power) {
-        armMotor1.setPower(power);
-        armMotor2.setPower(power);
+    public void isPropellerStuck(){
+        if (elapsedTime()<=5){
+            propellerPos = Math.abs(propeller.getCurrentPosition());
+        }
+        if (elapsedTime()>=10 && Math.abs(propeller.getCurrentPosition())-propellerPos<=5){
+            resetStartTime();
+            if (propeller.getTargetPosition()==PROPELLER_LEFT){
+                propeller.setTargetPosition(PROPELLER_RIGHT);
+            }
+            else if (propeller.getTargetPosition()==PROPELLER_RIGHT){
+                propeller.setTargetPosition(PROPELLER_LEFT);
+            }
+        }
+        else{
+            resetStartTime();
+        }
     }
 
     public boolean resetProp(){
@@ -210,11 +361,10 @@ public class AutonHelper extends OpMode {
             targetPos = currentPos + (280 - (currentPos % 280));
         }
             propeller.setTargetPosition(targetPos);
-            propeller.setPower(.4);
-            if (targetPos - currentPos <= 6) {
-                resetPropellerEncoder();
+            propeller.setPower(.2);
+            if (targetPos - currentPos <= 2) {
                 propeller.setPower(0);
-                targetPos=0;
+                resetPropellerEncoder();
                 return true;
             } else return false;
     }
@@ -232,14 +382,8 @@ public class AutonHelper extends OpMode {
         } else if (pos == 0) {
             zipLiner.setPosition(SERVO_NEUTRAL);
         }
-        telemetry.addData("00 Zipline moving at: ", pos);
         return true;
     }
-
-    public void setArmPivot(double power) {
-        armPivot.setPower(power);
-    }
-
 
     //HELPER METHODS
     enum ComponentType {
@@ -257,25 +401,54 @@ public class AutonHelper extends OpMode {
         return finalval;
     }
 
+    public void dropClimber(boolean dump) {
+        if (!dump) {
+            dropClimber.setPosition(0);
+        }
+        else if (dump){
+            dropClimber.setPosition(.75);
+        }
+    }
+
 
     //DEBUG
     public void basicTel() {
+
+        //Left Side Drive
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
         telemetry.addData("03 LeftTarget: ", leftTarget);
 
+        //Right Side Drive
         telemetry.addData("04 frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("05 backRightPos: ", backRight.getCurrentPosition());
         telemetry.addData("06 RightTarget: ", rightTarget);
 
+        //Arm
         telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
         telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
-        telemetry.addData("09 propeller: ", propeller.getCurrentPosition());
 
-        telemetry.addData("10 Target Position: ", targetPos);
+        //Propeller
+        telemetry.addData("09 Propeller: ", propeller.getCurrentPosition());
+        telemetry.addData("10 Propeller Reset Target Position: ", targetPos);
+        telemetry.addData("11 Alternating Propeller is: ", on);
+
+        //Servos
+        telemetry.addData("12 Drop Climber Position: ", dropClimber.getPosition());
+        telemetry.addData("13 Rack and Pinion Power: ", zipLiner.getPosition());
+
+        //Sensors
+        telemetry.addData("14 Back Bumper Pushed is: ", backBumper.isPressed());
+//        telemetry.addData("15 Robot is facing: ", gyro.getHeading());
+        telemetry.addData("15 Redness", colorSensor.red());
+        telemetry.addData("16 Blue", colorSensor.blue());
+        telemetry.addData("17 Greenness", colorSensor.green());
+
+
+        telemetry.addData("0 Time Elapsed: ", time);
+
 
     }
-
 
     //MANDATORY METHODS
     public void loop() {
@@ -284,11 +457,7 @@ public class AutonHelper extends OpMode {
     @Override
     public void stop() {
         setMotorPower(0, 0);//brake the movement of drive
-        moveTubing(0);//brake the tape measure
-        setArmPivot(0);//brake the arm pivot
         setZipLinePosition(0);
-        spinPropeller(0);
-
     }
 
 }

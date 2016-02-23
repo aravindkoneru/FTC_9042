@@ -36,14 +36,16 @@ public class BlueSideBlue extends AutonHelper{
 
     @Override
     public void loop() {
-//        setZipLinePosition(0);
+        telemetry.addData("Current Runstate", rs);
+        alternatePropeller(on);
         basicTel();
         setToEncoderMode();
+        propellerSetToEncoderMode();
+
 
         switch(rs) {
             case RESET_STATE:
             {
-                spinPropeller(1);
                 setZipLinePosition(0);
                 resetEncoders();
                 rs=RunState.FIRST_STATE;
@@ -51,6 +53,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FIRST_STATE:
             {
+                on = true;
                 if(runStraight(-12, false) ){
                     rs = RunState.FIRST_RESET;
                 }
@@ -78,7 +81,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case THIRD_STATE:
             {
-                if (runStraight(-70, false)){
+                if (runStraight(-51, false)){
                     rs= RunState.THIRD_RESET;
                 }
                 break;
@@ -92,7 +95,7 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FOURTH_STATE: {
                 setZipLinePosition(-1);
-                if (setTargetValueTurn(145)){
+                if (setTargetValueTurn(142)){
                     rs= RunState.FOURTH_RESET;
                 }
                 break;
@@ -107,14 +110,14 @@ public class BlueSideBlue extends AutonHelper{
             }
             case FIFTH_STATE:
             {
-                if (runStraight(-20, false)){
+                if (runStraight(-5, false)){
                     rs= RunState.FIFTH_RESET;
                 }
                 break;
             }
             case FIFTH_RESET:
             {
-                spinPropeller(0);
+                on = false;
                 if (resetEncoders()){
                     rs= RunState.RESET_PROP;
                 }
@@ -130,21 +133,7 @@ public class BlueSideBlue extends AutonHelper{
             case SIXTH_STATE:
             {
                 if (runStraight(-50, false)){
-                    rs= RunState.SIXTH_RESET;
-                }
-                break;
-            }
-            case SIXTH_RESET:
-            {
-                if (resetEncoders()){
-                    rs= RunState.SEVENTH_STATE;
-                }
-                break;
-            }
-            case SEVENTH_STATE:
-            {
-                if (runStraight(-10, true)){
-                    rs=RunState.LAST_STATE;
+                    rs= RunState.LAST_STATE;
                 }
                 break;
             }

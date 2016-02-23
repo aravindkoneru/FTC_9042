@@ -2,9 +2,11 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.ftcrobotcontroller.BuildConfig;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -26,11 +28,13 @@ public class TeleOpHelper extends OpMode {
             propeller;
 
     //zipline servo
-    Servo zipLiner;
+    Servo zipLiner,
+          dropClimber;
 
-    //encoder targets
-    private int rightTarget,
-            leftTarget;
+    TouchSensor backBumper;
+
+    ColorSensor colorSensor;
+
 
     //SERVO CONSTANTS
     private final double SERVO_MAX = .6,
@@ -54,6 +58,10 @@ public class TeleOpHelper extends OpMode {
     private int turn=0,
             targetPos;
 
+    private final int PROPELLER_RIGHT = -140,
+            PROPELLER_LEFT = 140;
+
+    private int propellerTargetPos = PROPELLER_RIGHT;
 
     public TeleOpHelper() {
 
@@ -77,12 +85,18 @@ public class TeleOpHelper extends OpMode {
         armMotor2 = hardwareMap.dcMotor.get("tm2");
         propeller = hardwareMap.dcMotor.get("prop");
 
-        //zipline servo
+        //servos
         zipLiner = hardwareMap.servo.get("zip");
+        dropClimber = hardwareMap.servo.get("drop");
+
+        backBumper = hardwareMap.touchSensor.get("bumper");
+        colorSensor = hardwareMap.colorSensor.get("color");
 
 
         setDirection();
         resetEncoders();
+        dropClimber(false);
+        setZipLinePosition(0);
     }
 
 
@@ -124,15 +138,6 @@ public class TeleOpHelper extends OpMode {
 
     }
 
-    public void setToEncoderMode() {
-
-        frontLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backLeft.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
-        frontRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-    }
-
     public void setToWOEncoderMode() {
         frontLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backLeft.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
@@ -140,7 +145,6 @@ public class TeleOpHelper extends OpMode {
         frontRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         backRight.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
-
 
     //MANUAL MOVEMENT (DRIVING)
     public void manualDrive(boolean turtleDrive) {
@@ -154,6 +158,16 @@ public class TeleOpHelper extends OpMode {
         } else {
             setMotorPower(rightPower, leftPower);
         }
+
+    }
+
+    public void backDrive() {
+        setToWOEncoderMode();
+
+        double rightPower = -gamepad1.right_stick_y;
+        double leftPower = -gamepad1.left_stick_y;
+
+        setMotorPower(.7*rightPower, .7*leftPower);
 
     }
 
@@ -185,6 +199,15 @@ public class TeleOpHelper extends OpMode {
         armMotor2.setPower(power);
     }
 
+    public void dropClimber(boolean dump) {
+        if (dump) {
+            dropClimber.setPosition(.57);
+        }
+        else if (!dump){
+            dropClimber.setPosition(0);
+        }
+    }
+
     public boolean resetProp(){
         propeller.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
         int currentPos = propeller.getCurrentPosition();
@@ -193,19 +216,13 @@ public class TeleOpHelper extends OpMode {
                 targetPos = currentPos + (280-(currentPos % 280));
             }
             propeller.setTargetPosition(targetPos);
-            propeller.setPower(.4);
-            if (targetPos - currentPos <= 6) {
-                resetPropellerEncoder();
+            propeller.setPower(.2);
+            if (targetPos - currentPos <= 2) {
                 propeller.setPower(0);
                 turn = 1;
                 return true;
             } else return false;
         } else return false;
-    }
-
-    public void resetPropellerEncoder(){
-        propeller.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        propeller.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public boolean setZipLinePosition(double pos) {//slider values
@@ -241,24 +258,29 @@ public class TeleOpHelper extends OpMode {
         return finalval;
     }
 
-
     //DEBUG
     public void basicTel() {
         telemetry.addData("01 frontLeftPos: ", frontLeft.getCurrentPosition());
         telemetry.addData("02 backLeftPos: ", backLeft.getCurrentPosition());
-        telemetry.addData("03 LeftTarget: ", leftTarget);
+        telemetry.addData("03a Back Left Power ", backLeft.getPower());
+        telemetry.addData("03b Front Left Power ", frontLeft.getPower());
 
         telemetry.addData("04 frontRightPos: ", frontRight.getCurrentPosition());
         telemetry.addData("05 backRightPos: ", backRight.getCurrentPosition());
-        telemetry.addData("06 RightTarget: ", rightTarget);
+        telemetry.addData("06a Back Right Power ", backRight.getPower());
+        telemetry.addData("06b Front Right Power ", frontRight.getPower());
 
         telemetry.addData("07 ArmMotor1: ", armMotor1.getCurrentPosition());
         telemetry.addData("08 ArmMotor2: ", armMotor2.getCurrentPosition());
         telemetry.addData("09 propeller: ", propeller.getCurrentPosition());
 
         telemetry.addData("10 Target Position: ", targetPos);
-
-        telemetry.addData("11 Pivot Arm Power: ", armPivot.getPower());
+        telemetry.addData("11 Dump position",dropClimber.getPosition());
+        telemetry.addData("12 Pivot Arm Power: ", armPivot.getPower());
+        telemetry.addData("13 Back Bumper Pushed is ", backBumper.getValue());
+        telemetry.addData("15 Redness", colorSensor.red());
+        telemetry.addData("16 Blue", colorSensor.blue());
+        telemetry.addData("17 Greenness", colorSensor.green());
 
     }
 
